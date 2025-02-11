@@ -8,7 +8,7 @@ function Leaderboard() {
 
   const fetchLeaderboard = async () => {
     try {
-      const response = await fetch("http://localhost:5000/leaderboard");
+      const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
       const data = await response.json();
       setLeaderboard(data);
     } catch (error) {
@@ -114,7 +114,7 @@ function Quiz() {
   const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/quiz/table${tableNumber}`)
+    fetch(`https://game-uaxu.onrender.com/quiz/table${tableNumber}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Questions:", data);
@@ -175,7 +175,7 @@ function Quiz() {
 
     const playerName = prompt("Enter your name:");
     const formattedTime = formatTime(timeTaken);
-    fetch("http://localhost:5000/leaderboard", {
+    fetch("https://game-uaxu.onrender.com/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: playerName, score: finalScore, time: formattedTime  }),
