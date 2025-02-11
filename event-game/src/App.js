@@ -41,7 +41,7 @@ function Leaderboard() {
       </h1>
       <table
         style={{
-          width: "60%",
+          width: "95%",
           borderCollapse: "collapse",
           backgroundColor: "#fff",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
