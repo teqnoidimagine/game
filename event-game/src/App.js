@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-r
 
 // import { useState, useEffect } from "react";
 
+import { useState, useEffect } from "react";
+
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
 
@@ -10,7 +12,16 @@ function Leaderboard() {
     try {
       const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
       const data = await response.json();
-      setLeaderboard(data);
+      
+      // Sorting by score (descending), then by time (ascending)
+      const sortedData = data.sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score; // Higher scores first
+        }
+        return a.time - b.time; // Lower time first if scores are equal
+      });
+
+      setLeaderboard(sortedData);
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
     }
@@ -51,7 +62,7 @@ function Leaderboard() {
       >
         <thead>
           <tr style={{ backgroundColor: "#007BFF", color: "#fff" }}>
-          <th style={{ padding: "10px", fontSize: "18px" }}>Table No</th>
+            <th style={{ padding: "10px", fontSize: "18px" }}>Table No</th>
             <th style={{ padding: "10px", fontSize: "18px" }}>Score</th>
             <th style={{ padding: "10px", fontSize: "18px" }}>Time</th>
           </tr>
@@ -72,7 +83,7 @@ function Leaderboard() {
                   fontSize: "16px",
                 }}
               >
-               Table {player.tableNo}
+                Table {player.tableNo}
               </td>
               <td
                 style={{
@@ -99,6 +110,7 @@ function Leaderboard() {
     </div>
   );
 }
+
 
 // export default Leaderboard;
 
