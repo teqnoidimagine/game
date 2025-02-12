@@ -189,7 +189,7 @@ function Quiz() {
     fetch("https://game-uaxu.onrender.com/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken  }),
+      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: Number(timeTaken)  }),
     })
       .then((res) => res.json())
       .then((data) => {
