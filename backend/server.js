@@ -28,8 +28,8 @@ app.post("/leaderboard", (req, res) => {
     return res.status(400).json({ message: "Table number, score, and time are required" });
   }
     // Convert tableNo to a number if it's not already
-    tableNo = Number(tableNo);
-    score = Number(score);
+    // tableNo = Number(tableNo);
+    // score = Number(score);
   
 
   // Check if table exists
