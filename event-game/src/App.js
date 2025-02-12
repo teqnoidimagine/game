@@ -129,7 +129,7 @@ function Quiz() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Questions:", data);
-        setQuestions(data.questions.slice(0, 3)); // Ensure only 3 questions
+        setQuestions(data.questions.slice(0, 3)); 
       })
       .catch((error) => console.error("Error fetching questions:", error));
   }, [tableNumber]);
@@ -178,18 +178,18 @@ function Quiz() {
     let secs = seconds % 60;
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
+
   const handleSubmit = () => {
     setTimerActive(false); // Stop the timer
     const finalScore = calculateScore();
     setScore(finalScore);
     setIsSubmitted(true);
 
-    const playerName = prompt("Enter your name:");
     const formattedTime = formatTime(timeTaken);
     fetch("https://game-uaxu.onrender.com/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: formattedTime  }),
+      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken  }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -198,6 +198,8 @@ function Quiz() {
       })
       .catch((error) => console.error("Error updating leaderboard:", error));
   };
+
+
 
   return (
     <div style={{ padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto" }}>
