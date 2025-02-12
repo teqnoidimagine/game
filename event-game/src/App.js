@@ -72,7 +72,7 @@ function Leaderboard() {
                   fontSize: "16px",
                 }}
               >
-               Table {player.id}
+               Table {player.tableNo}
               </td>
               <td
                 style={{
