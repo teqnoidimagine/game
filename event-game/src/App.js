@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-r
 
 // import { useState, useEffect } from "react";
 
-import { useState, useEffect } from "react";
 
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
