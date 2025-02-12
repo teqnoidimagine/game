@@ -11,13 +11,13 @@ function Leaderboard() {
     try {
       const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
       const data = await response.json();
-      
-      // Sorting by score (descending), then by time (ascending)
+
+      // Sorting: Higher scores first, if scores are equal -> lower time first
       const sortedData = data.sort((a, b) => {
-        if (b.score !== a.score) {
-          return b.score - a.score; // Higher scores first
+        if (a.score === b.score) {
+          return a.time - b.time; // Lower time first if scores are the same
         }
-        return a.time - b.time; // Lower time first if scores are equal
+        return b.score - a.score; // Higher score first
       });
 
       setLeaderboard(sortedData);
