@@ -27,6 +27,10 @@ app.post("/leaderboard", (req, res) => {
   if (tableNo === undefined || score === undefined || !time) {
     return res.status(400).json({ message: "Table number, score, and time are required" });
   }
+    // Convert tableNo to a number if it's not already
+    tableNo = Number(tableNo);
+    score = Number(score);
+  
 
   // Check if table exists
   let tableIndex = leaderboard.findIndex((entry) => entry.tableNo === tableNo);
