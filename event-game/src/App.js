@@ -215,7 +215,7 @@ function Quiz() {
       {isSubmitted ? (
         <h2>Your final score: {score}</h2>
       ) : questions.length > 0 ? (
-        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "20px", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
+        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "15%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
             {currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}
           </p>
@@ -239,7 +239,7 @@ function Quiz() {
           </ul>
         </div>
       ) : (
-        <p>Loading questions...</p>
+        <p style={{color:"white"}}>Loading questions...</p>
       )}
 
       {!isSubmitted && (
