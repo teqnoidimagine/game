@@ -61,20 +61,22 @@ for (let i = 1; i <= 24; i++) {
     const operators = ["+", "-", "×", "÷", "^", "√"];
     const questions = Array.from({ length: 3 }, () => {
       let num1, num2, operator, answer;
-      
+
       operator = operators[Math.floor(Math.random() * operators.length)];
-      
+
       if (operator === "^") {
-        num1 = Math.floor(Math.random() * 6) + 2; // Small base
-        num2 = 2; // Always square for simplicity
+        num1 = Math.floor(Math.random() * 20) + 5; // Larger base for exponentiation
+        num2 = Math.floor(Math.random() * 2) + 2; // Power of 2 or 3
         answer = Math.pow(num1, num2);
       } else if (operator === "√") {
-        answer = Math.floor(Math.random() * 10) + 1; // Only perfect squares
-        num1 = answer * answer;
+        num1 = Math.floor(Math.random() * 30) + 20; // Larger perfect square numbers
+        answer = Math.sqrt(num1);
+        num1 = Math.pow(answer, 2); // Ensure it’s a perfect square
         num2 = "";
       } else {
-        num1 = Math.floor(Math.random() * 50) + 1;
-        num2 = Math.floor(Math.random() * 30) + 1;
+        num1 = Math.floor(Math.random() * 100) + 1; // Larger numbers for addition/subtraction/multiplication
+        num2 = Math.floor(Math.random() * 50) + 1; // Larger numbers for division
+
         switch (operator) {
           case "+": answer = num1 + num2; break;
           case "-": answer = num1 - num2; break;
@@ -85,9 +87,9 @@ for (let i = 1; i <= 24; i++) {
 
       const options = [
         answer,
-        answer + Math.floor(Math.random() * 5) + 1,
-        answer - Math.floor(Math.random() * 5) - 1,
-        answer + Math.floor(Math.random() * 10) - 5
+        answer + Math.floor(Math.random() * 10) + 2,
+        answer - Math.floor(Math.random() * 10) - 2,
+        answer + Math.floor(Math.random() * 20) - 10
       ].sort(() => Math.random() - 0.5);
 
       return {
