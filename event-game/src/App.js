@@ -56,16 +56,18 @@ function Leaderboard() {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "10px",
           overflow: "hidden",
-          marginY:"10%",
-          paddingTop:"10%",
+          // marginY:"10%",
+          width:"100%",
+          paddingTop:"15%",
+          paddingBottom:"15%",
           backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
         }}
       >
         <thead>
           <tr style={{ background:"none" }}>
-            <th style={{ padding: "10px", fontSize: "18px" }}>Table No</th>
-            <th style={{ padding: "10px", fontSize: "18px" }}>Score</th>
-            <th style={{ padding: "10px", fontSize: "18px" }}>Time</th>
+            <th style={{ padding: "5px", fontSize: "14px" }}>Table No</th>
+            <th style={{ padding: "5px", fontSize: "14px" }}>Score</th>
+            <th style={{ padding: "5px", fontSize: "14px" }}>Time</th>
           </tr>
         </thead>
         <tbody style={{background:"none",marginBottom:"10px" }}>
@@ -79,27 +81,27 @@ function Leaderboard() {
             >
               <td
                 style={{
-                  padding: "10px",
+                  padding: "5px",
                   borderBottom: "1px solid #ddd",
-                  fontSize: "16px",
+                  fontSize: "12px",
                 }}
               >
                 Table {player.tableNo}
               </td>
               <td
                 style={{
-                  padding: "10px",
+                  padding: "5px",
                   borderBottom: "1px solid #ddd",
-                  fontSize: "16px",
+                  fontSize: "12px",
                 }}
               >
                 {player.score}
               </td>
               <td
                 style={{
-                  padding: "10px",
+                  padding: "5px",
                   borderBottom: "1px solid #ddd",
-                  fontSize: "16px",
+                  fontSize: "12px",
                 }}
               >
                 {player.time}s
@@ -215,7 +217,7 @@ function Quiz() {
       {isSubmitted ? (
         <h2>Your final score: {score}</h2>
       ) : questions.length > 0 ? (
-        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "11%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
+        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",padding: "11%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
             {currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}
           </p>
@@ -249,7 +251,7 @@ function Quiz() {
             disabled={currentQuestionIndex === 0}
             style={{
               padding: "10px 20px",
-              fontSize: "16px",
+              fontSize: "12px",
               marginRight: "10px",
               cursor: currentQuestionIndex === 0 ? "not-allowed" : "pointer",
               backgroundColor: currentQuestionIndex === 0 ? "#ccc" : "#007bff",
@@ -266,7 +268,7 @@ function Quiz() {
               onClick={handleSubmit}
               style={{
                 padding: "10px 20px",
-                fontSize: "16px",
+                fontSize: "12px",
                 backgroundColor: "#ff5733",
                 color: "#fff",
                 border: "none",
@@ -281,7 +283,7 @@ function Quiz() {
               onClick={nextQuestion}
               style={{
                 padding: "10px 20px",
-                fontSize: "16px",
+                fontSize: "12px",
                 backgroundColor: "#28a745",
                 color: "#fff",
                 border: "none",
@@ -305,15 +307,21 @@ function Quiz() {
 function App() {
   return (
     <Router>
-      <div style={{ padding: "20px", textAlign: "center" }}>
+      <div style={{ padding: "0px", textAlign: "center" }}>
         <h1>Math Quiz</h1>
         <nav>
           <Link to="/leaderboard">Leaderboard</Link>
+          <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
+
+         
           {[...Array(24).keys()].map((i) => (
-            <Link key={i} to={`/quiz/table/${i + 1}`} style={{ marginLeft: "10px" }}>
-              Table {i + 1}
+            <Link  key={i} to={`/quiz/table/${i + 1}`} style={{ marginLeft: "10px" }}>
+             
+             <div style={{width:"30px",
+             alignItems:"center",rowGap:"20px"
+              ,height:"30px",display:"flex", justifyContent:"center",padding:"14px" , color:"white",backgroundColor:"green",borderRadius:"30px"}}>{i + 1}</div> 
             </Link>
-          ))}
+          ))} </div>
         </nav>
         <Routes>
           <Route path="/leaderboard" element={<Leaderboard />} />
