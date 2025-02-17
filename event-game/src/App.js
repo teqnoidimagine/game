@@ -12,10 +12,9 @@ function Leaderboard() {
       const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
       const data = await response.json();
 
-      // Sorting: Higher scores first, if scores are equal -> lower time first
       const sortedData = data.sort((a, b) => {
         if (a.score === b.score) {
-          return a.time - b.time; // Lower time first if scores are the same
+          return a.time - b.time; 
         }
         return b.score - a.score; // Higher score first
       });
@@ -38,40 +37,43 @@ function Leaderboard() {
         padding: "20px",
         textAlign: "center",
         fontFamily: "Arial, sans-serif",
-        backgroundColor: "#f4f4f4",
+        backgroundColor: "#0c8240",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
       }}
     >
-      <h1 style={{ color: "#333", fontSize: "28px", marginBottom: "20px" }}>
+      <h1 style={{ color: "white", fontSize: "28px", marginBottom: "20px" }}>
         Leaderboard
       </h1>
       <table
         style={{
-          width: "95%",
-          borderCollapse: "collapse",
-          backgroundColor: "#fff",
+          // width: "95%",
+          // borderCollapse: "collapse",
+          // backgroundColor: "#fff",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "10px",
           overflow: "hidden",
+          marginTop:"10%",
+          paddingTop:"10%",
+          backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
         }}
       >
         <thead>
-          <tr style={{ backgroundColor: "#007BFF", color: "#fff" }}>
+          <tr style={{ background:"none" }}>
             <th style={{ padding: "10px", fontSize: "18px" }}>Table No</th>
             <th style={{ padding: "10px", fontSize: "18px" }}>Score</th>
             <th style={{ padding: "10px", fontSize: "18px" }}>Time</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={{background:"none" }}>
           {leaderboard.map((player, index) => (
             <tr
               key={player.id}
               style={{
-                backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#e9ecef",
+                // backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#e9ecef",
                 transition: "background-color 0.3s",
               }}
             >
@@ -100,7 +102,7 @@ function Leaderboard() {
                   fontSize: "16px",
                 }}
               >
-                {player.time}
+                {player.time}s
               </td>
             </tr>
           ))}
@@ -189,26 +191,31 @@ function Quiz() {
     fetch("https://game-uaxu.onrender.com/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken  }),
+      body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken }),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        const text = await res.text(); // Get raw response
+        console.log("Raw Response:", text); 
+        return JSON.parse(text); // Parse JSON manually
+      })
       .then((data) => {
         console.log("Leaderboard Updated:", data);
         alert(`Quiz submitted! Your score: ${finalScore}, Time Taken: ${timeTaken} sec`);
       })
       .catch((error) => console.error("Error updating leaderboard:", error));
+    
   };
 
 
 
   return (
-    <div style={{ padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto" }}>
-      <h1>Math Quiz - Table {tableNumber}</h1>
-      <h3>⏳ Time Taken: {timeTaken} sec</h3>
+    <div style={{backgroundColor:"#0C8240", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto" }}>
+      <h1  style={{color:"white"}}>Math Quiz - Table {tableNumber}</h1>
+      <h3 style={{color:"white"}}>⏳ Time Taken: {timeTaken} sec</h3>
       {isSubmitted ? (
         <h2>Your final score: {score}</h2>
       ) : questions.length > 0 ? (
-        <div style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "8px", backgroundColor: "#f8f9fa" }}>
+        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "20px", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
             {currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}
           </p>

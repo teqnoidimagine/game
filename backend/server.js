@@ -11,8 +11,8 @@ app.use(express.json()); // Enable JSON parsing
 
 // Fake leaderboard data
 let leaderboard = [
-  { id: 1, tableNo: 1, score: 120, time: "00:30" },
-  { id: 2, tableNo: 2, score: 95, time: "00:45" },
+  // { id: 1, tableNo: 1, score: 120, time: "00:30" },
+  // { id: 2, tableNo: 2, score: 95, time: "00:45" },
 ];
 
 // API to get leaderboard data
