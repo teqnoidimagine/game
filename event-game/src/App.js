@@ -126,12 +126,25 @@ function Quiz() {
   const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
-    fetch(`https://game-uaxu.onrender.com/quiz/table${tableNumber}`)
-      .then((res) => res.json())
-      .then((data) => setQuestions(data.questions.slice(0, 3)))
-      .catch((error) => console.error("Error fetching questions:", error));
+    let interval;
+    const fetchQuestions = () => {
+      fetch(`https://game-uaxu.onrender.com/quiz/table${tableNumber}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.questions && data.questions.length > 0) {
+            setQuestions(data.questions.slice(0, 3)); 
+            clearInterval(interval); // Stop retries when data is received
+          }
+        })
+        .catch((error) => console.error("Error fetching questions:", error));
+    };
+  
+    fetchQuestions(); // Initial call
+  
+    interval = setInterval(fetchQuestions, 1000); // Retry every second
+  
+    return () => clearInterval(interval); // Cleanup interval on unmount
   }, [tableNumber]);
-
   useEffect(() => {
     let timer;
     if (timerActive) {
@@ -207,7 +220,7 @@ function Quiz() {
           overflow: "hidden",
           // marginY:"10%",
           // width:"100%",
-          height:"360px",
+          height:"50%",
           justifyContent:"center",
           alignItems:"center",
           display:"flex",
@@ -215,7 +228,7 @@ function Quiz() {
           // display
           // paddingTop:"15%",
           // paddingBottom:"15%",
-
+         backgroundPosition:"center",
           backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
         }}>
           <h3>Calculation</h3>
@@ -236,7 +249,7 @@ function Quiz() {
                   background: answers[currentQuestionIndex] === option ? "#d4edda" : "#fff",
                 }}
               >
-                 {typeof option === "number" ? option.toFixed(2) : option}
+                 {typeof option === "number" ? option.toFixed(1) : option}
               </li>
             ))}
           </ul>
