@@ -27,10 +27,6 @@ app.post("/leaderboard", (req, res) => {
   if (tableNo === undefined || score === undefined || !time) {
     return res.status(400).json({ message: "Table number, score, and time are required" });
   }
-    // Convert tableNo to a number if it's not already
-    // tableNo = Number(tableNo);
-    // score = Number(score);
-  
 
   // Check if table exists
   let tableIndex = leaderboard.findIndex((entry) => entry.tableNo === tableNo);
@@ -59,26 +55,48 @@ app.post("/leaderboard", (req, res) => {
   res.json({ message: "Score updated", leaderboard });
 });
 
-// Creating quiz routes dynamically
+// Creating quiz routes dynamically with harder questions
 for (let i = 1; i <= 24; i++) {
   app.get(`/quiz/table${i}`, (req, res) => {
-    const operators = ["+", "-", "×", "÷"];
+    const operators = ["+", "-", "×", "÷", "^", "√"];
     const questions = Array.from({ length: 3 }, () => {
-      const num1 = Math.floor(Math.random() * 20) + 1;
-      const num2 = Math.floor(Math.random() * 20) + 1;
-      const operator = operators[Math.floor(Math.random() * operators.length)];
-      let answer;
-
-      switch (operator) {
-        case "+": answer = num1 + num2; break;
-        case "-": answer = num1 - num2; break;
-        case "×": answer = num1 * num2; break;
-        case "÷": answer = parseFloat((num1 / num2).toFixed(2)); break;
+      let num1, num2, operator, answer;
+      
+      operator = operators[Math.floor(Math.random() * operators.length)];
+      
+      if (operator === "^") {
+        num1 = Math.floor(Math.random() * 6) + 2; // Small base
+        num2 = 2; // Always square for simplicity
+        answer = Math.pow(num1, num2);
+      } else if (operator === "√") {
+        answer = Math.floor(Math.random() * 10) + 1; // Only perfect squares
+        num1 = answer * answer;
+        num2 = "";
+      } else {
+        num1 = Math.floor(Math.random() * 50) + 1;
+        num2 = Math.floor(Math.random() * 30) + 1;
+        switch (operator) {
+          case "+": answer = num1 + num2; break;
+          case "-": answer = num1 - num2; break;
+          case "×": answer = num1 * num2; break;
+          case "÷": answer = parseFloat((num1 / num2).toFixed(2)); break;
+        }
       }
 
-      const options = [answer, answer + 1, answer - 1, answer + 2].sort(() => Math.random() - 0.5);
-      return { question: `${num1} ${operator} ${num2} = ?`, options, answer };
+      const options = [
+        answer,
+        answer + Math.floor(Math.random() * 5) + 1,
+        answer - Math.floor(Math.random() * 5) - 1,
+        answer + Math.floor(Math.random() * 10) - 5
+      ].sort(() => Math.random() - 0.5);
+
+      return {
+        question: operator === "√" ? `√${num1} = ?` : `${num1} ${operator} ${num2} = ?`,
+        options,
+        answer
+      };
     });
+
     res.json({ table: i, questions });
   });
 }

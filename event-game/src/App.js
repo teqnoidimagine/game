@@ -56,7 +56,7 @@ function Leaderboard() {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "10px",
           overflow: "hidden",
-          marginTop:"10%",
+          marginY:"10%",
           paddingTop:"10%",
           backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
         }}
@@ -68,7 +68,7 @@ function Leaderboard() {
             <th style={{ padding: "10px", fontSize: "18px" }}>Time</th>
           </tr>
         </thead>
-        <tbody style={{background:"none" }}>
+        <tbody style={{background:"none",marginBottom:"10px" }}>
           {leaderboard.map((player, index) => (
             <tr
               key={player.id}
@@ -209,13 +209,13 @@ function Quiz() {
 
 
   return (
-    <div style={{backgroundColor:"#0C8240", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto" }}>
+    <div style={{backgroundColor:"#0C8240", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto",borderRadius:"20px" }}>
       <h1  style={{color:"white"}}>Math Quiz - Table {tableNumber}</h1>
       <h3 style={{color:"white"}}>⏳ Time Taken: {timeTaken} sec</h3>
       {isSubmitted ? (
         <h2>Your final score: {score}</h2>
       ) : questions.length > 0 ? (
-        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "15%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
+        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",padding: "11%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
             {currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}
           </p>
