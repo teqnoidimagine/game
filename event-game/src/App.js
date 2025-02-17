@@ -1,23 +1,37 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useParams } from "react-router-dom";
+// 🎉 Welcome Page Component
+import arrowW from './arrowW.png';
+import arrowG from './arrowG.png'
+import { useHistory } from 'react-router-dom';
+function Welcome() {
+  const navigate = useNavigate();
 
-// import { useState, useEffect } from "react";
+  return (
+    <div style={{ backgroundImage:"url('/welcome.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",textAlign: "center", padding: "0%", backgroundColor: "#0c8240", height: "100vh", color: "white" }}>
+      {/* <h1>Welcome to the Game!</h1> */}
+      {/* <p>Get ready to play!</p> */}
+      <button
+        onClick={() => navigate("/quiz/3")}
+        style={{ position:"absolute",bottom:"70px",left:"35%",padding: "10px 20px", fontSize: "16px", backgroundColor: "white", color: "black", border: "none", borderRadius: "5px", cursor: "pointer" }}
+      >
+        Start <span><img src={arrowG} width="35px"/></span>
+      </button>
+    </div>
+  );
+}
 
-
+// 🏆 Leaderboard Component
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
+
 
   const fetchLeaderboard = async () => {
     try {
       const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
       const data = await response.json();
 
-      const sortedData = data.sort((a, b) => {
-        if (a.score === b.score) {
-          return a.time - b.time; 
-        }
-        return b.score - a.score; // Higher score first
-      });
+      const sortedData = data.sort((a, b) => (b.score === a.score ? a.time - b.time : b.score - a.score));
 
       setLeaderboard(sortedData);
     } catch (error) {
@@ -32,22 +46,8 @@ function Leaderboard() {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        textAlign: "center",
-        fontFamily: "Arial, sans-serif",
-        backgroundColor: "#0c8240",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        // justifyContent: "center",
-      }}
-    >
-      <h1 style={{ color: "white", fontSize: "28px", marginBottom: "20px" }}>
-        Leaderboard
-      </h1>
+    <div style={{ padding: "20px", textAlign: "center", backgroundColor: "#0c8240", minHeight: "100vh", color: "black" }}>
+      <h1 style={{color:"white"}}>Leaderboard</h1>
       <table
         style={{
           // width: "95%",
@@ -114,10 +114,7 @@ function Leaderboard() {
   );
 }
 
-
-// export default Leaderboard;
-
-
+// 📝 Quiz Component
 function Quiz() {
   const { tableNumber } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -131,29 +128,20 @@ function Quiz() {
   useEffect(() => {
     fetch(`https://game-uaxu.onrender.com/quiz/table${tableNumber}`)
       .then((res) => res.json())
-      .then((data) => {
-        console.log("Fetched Questions:", data);
-        setQuestions(data.questions.slice(0, 3)); 
-      })
+      .then((data) => setQuestions(data.questions.slice(0, 3)))
       .catch((error) => console.error("Error fetching questions:", error));
   }, [tableNumber]);
 
-  // Timer Effect
   useEffect(() => {
     let timer;
     if (timerActive) {
-      timer = setInterval(() => {
-        setTimeTaken((prevTime) => prevTime + 1);
-      }, 1000);
+      timer = setInterval(() => setTimeTaken((prevTime) => prevTime + 1), 1000);
     }
     return () => clearInterval(timer);
   }, [timerActive]);
 
   const handleAnswer = (option) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestionIndex]: option,
-    }));
+    setAnswers((prev) => ({ ...prev, [currentQuestionIndex]: option }));
   };
 
   const nextQuestion = () => {
@@ -177,51 +165,64 @@ function Quiz() {
     });
     return newScore;
   };
-  const formatTime = (seconds) => {
-    let mins = Math.floor(seconds / 60);
-    let secs = seconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
 
   const handleSubmit = () => {
-    setTimerActive(false); // Stop the timer
+    setTimerActive(false);
     const finalScore = calculateScore();
     setScore(finalScore);
     setIsSubmitted(true);
-
-    const formattedTime = formatTime(timeTaken);
+ 
     fetch("https://game-uaxu.onrender.com/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken }),
-    })
-      .then(async (res) => {
-        const text = await res.text(); // Get raw response
-        console.log("Raw Response:", text); 
-        return JSON.parse(text); // Parse JSON manually
-      })
-      .then((data) => {
-        console.log("Leaderboard Updated:", data);
-        alert(`Quiz submitted! Your score: ${finalScore}, Time Taken: ${timeTaken} sec`);
-      })
-      .catch((error) => console.error("Error updating leaderboard:", error));
-    
+    }).catch((error) => console.error("Error updating leaderboard:", error));
+  };
+  const navigate = useNavigate();
+
+  const handleLeaderboardClick = () => {
+    navigate('/leaderboard'); // Navigate to '/leaderboard' route
   };
 
-
-
   return (
-    <div style={{backgroundColor:"#0C8240", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto",borderRadius:"20px" }}>
-      <h1  style={{color:"white"}}>Math Quiz - Table {tableNumber}</h1>
-      <h3 style={{color:"white"}}>⏳ Time Taken: {timeTaken} sec</h3>
+    <div style={{ backgroundImage:"url('/page2.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",height:"100vh", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto", borderRadius: "0px" }}>
+      <h1 style={{ color: "white" }}> Table {tableNumber}</h1>
+      <h3 style={{ color: "white" ,marginTop:"25%"}}>⏳ Time Taken: {timeTaken} sec</h3>
       {isSubmitted ? (
-        <h2>Your final score: {score}</h2>
+        <>
+         <h2>Your final score: {score}</h2>
+         
+         <button   onClick={handleLeaderboardClick} style={{cursor:"pointer",border:"none", padding: "10px", backgroundColor: "#11C05E",borderRadius:"14px", color: "white",fontSize:"20px" }}>
+              Check Leaderboard 
+            </button>
+        </>
+       
       ) : questions.length > 0 ? (
-        <div style={{ backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",padding: "11%", borderRadius: "8px", backgroundColor: "#f8ffa" }}>
+        <div  style={{
+          // width: "95%",
+          // borderCollapse: "collapse",
+          // backgroundColor: "#fff",
+          // boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          borderRadius: "10px",
+          overflow: "hidden",
+          // marginY:"10%",
+          // width:"100%",
+          height:"360px",
+          justifyContent:"center",
+          alignItems:"center",
+          display:"flex",
+          flexDirection:"column",
+          // display
+          // paddingTop:"15%",
+          // paddingBottom:"15%",
+
+          backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
+        }}>
+          <h3>Calculation</h3>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}
+            {currentQuestionIndex + 1}. {"    "} {questions[currentQuestionIndex].question}
           </p>
-          <ul style={{ listStyleType: "none", padding: 0 }}>
+          <ul style={{ display:"flex",justifyContent:"space-evenly",gap:"10px", listStyleType: "none", padding: 0 }}>
             {questions[currentQuestionIndex].options.map((option, idx) => (
               <li
                 key={idx}
@@ -235,63 +236,28 @@ function Quiz() {
                   background: answers[currentQuestionIndex] === option ? "#d4edda" : "#fff",
                 }}
               >
-                {option}
+                 {typeof option === "number" ? option.toFixed(2) : option}
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p style={{color:"white"}}>Loading questions...</p>
+        <p style={{ color: "white" }}>Loading questions...</p>
       )}
 
       {!isSubmitted && (
         <div style={{ marginTop: "20px" }}>
-          <button
-            onClick={prevQuestion}
-            disabled={currentQuestionIndex === 0}
-            style={{
-              padding: "10px 20px",
-              fontSize: "12px",
-              marginRight: "10px",
-              cursor: currentQuestionIndex === 0 ? "not-allowed" : "pointer",
-              backgroundColor: currentQuestionIndex === 0 ? "#ccc" : "#007bff",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-            }}
-          >
+          {/* <button onClick={prevQuestion} disabled={currentQuestionIndex === 0} style={{ padding: "10px", marginRight: "10px", backgroundColor: "#007bff", color: "white" }}>
             Previous
-          </button>
-
+          </button> */}
           {currentQuestionIndex === questions.length - 1 ? (
-            <button
-              onClick={handleSubmit}
-              style={{
-                padding: "10px 20px",
-                fontSize: "12px",
-                backgroundColor: "#ff5733",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Submit
-            </button>
+             <button onClick={handleSubmit}  style={{cursor:"pointer",border:"none", padding: "10px", backgroundColor: "#11C05E",borderRadius:"14px", color: "white",fontSize:"20px" }}>
+           Submit
+           </button>
+          
           ) : (
-            <button
-              onClick={nextQuestion}
-              style={{
-                padding: "10px 20px",
-                fontSize: "12px",
-                backgroundColor: "#28a745",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Next
+            <button onClick={nextQuestion} style={{cursor:"pointer",border:"none", padding: "10px", backgroundColor: "#11C05E",borderRadius:"14px", color: "white",fontSize:"20px" }}>
+              Next <span><img src={arrowW} width="35px"/></span>
             </button>
           )}
         </div>
@@ -300,36 +266,15 @@ function Quiz() {
   );
 }
 
-
-
-
-
-function App() {
+// 🔗 Main App Component
+export default function App() {
   return (
     <Router>
-      <div style={{ padding: "0px", textAlign: "center" }}>
-        <h1>Math Quiz</h1>
-        <nav>
-          <Link to="/leaderboard">Leaderboard</Link>
-          <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
-
-         
-          {[...Array(24).keys()].map((i) => (
-            <Link  key={i} to={`/quiz/table/${i + 1}`} style={{ marginLeft: "10px" }}>
-             
-             <div style={{width:"30px",
-             alignItems:"center",rowGap:"20px"
-              ,height:"30px",display:"flex", justifyContent:"center",padding:"14px" , color:"white",backgroundColor:"green",borderRadius:"30px"}}>{i + 1}</div> 
-            </Link>
-          ))} </div>
-        </nav>
-        <Routes>
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/quiz/table/:tableNumber" element={<Quiz />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/quiz/:tableNumber" element={<Quiz />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
     </Router>
   );
 }
-
-export default App;
