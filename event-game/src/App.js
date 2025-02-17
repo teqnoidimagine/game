@@ -12,8 +12,8 @@ function Welcome() {
       {/* <h1>Welcome to the Game!</h1> */}
       {/* <p>Get ready to play!</p> */}
       <button
-        onClick={() => navigate("/table/5")}
-        style={{ position:"absolute",bottom:"70px",left:"35%",padding: "10px 20px", fontSize: "16px", backgroundColor: "white", color: "black", border: "none", borderRadius: "5px", cursor: "pointer" }}
+        onClick={() => navigate("/quiz/5")}
+        style={{ position:"absolute",bottom:"30px",left:"35%",padding: "10px 20px", fontSize: "16px", backgroundColor: "white", color: "black", border: "none", borderRadius: "5px", cursor: "pointer" }}
       >
         Start <span><img src={arrowG} width="35px"/></span>
       </button>
