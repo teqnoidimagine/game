@@ -24,7 +24,7 @@ function Welcome() {
         onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate using dynamic tableNumber
         style={{ 
           position: "absolute",
-          bottom: "30px",
+          bottom: "25px",
           left: "35%",
           padding: "10px 20px",
           fontSize: "16px",
