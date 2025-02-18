@@ -219,9 +219,9 @@ function Quiz() {
   };
 
   return (
-    <div style={{ backgroundImage:"url('/page2.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",height:"100vh", padding: "20px", textAlign: "center", maxWidth: "600px", margin: "auto", borderRadius: "0px" }}>
-      <h1 style={{ color: "white" }}> Table {tableNumber}</h1>
-      <h3 style={{ color: "white" ,marginTop:"25%"}}>⏳ Time Taken: {timeTaken} sec</h3>
+    <div style={{ backgroundImage:"url('/page2.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",height:"100vh", padding: "0px", textAlign: "center", maxWidth: "600px", margin: "auto", borderRadius: "0px" }}>
+      <div style={{ color: "white",paddingTop:"5%",fontSize:"30px" }}> Table {tableNumber}</div>
+      <h3 style={{ color: "white" ,marginTop:"30%"}}>⏳ Time Taken: {timeTaken} sec</h3>
       {isSubmitted ? (
         <>
          <h2 style={{ color: "white" }}>Your final score: {score}</h2>
