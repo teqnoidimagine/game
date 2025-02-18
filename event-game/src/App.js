@@ -6,20 +6,41 @@ import arrowG from './arrowG.png'
 import { useHistory } from 'react-router-dom';
 function Welcome() {
   const navigate = useNavigate();
+  const { tableNumber } = useParams(); // Get table number from URL
 
   return (
-    <div style={{ backgroundImage:"url('/welcome.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",textAlign: "center", padding: "0%", backgroundColor: "#0c8240", height: "100vh", color: "white" }}>
-      {/* <h1>Welcome to the Game!</h1> */}
-      {/* <p>Get ready to play!</p> */}
+    <div style={{ 
+      backgroundImage: "url('/welcome.png')",
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      textAlign: "center",
+      padding: "0%",
+      backgroundColor: "#0c8240",
+      height: "100vh",
+      color: "white"
+    }}>
       <button
-        onClick={() => navigate("/quiz/5")}
-        style={{ position:"absolute",bottom:"30px",left:"35%",padding: "10px 20px", fontSize: "16px", backgroundColor: "white", color: "black", border: "none", borderRadius: "5px", cursor: "pointer" }}
+        onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate using dynamic tableNumber
+        style={{ 
+          position: "absolute",
+          bottom: "30px",
+          left: "35%",
+          padding: "10px 20px",
+          fontSize: "16px",
+          backgroundColor: "white",
+          color: "black",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer"
+        }}
       >
-        Start <span><img src={arrowG} width="35px"/></span>
+        Start <span><img src={arrowG} width="35px" /></span>
       </button>
     </div>
   );
 }
+
 
 // 🏆 Leaderboard Component
 function Leaderboard() {
@@ -284,7 +305,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Welcome />} />
+      <Route path="/welcome/:tableNumber" element={<Welcome />} />
         <Route path="/quiz/:tableNumber" element={<Quiz />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
