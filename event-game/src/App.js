@@ -224,7 +224,7 @@ function Quiz() {
       <h3 style={{ color: "white" ,marginTop:"25%"}}>⏳ Time Taken: {timeTaken} sec</h3>
       {isSubmitted ? (
         <>
-         <h2>Your final score: {score}</h2>
+         <h2 style={{ color: "white" }}>Your final score: {score}</h2>
          
          <button   onClick={handleLeaderboardClick} style={{cursor:"pointer",border:"none", padding: "10px", backgroundColor: "#11C05E",borderRadius:"14px", color: "white",fontSize:"20px" }}>
               Check Leaderboard 
