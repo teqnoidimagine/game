@@ -10,10 +10,8 @@ app.use(bodyParser.json()); // Parses JSON requests
 app.use(express.json()); // Enable JSON parsing
 
 // Fake leaderboard data
-let leaderboard = [
-  // { id: 1, tableNo: 1, score: 120, time: "00:30" },
-  // { id: 2, tableNo: 2, score: 95, time: "00:45" },
-];
+let leaderboard = [];
+
 // Health check route
 app.get("/health", (req, res) => {
   res.json({ status: "Server is running", port: PORT });
@@ -32,28 +30,22 @@ app.post("/leaderboard", (req, res) => {
     return res.status(400).json({ message: "Table number, score, and time are required" });
   }
 
-  // Check if table exists
   let tableIndex = leaderboard.findIndex((entry) => entry.tableNo === tableNo);
 
   if (tableIndex !== -1) {
-    // Update existing table entry
     leaderboard[tableIndex].score += score;
 
-    // Convert time to seconds and update the best time (minimum)
     let existingTime = leaderboard[tableIndex].time.split(":").map(Number);
     let newTime = time.split(":").map(Number);
 
     let existingTotalSeconds = existingTime[0] * 60 + existingTime[1];
     let newTotalSeconds = newTime[0] * 60 + newTime[1];
 
-    // Keep the better (lower) time
     leaderboard[tableIndex].time = newTotalSeconds < existingTotalSeconds ? time : leaderboard[tableIndex].time;
   } else {
-    // Add new table entry
     leaderboard.push({ id: leaderboard.length + 1, tableNo, score, time });
   }
 
-  // Sort leaderboard by highest score
   leaderboard.sort((a, b) => b.score - a.score);
 
   res.json({ message: "Score updated", leaderboard });
@@ -63,23 +55,24 @@ app.post("/leaderboard", (req, res) => {
 for (let i = 1; i <= 24; i++) {
   app.get(`/quiz/table${i}`, (req, res) => {
     const operators = ["+", "-", "×", "÷", "^", "√"];
+    
     const questions = Array.from({ length: 3 }, () => {
       let num1, num2, operator, answer;
 
       operator = operators[Math.floor(Math.random() * operators.length)];
 
       if (operator === "^") {
-        num1 = Math.floor(Math.random() * 20) + 5; // Larger base for exponentiation
-        num2 = Math.floor(Math.random() * 2) + 2; // Power of 2 or 3
+        num1 = Math.floor(Math.random() * 20) + 5;
+        num2 = Math.floor(Math.random() * 2) + 2;
         answer = Math.pow(num1, num2);
       } else if (operator === "√") {
-        num1 = Math.floor(Math.random() * 30) + 20; // Larger perfect square numbers
+        num1 = Math.floor(Math.random() * 30) + 20;
         answer = Math.sqrt(num1);
-        num1 = Math.pow(answer, 2); // Ensure it’s a perfect square
+        num1 = Math.pow(answer, 2);
         num2 = "";
       } else {
-        num1 = Math.floor(Math.random() * 100) + 1; // Larger numbers for addition/subtraction/multiplication
-        num2 = Math.floor(Math.random() * 50) + 1; // Larger numbers for division
+        num1 = Math.floor(Math.random() * 100) + 1;
+        num2 = Math.floor(Math.random() * 50) + 1;
 
         switch (operator) {
           case "+": answer = num1 + num2; break;
@@ -89,16 +82,22 @@ for (let i = 1; i <= 24; i++) {
         }
       }
 
-      const options = [
-        answer,
-        answer + Math.floor(Math.random() * 10) + 2,
-        answer - Math.floor(Math.random() * 10) - 2,
-        answer + Math.floor(Math.random() * 20) - 10
-      ].sort(() => Math.random() - 0.5);
+      // Generate unique options
+      let options = new Set();
+      options.add(answer);
+
+      while (options.size < 4) {
+        let randomOffset = Math.floor(Math.random() * 20) - 10;
+        let fakeAnswer = operator === "÷" ? parseFloat((answer + randomOffset / 10).toFixed(2)) : answer + randomOffset;
+
+        if (!options.has(fakeAnswer)) {
+          options.add(fakeAnswer);
+        }
+      }
 
       return {
         question: operator === "√" ? `√${num1} = ?` : `${num1} ${operator} ${num2} = ?`,
-        options,
+        options: Array.from(options).sort(() => Math.random() - 0.5),
         answer
       };
     });
