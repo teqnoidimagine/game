@@ -49,7 +49,7 @@ function Leaderboard() {
 
   const fetchLeaderboard = async () => {
     try {
-      const response = await fetch("https://game-uaxu.onrender.com/leaderboard");
+      const response = await fetch("https://game-f1rk.vercel.app/leaderboard");
       const data = await response.json();
 
       const sortedData = data.sort((a, b) => (b.score === a.score ? a.time - b.time : b.score - a.score));
@@ -149,7 +149,7 @@ function Quiz() {
   useEffect(() => {
     let interval;
     const fetchQuestions = () => {
-      fetch(`https://game-uaxu.onrender.com/quiz/table${tableNumber}`)
+      fetch(`https://game-f1rk.vercel.app/quiz/table${tableNumber}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.questions && data.questions.length > 0) {
@@ -206,7 +206,7 @@ function Quiz() {
     setScore(finalScore);
     setIsSubmitted(true);
  
-    fetch("https://game-uaxu.onrender.com/leaderboard", {
+    fetch("https://game-f1rk.vercel.app/leaderboard", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken }),
