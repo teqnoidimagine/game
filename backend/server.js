@@ -14,6 +14,10 @@ let leaderboard = [
   // { id: 1, tableNo: 1, score: 120, time: "00:30" },
   // { id: 2, tableNo: 2, score: 95, time: "00:45" },
 ];
+// Health check route
+app.get("/health", (req, res) => {
+  res.json({ status: "Server is running", port: PORT });
+});
 
 // API to get leaderboard data
 app.get("/leaderboard", (req, res) => {
