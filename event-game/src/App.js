@@ -12,19 +12,19 @@ function Welcome() {
     <div style={{ 
       backgroundImage: "url('/welcome.png')",
       backgroundPosition: "center",
-      backgroundSize: "contain",
+      backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       textAlign: "center",
       padding: "0%",
       backgroundColor: "#4dd766",
-      height: "100vh",
+      height: "80vh",
       color: "white"
     }}>
       <button
         onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate using dynamic tableNumber
         style={{ 
           position: "absolute",
-          bottom: "3vh",
+          bottom: "2vh",
           left: "35%",
           padding: "10px 20px",
           fontSize: "16px",
