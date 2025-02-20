@@ -51,58 +51,19 @@ app.post("/leaderboard", (req, res) => {
   res.json({ message: "Score updated", leaderboard });
 });
 
-// Creating quiz routes dynamically with harder questions
+// Creating quiz routes dynamically with the Pomeranian question
 for (let i = 1; i <= 24; i++) {
   app.get(`/quiz/table${i}`, (req, res) => {
-    const operators = ["+", "-", "×", "÷", "^", "√"];
-    
-    const questions = Array.from({ length: 3 }, () => {
-      let num1, num2, operator, answer;
-
-      operator = operators[Math.floor(Math.random() * operators.length)];
-
-      if (operator === "^") {
-        num1 = Math.floor(Math.random() * 20) + 5;
-        num2 = Math.floor(Math.random() * 2) + 2;
-        answer = Math.pow(num1, num2);
-      } else if (operator === "√") {
-        num1 = Math.floor(Math.random() * 30) + 20;
-        answer = Math.sqrt(num1);
-        num1 = Math.pow(answer, 2);
-        num2 = "";
-      } else {
-        num1 = Math.floor(Math.random() * 100) + 1;
-        num2 = Math.floor(Math.random() * 50) + 1;
-
-        switch (operator) {
-          case "+": answer = num1 + num2; break;
-          case "-": answer = num1 - num2; break;
-          case "×": answer = num1 * num2; break;
-          case "÷": answer = parseFloat((num1 / num2).toFixed(2)); break;
+    res.json({
+      table: i,
+      questions: [
+        {
+          question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads.",
+          options: ["Pomeranian", "Golden Retriever", "Bulldog", "Beagle"],
+          answer: "Pomeranian"
         }
-      }
-
-      // Generate unique options
-      let options = new Set();
-      options.add(answer);
-
-      while (options.size < 4) {
-        let randomOffset = Math.floor(Math.random() * 20) - 10;
-        let fakeAnswer = operator === "÷" ? parseFloat((answer + randomOffset / 10).toFixed(2)) : answer + randomOffset;
-
-        if (!options.has(fakeAnswer)) {
-          options.add(fakeAnswer);
-        }
-      }
-
-      return {
-        question: operator === "√" ? `√${num1} = ?` : `${num1} ${operator} ${num2} = ?`,
-        options: Array.from(options).sort(() => Math.random() - 0.5),
-        answer
-      };
+      ]
     });
-
-    res.json({ table: i, questions });
   });
 }
 
