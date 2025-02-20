@@ -250,7 +250,7 @@ function Quiz() {
           // paddingTop:"15%",
           // paddingBottom:"15%",
          backgroundPosition:"center",
-          backgroundImage:"url('/Union.png')",  backgroundSize: "cover",backgroundRepeat:"no-repeat",
+          backgroundImage:"url('/Union.png')",  backgroundSize: "contain",backgroundRepeat:"no-repeat",
         }}>
           <h3>Calculation</h3>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>
