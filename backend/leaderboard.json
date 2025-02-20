@@ -1,0 +1,50 @@
+{
+  "round1": [
+    {
+      "id": 1,
+      "tableNo": 1,
+      "score": 2,
+      "time": "0:03",
+      "answered": true,
+      "createdAt": "2025-02-20T18:56:12.687Z",
+      "updatedAt": "2025-02-20T18:56:12.687Z"
+    },
+    {
+      "id": 2,
+      "tableNo": 2,
+      "score": 2,
+      "time": "0:03",
+      "answered": true,
+      "createdAt": "2025-02-20T18:56:27.440Z",
+      "updatedAt": "2025-02-20T18:56:27.440Z"
+    },
+    {
+      "id": 4,
+      "tableNo": 4,
+      "score": 2,
+      "time": "0:04",
+      "answered": true,
+      "createdAt": "2025-02-20T18:57:03.665Z",
+      "updatedAt": "2025-02-20T18:57:03.665Z"
+    },
+    {
+      "id": 3,
+      "tableNo": 3,
+      "score": 1,
+      "time": "0:05",
+      "answered": true,
+      "createdAt": "2025-02-20T18:56:40.105Z",
+      "updatedAt": "2025-02-20T18:56:40.105Z"
+    },
+    {
+      "id": 5,
+      "tableNo": 5,
+      "score": 1,
+      "time": "0:04",
+      "answered": true,
+      "createdAt": "2025-02-20T18:57:23.588Z",
+      "updatedAt": "2025-02-20T18:57:23.588Z"
+    }
+  ],
+  "round2": []
+}
