@@ -223,11 +223,11 @@ function Quiz() {
   return (
     <div style={{ backgroundImage:"url('/page2.png')",backgroundPosition:"center", backgroundSize: "cover",backgroundRepeat:"no-repeat",height:"100vh", padding: "0px", textAlign: "center", maxWidth: "600px", margin: "auto", borderRadius: "0px" }}>
       <div style={{ color: "white",paddingTop:"2%",fontSize:"30px" }}> Table {tableNumber}</div>
-      <h3 style={{ color: "white" ,marginTop:"30%"}}>⏳ Time Taken: {timeTaken} sec</h3>
+      <h3 style={{ color: "white" ,marginTop:"27%",marginBottom:"2%"}}>⏳ Time Taken: {timeTaken} sec</h3>
      <div style={{  display:"flex",flexDirection:"column",
     justifyContent:"center",
     alignItems:"center"}}>
-         <p style={{color:"white"}}>0{currentQuestionIndex+1}</p>
+         <p style={{color:"white",margin:"5px"}}>0{currentQuestionIndex+1}</p>
        <div style={{ display: "flex", gap: "8px" }}>
      
       {[...Array(totalQuestions)].map((_, index) => (
