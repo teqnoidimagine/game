@@ -16,7 +16,7 @@ function Welcome() {
       backgroundRepeat: "no-repeat",
       textAlign: "center",
       padding: "0%",
-      backgroundColor: "#0c8240",
+      backgroundColor: "#4dd766",
       height: "100vh",
       color: "white"
     }}>
