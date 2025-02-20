@@ -151,7 +151,7 @@ function Quiz() {
   useEffect(() => {
     let interval;
     const fetchQuestions = () => {
-      fetch(`https://game-f1rk.vercel.app/quiz/table${tableNumber}`)
+      fetch(`http://localhost:3000/quiz/table${tableNumber}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.questions && data.questions.length > 0) {
