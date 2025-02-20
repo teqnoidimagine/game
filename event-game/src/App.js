@@ -12,7 +12,7 @@ function Welcome() {
     <div style={{ 
       backgroundImage: "url('/welcome.png')",
       backgroundPosition: "center",
-      backgroundSize: "cover",
+      backgroundSize: "contain",
       backgroundRepeat: "no-repeat",
       textAlign: "center",
       padding: "0%",
