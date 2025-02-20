@@ -51,7 +51,7 @@ app.post("/leaderboard", (req, res) => {
   res.json({ message: "Score updated", leaderboard });
 });
 
-// Creating quiz routes dynamically with the Pomeranian question
+// Creating quiz routes dynamically with questions
 for (let i = 1; i <= 24; i++) {
   app.get(`/quiz/table${i}`, (req, res) => {
     res.json({
@@ -61,6 +61,11 @@ for (let i = 1; i <= 24; i++) {
           question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads.",
           options: ["Pomeranian", "Golden Retriever", "Bulldog", "Beagle"],
           answer: "Pomeranian"
+        },
+        {
+          question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice.",
+          options: ["Beagle", "Bloodhound", "Cocker Spaniel", "Basset Hound"],
+          answer: "Beagle"
         }
       ]
     });
