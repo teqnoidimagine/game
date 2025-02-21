@@ -8,10 +8,14 @@
 body {
   font-family: 'Bricolage', sans-serif;
 }
-code {
+body {
+  margin: 0; /* Removes default margin */
+  display: flex; /* Example: Change display type */
+}
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 a {
   text-decoration: none;
-}
+} */
