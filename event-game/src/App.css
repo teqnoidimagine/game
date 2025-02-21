@@ -7,6 +7,16 @@
   height: 40vmin;
   pointer-events: none;
 }
+@font-face {
+  font-family: 'Bricolage';
+  src: url('/fonts/Bricolage.ttf') ;
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Bricolage', sans-serif;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

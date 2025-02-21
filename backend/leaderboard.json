@@ -10,6 +10,15 @@
       "updatedAt": "2025-02-21T09:24:52.627Z"
     },
     {
+      "id": 17,
+      "tableNo": 3,
+      "score": 3,
+      "time": "0:27",
+      "answered": true,
+      "createdAt": "2025-02-21T10:10:16.095Z",
+      "updatedAt": "2025-02-21T10:10:16.095Z"
+    },
+    {
       "id": 3,
       "tableNo": 7,
       "score": 2,

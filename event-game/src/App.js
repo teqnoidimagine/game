@@ -14,6 +14,10 @@ import thankYouImage1 from './huft1t.png'; // Import your "Thank you" image (adj
 import thankYouImage2 from './huft2.png'; // Import your "Thank you" image (adjust the path as needed)
 import thankYouImage3 from './huft3.png'; // Import your "Thank you" image (adjust the path as needed)
 
+import wrongImage1 from './wrong1.png'; // Import your "Thank you" image (adjust the path as needed)
+import wrongImage2 from './wrong2.png'; // Import your "Thank you" image (adjust the path as needed)
+import wrongImage3 from './wrong3.png'; // Import your "Thank you" image (adjust the path as needed)
+
 const baseUrl = "http://localhost:5000/";
 
 // Welcome Page Component
@@ -217,18 +221,14 @@ function Leaderboard() {
 
 // Quiz Component
 
-
-
-
 function Quiz() {
   const { tableNumber } = useParams();
   const [round1Questions, setRound1Questions] = useState([
     {
       question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers",
       options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
-      answer: "Dalmatian", // Corrected answer based on the hint
+      answer: "Dalmatian",
     },
-    // Add your second and third questions here, e.g.:
     {
       question: "I’m a small, fluffy breed known for my playful nature and loyalty",
       options: ["Pomeranian", "Chihuahua", "Pug", "Shih Tzu"],
@@ -253,6 +253,7 @@ function Quiz() {
   const [notification, setNotification] = useState("");
   const [isTop10, setIsTop10] = useState(false);
   const [countdown, setCountdown] = useState(20);
+  const [feedbackTimer, setFeedbackTimer] = useState(3); // Feedback countdown
   const [tableInput, setTableInput] = useState("");
   const [showTableVerification, setShowTableVerification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -266,7 +267,7 @@ function Quiz() {
       try {
         const response = await fetch(`${baseUrl}quiz/table${tableNumber}`);
         const data = await response.json();
-        setRound1Questions(data.round1 || round1Questions); // Use fetched data or fallback to local
+        setRound1Questions(data.round1 || round1Questions);
         setRound2Data(data.round2 || { locked: true });
       } catch (error) {
         console.error("Error fetching quiz data:", error);
@@ -320,6 +321,24 @@ function Quiz() {
     return () => clearInterval(timer);
   }, [timerActive, currentRound, isSubmitted.round2]);
 
+  // Feedback timer effect
+  useEffect(() => {
+    let feedbackInterval;
+    if (showFeedback) {
+      setFeedbackTimer(3); // Reset timer to 3 seconds
+      feedbackInterval = setInterval(() => {
+        setFeedbackTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(feedbackInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(feedbackInterval);
+  }, [showFeedback]);
+
   const handleAnswer = (option) => {
     setAnswers((prev) => ({ ...prev, [currentQuestionIndex]: option }));
     const correctAnswer = round1Questions[currentQuestionIndex].answer;
@@ -331,7 +350,7 @@ function Quiz() {
     setTimeout(() => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setShowFeedback(false);
-    }, 3000); // Show feedback for 3 seconds
+    }, 3000);
   };
 
   const calculateRound1Score = () => {
@@ -373,7 +392,7 @@ function Quiz() {
         .finally(() => {
           setIsLoading(false);
         });
-    }, 3000); // Show feedback for 3 seconds before submitting
+    }, 3000);
   };
 
   const checkTop10 = async () => {
@@ -474,7 +493,6 @@ function Quiz() {
 
   const totalQuestions = round1Questions.length;
 
-  // Map question index to corresponding "Thank you" image
   const getThankYouImage = () => {
     switch (currentQuestionIndex) {
       case 0:
@@ -485,6 +503,19 @@ function Quiz() {
         return thankYouImage3;
       default:
         return thankYouImage1; // Fallback
+    }
+  };
+
+  const getWrongImage = () => {
+    switch (currentQuestionIndex) {
+      case 0:
+        return wrongImage1;
+      case 1:
+        return wrongImage2;
+      case 2:
+        return wrongImage3;
+      default:
+        return wrongImage1; // Fallback
     }
   };
 
@@ -660,29 +691,128 @@ function Quiz() {
               }}
             >
               {isAnswerCorrect ? (
-                <img
-                  src={getThankYouImage()}
-                  alt="Thank you"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
+                <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                  <img
+                    src={getThankYouImage()}
+                    alt="Thank you"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "70px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "80%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "70%",
+                        height: "10px",
+                        backgroundColor: "#106336",
+                        borderRadius: "5px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "0%", // Start at 0%
+                          height: "100%",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          animation: "fillBar 3s linear forwards", // 3s animation
+                        }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        position: "absolute",
+                        color: "white",
+                        fontSize: "16px",
+                        marginBottom: "50px",
+                      }}
+                    >
+                      Wait for <span style={{ fontSize: "26px" }}>{feedbackTimer > 1 ? "3" : "2"}</span> sec
+                    </span>
+                  </div>
+                </div>
               ) : (
-                <div
-                  style={{
-                    backgroundColor: "white",
-                    padding: "20px",
-                    borderRadius: "10px",
-                    textAlign: "center",
-                  }}
-                >
-                  <h2 style={{ color: "red" }}>Sorry you are not able to find me</h2>
+                <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                  <img
+                    src={getWrongImage()}
+                    alt="Wrong"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "70px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: "80%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "70%",
+                        height: "10px",
+                        backgroundColor: "#106336",
+                        borderRadius: "5px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "0%", // Start at 0%
+                          height: "100%",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          animation: "fillBar 3s linear forwards", // 3s animation
+                        }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        position: "absolute",
+                        color: "white",
+                        fontSize: "16px",
+                        marginBottom: "50px",
+                      }}
+                    >
+                      Wait for <span style={{ fontSize: "26px" }}>{feedbackTimer > 1 ? "3" : "2"}</span> sec
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           )}
+          <style>
+            {`
+              @keyframes fillBar {
+                from {
+                  width: 0%;
+                }
+                to {
+                  width: 100%;
+                }
+              }
+            `}
+          </style>
         </>
       )}
 
@@ -777,6 +907,8 @@ function Quiz() {
     </div>
   );
 }
+
+
 // Main App Component
 export default function App() {
   return (
