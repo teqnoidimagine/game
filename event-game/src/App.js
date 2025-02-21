@@ -57,7 +57,7 @@ function Welcome() {
 // Leaderboard Component
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState({ round1: [], round2: [], winners: [] });
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchLeaderboard = async () => {
     setIsLoading(true);
@@ -79,7 +79,7 @@ function Leaderboard() {
 
   useEffect(() => {
     fetchLeaderboard();
-    const interval = setInterval(fetchLeaderboard, 5000);
+    const interval = setInterval(fetchLeaderboard, 50000);
     return () => clearInterval(interval);
   }, []);
 
@@ -100,6 +100,8 @@ function Leaderboard() {
       ) : (
         <>
           <h1 style={{ color: "white" }}>Leaderboard</h1>
+
+          {/* Round 1 */}
           <h2 style={{ color: "white" }}>Round 1</h2>
           <table
             style={{
@@ -115,14 +117,16 @@ function Leaderboard() {
           >
             <thead>
               <tr style={{ background: "none" }}>
+                <th style={{ padding: "5px" }}>Serial No</th>
                 <th style={{ padding: "5px" }}>Table No</th>
                 <th style={{ padding: "5px" }}>Score</th>
                 <th style={{ padding: "5px" }}>Time</th>
               </tr>
             </thead>
             <tbody>
-              {leaderboard.round1.map((player) => (
+              {leaderboard.round1.map((player, index) => (
                 <tr key={player.id}>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{index + 1}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
@@ -131,6 +135,7 @@ function Leaderboard() {
             </tbody>
           </table>
 
+          {/* Round 2 */}
           <h2 style={{ color: "white", marginTop: "20px" }}>Round 2</h2>
           <table
             style={{
@@ -146,14 +151,16 @@ function Leaderboard() {
           >
             <thead>
               <tr style={{ background: "none" }}>
+                <th style={{ padding: "5px" }}>Serial No</th>
                 <th style={{ padding: "5px" }}>Table No</th>
                 <th style={{ padding: "5px" }}>Score</th>
                 <th style={{ padding: "5px" }}>Time</th>
               </tr>
             </thead>
             <tbody>
-              {leaderboard.round2.map((player) => (
+              {leaderboard.round2.map((player, index) => (
                 <tr key={player.id}>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{index + 1}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
                   <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
@@ -162,6 +169,7 @@ function Leaderboard() {
             </tbody>
           </table>
 
+          {/* Winners */}
           {leaderboard.winners.length > 0 && (
             <>
               <h2 style={{ color: "white", marginTop: "20px" }}>Winners</h2>
@@ -178,14 +186,16 @@ function Leaderboard() {
               >
                 <thead>
                   <tr style={{ background: "none" }}>
+                    <th style={{ padding: "5px" }}>Serial No</th>
                     <th style={{ padding: "5px" }}>Table No</th>
                     <th style={{ padding: "5px" }}>Score</th>
                     <th style={{ padding: "5px" }}>Time</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {leaderboard.winners.map((player) => (
+                  {leaderboard.winners.map((player, index) => (
                     <tr key={player.id}>
+                      <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{index + 1}</td>
                       <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
                       <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
                       <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
@@ -201,6 +211,7 @@ function Leaderboard() {
   );
 }
 
+
 // Quiz Component
 function Quiz() {
   const { tableNumber } = useParams();
@@ -214,13 +225,13 @@ function Quiz() {
   const [timerActive, setTimerActive] = useState(true);
   const [currentRound, setCurrentRound] = useState("round1");
   const [flippedBoxes, setFlippedBoxes] = useState([]);
-  const [hasAttempted, setHasAttempted] = useState(false);
+  const [attempts, setAttempts] = useState(0); // Changed from hasAttempted to attempts
   const [notification, setNotification] = useState("");
   const [isTop10, setIsTop10] = useState(false);
-  const [countdown, setCountdown] = useState(20); // 2 minutes in seconds
+  const [countdown, setCountdown] = useState(20);
   const [tableInput, setTableInput] = useState("");
   const [showTableVerification, setShowTableVerification] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loading state for API calls
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -241,7 +252,6 @@ function Quiz() {
     fetchQuizData();
   }, [tableNumber]);
 
-  // Timer for Round 1
   useEffect(() => {
     let timer;
     if (timerActive && currentRound === "round1" && !isSubmitted.round1) {
@@ -258,7 +268,6 @@ function Quiz() {
     return () => clearInterval(timer);
   }, [timerActive, currentRound, isSubmitted.round1]);
 
-  // Countdown timer for checking results after Round 1
   useEffect(() => {
     let countdownTimer;
     if (isSubmitted.round1 && currentRound === "round1" && !showTableVerification) {
@@ -277,7 +286,6 @@ function Quiz() {
     return () => clearInterval(countdownTimer);
   }, [isSubmitted.round1, currentRound, showTableVerification]);
 
-  // Timer for Round 2
   useEffect(() => {
     let timer;
     if (timerActive && currentRound === "round2" && !isSubmitted.round2) {
@@ -373,34 +381,56 @@ function Quiz() {
   };
 
   const handleBoxFlip = async (box) => {
-    if (hasAttempted || isSubmitted.round2) return;
+    if (attempts >= 2 || isSubmitted.round2) return;
 
-    setFlippedBoxes([box.id]);
-    setHasAttempted(true);
-    const newScore = box.isCorrect ? 5 : 0;
-    setScore((prev) => ({ ...prev, round2: newScore }));
-    setTimerActive(false);
-    setIsSubmitted((prev) => ({ ...prev, round2: true }));
+    const newFlippedBoxes = [...flippedBoxes, box.id];
+    setFlippedBoxes(newFlippedBoxes);
+    setAttempts(attempts + 1);
 
-    const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
-    setIsLoading(true);
-    try {
-      await fetch(`${baseUrl}leaderboard`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tableNo: Number(tableNumber), score: newScore, time: timeFormatted, round: "round2" }),
-      });
-      toast.success("Round 2 submitted successfully!");
-      if (newScore > 0) {
+    if (box.isCorrect) {
+      // If correct box is flipped, set score and submit
+      setScore((prev) => ({ ...prev, round2: 5 }));
+      setTimerActive(false);
+      setIsSubmitted((prev) => ({ ...prev, round2: true }));
+
+      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+      setIsLoading(true);
+      try {
+        await fetch(`${baseUrl}leaderboard`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tableNo: Number(tableNumber), score: 5, time: timeFormatted, round: "round2" }),
+        });
+        toast.success("Round 2 submitted successfully!");
         toast.success("Great job! You won Round 2!", { duration: 4000 });
-      } else {
-        toast.error("Oops! You lost Round 2.", { duration: 4000 });
+      } catch (error) {
+        console.error("Error submitting Round 2:", error);
+        toast.error("Failed to submit Round 2 score");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error submitting Round 2:", error);
-      toast.error("Failed to submit Round 2 score");
-    } finally {
-      setIsLoading(false);
+    } else if (attempts + 1 === 2) {
+      // If second attempt fails, submit with score 0
+      setScore((prev) => ({ ...prev, round2: 0 }));
+      setTimerActive(false);
+      setIsSubmitted((prev) => ({ ...prev, round2: true }));
+
+      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+      setIsLoading(true);
+      try {
+        await fetch(`${baseUrl}leaderboard`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tableNo: Number(tableNumber), score: 0, time: timeFormatted, round: "round2" }),
+        });
+        toast.success("Round 2 submitted successfully!");
+        toast.error("Oops! You lost Round 2.", { duration: 4000 });
+      } catch (error) {
+        console.error("Error submitting Round 2:", error);
+        toast.error("Failed to submit Round 2 score");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -483,7 +513,6 @@ function Quiz() {
               margin:"20px",
               borderRadius:"20px",
               boxShadow:"0 0 0 1px lightgray",
-              // backgroundImage: "url('/Union.png')",
               backgroundColor:"white",
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
@@ -491,37 +520,36 @@ function Quiz() {
           >
             <p style={{ fontSize: "18px", fontWeight: "bold" }}>{round1Questions[currentQuestionIndex].question}</p>
             <ul
-  style={{
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-evenly",
-    gap: "10px",
-    listStyleType: "none",
-    padding: "0",
-  }}
->
-  {round1Questions[currentQuestionIndex].options.map((option, idx) => (
-    <li
-      key={idx}
-      onClick={() => handleAnswer(option)}
-      style={{
-        padding: "10px",
-        margin: "5px 0",
-        width:"34vw",
-        border: "2px solid white", // Ensuring all options have the same border width
-        borderRadius: "5px",
-        cursor: "pointer",
-        background: "#fff", // Keeping background white for all options
-        backgroundColor: "#000", // Ensuring text is visible
-        color: "white",
-        boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px white" : "none", // White border when selected
-      }}
-    >
-      {option}
-    </li>
-  ))}
-</ul>
-
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-evenly",
+                gap: "10px",
+                listStyleType: "none",
+                padding: "0",
+              }}
+            >
+              {round1Questions[currentQuestionIndex].options.map((option, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => handleAnswer(option)}
+                  style={{
+                    padding: "10px",
+                    margin: "5px 0",
+                    width:"34vw",
+                    border: "2px solid white",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    background: "#fff",
+                    backgroundColor: "#000",
+                    color: "white",
+                    boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
+                  }}
+                >
+                  {option}
+                </li>
+              ))}
+            </ul>
           </div>
           <div style={{ marginTop: "20px" }}>
             {currentQuestionIndex === totalQuestions - 1 ? (
@@ -591,7 +619,8 @@ function Quiz() {
 
       {currentRound === "round2" && round2Data && !round2Data.locked && !isLoading && (
         <div style={{ height: "50%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (One Chance Only)</h3>
+          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
+          <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
             {round2Data.boxes.map((box) => (
               <div
@@ -602,7 +631,7 @@ function Quiz() {
                   height: "50px",
                   backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
                   borderRadius: "5px",
-                  cursor: hasAttempted ? "default" : "pointer",
+                  cursor: attempts >= 2 || isSubmitted.round2 ? "default" : "pointer",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
