@@ -10,6 +10,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import arrowW from './arrowW.png';
 import arrowG from './arrowG.png';
 import loadingGif from './loading.gif'; // Import your loading GIF
+import thankYouImage1 from './huft1t.png'; // Import your "Thank you" image (adjust the path as needed)
+import thankYouImage2 from './huft2.png'; // Import your "Thank you" image (adjust the path as needed)
+import thankYouImage3 from './huft3.png'; // Import your "Thank you" image (adjust the path as needed)
 
 const baseUrl = "http://localhost:5000/";
 
@@ -213,9 +216,30 @@ function Leaderboard() {
 
 
 // Quiz Component
+
+
+
+
 function Quiz() {
   const { tableNumber } = useParams();
-  const [round1Questions, setRound1Questions] = useState([]);
+  const [round1Questions, setRound1Questions] = useState([
+    {
+      question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers",
+      options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
+      answer: "Dalmatian", // Corrected answer based on the hint
+    },
+    // Add your second and third questions here, e.g.:
+    {
+      question: "I’m a small, fluffy breed known for my playful nature and loyalty",
+      options: ["Pomeranian", "Chihuahua", "Pug", "Shih Tzu"],
+      answer: "Pomeranian",
+    },
+    {
+      question: "I’m a large working breed, often used for guarding and pulling sleds",
+      options: ["German Shepherd", "Saint Bernard", "Bernese Mountain Dog", "Alaskan Malamute"],
+      answer: "Alaskan Malamute",
+    },
+  ]);
   const [round2Data, setRound2Data] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -225,13 +249,15 @@ function Quiz() {
   const [timerActive, setTimerActive] = useState(true);
   const [currentRound, setCurrentRound] = useState("round1");
   const [flippedBoxes, setFlippedBoxes] = useState([]);
-  const [attempts, setAttempts] = useState(0); // Changed from hasAttempted to attempts
+  const [attempts, setAttempts] = useState(0);
   const [notification, setNotification] = useState("");
   const [isTop10, setIsTop10] = useState(false);
   const [countdown, setCountdown] = useState(20);
   const [tableInput, setTableInput] = useState("");
   const [showTableVerification, setShowTableVerification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -240,7 +266,7 @@ function Quiz() {
       try {
         const response = await fetch(`${baseUrl}quiz/table${tableNumber}`);
         const data = await response.json();
-        setRound1Questions(data.round1 || []);
+        setRound1Questions(data.round1 || round1Questions); // Use fetched data or fallback to local
         setRound2Data(data.round2 || { locked: true });
       } catch (error) {
         console.error("Error fetching quiz data:", error);
@@ -296,12 +322,16 @@ function Quiz() {
 
   const handleAnswer = (option) => {
     setAnswers((prev) => ({ ...prev, [currentQuestionIndex]: option }));
+    const correctAnswer = round1Questions[currentQuestionIndex].answer;
+    setIsAnswerCorrect(option === correctAnswer);
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < round1Questions.length - 1) {
+    setShowFeedback(true);
+    setTimeout(() => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
+      setShowFeedback(false);
+    }, 3000); // Show feedback for 3 seconds
   };
 
   const calculateRound1Score = () => {
@@ -313,32 +343,37 @@ function Quiz() {
   };
 
   const handleRound1Submit = async (isAuto = false) => {
-    setTimerActive(false);
-    const finalScore = calculateRound1Score();
-    setScore((prev) => ({ ...prev, round1: finalScore }));
-    setIsSubmitted((prev) => ({ ...prev, round1: true }));
+    setShowFeedback(true);
+    setTimeout(() => {
+      setTimerActive(false);
+      const finalScore = calculateRound1Score();
+      setScore((prev) => ({ ...prev, round1: finalScore }));
+      setIsSubmitted((prev) => ({ ...prev, round1: true }));
+      setShowFeedback(false);
 
-    const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${baseUrl}leaderboard`, {
+      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+      setIsLoading(true);
+      fetch(`${baseUrl}leaderboard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeFormatted, round: "round1" }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(errorData.message);
-        return;
-      }
-      toast.success("Round 1 submitted successfully!");
-    } catch (error) {
-      console.error("Error updating leaderboard:", error);
-      toast.error("Failed to submit Round 1 score");
-    } finally {
-      setIsLoading(false);
-    }
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((errorData) => {
+              throw new Error(errorData.message);
+            });
+          }
+          toast.success("Round 1 submitted successfully!");
+        })
+        .catch((error) => {
+          console.error("Error updating leaderboard:", error);
+          toast.error("Failed to submit Round 1 score");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }, 3000); // Show feedback for 3 seconds before submitting
   };
 
   const checkTop10 = async () => {
@@ -347,7 +382,7 @@ function Quiz() {
       const leaderboardResponse = await fetch(`${baseUrl}leaderboard`);
       const leaderboardData = await leaderboardResponse.json();
       const sortedRound1 = leaderboardData.round1.sort((a, b) => b.score - a.score).slice(0, 10);
-      const top10Tables = sortedRound1.map(player => player.tableNo);
+      const top10Tables = sortedRound1.map((player) => player.tableNo);
 
       if (top10Tables.includes(Number(tableNumber))) {
         setIsTop10(true);
@@ -372,7 +407,7 @@ function Quiz() {
       setCurrentRound("round2");
       setTimerActive(true);
       setTimeTaken(0);
-      setRound2Data(prev => ({ ...prev, locked: false }));
+      setRound2Data((prev) => ({ ...prev, locked: false }));
       setShowTableVerification(false);
       toast.success("Secret Code verified! Proceeding to Round 2...");
     } else {
@@ -388,7 +423,6 @@ function Quiz() {
     setAttempts(attempts + 1);
 
     if (box.isCorrect) {
-      // If correct box is flipped, set score and submit
       setScore((prev) => ({ ...prev, round2: 5 }));
       setTimerActive(false);
       setIsSubmitted((prev) => ({ ...prev, round2: true }));
@@ -410,7 +444,6 @@ function Quiz() {
         setIsLoading(false);
       }
     } else if (attempts + 1 === 2) {
-      // If second attempt fails, submit with score 0
       setScore((prev) => ({ ...prev, round2: 0 }));
       setTimerActive(false);
       setIsSubmitted((prev) => ({ ...prev, round2: true }));
@@ -435,11 +468,25 @@ function Quiz() {
   };
 
   const handleLeaderboardClick = () => {
-    navigate('/leaderboard');
+    navigate("/leaderboard");
     toast("Loading leaderboard...", { duration: 2000 });
   };
 
   const totalQuestions = round1Questions.length;
+
+  // Map question index to corresponding "Thank you" image
+  const getThankYouImage = () => {
+    switch (currentQuestionIndex) {
+      case 0:
+        return thankYouImage1;
+      case 1:
+        return thankYouImage2;
+      case 2:
+        return thankYouImage3;
+      default:
+        return thankYouImage1; // Fallback
+    }
+  };
 
   return (
     <div
@@ -453,6 +500,7 @@ function Quiz() {
         textAlign: "center",
         maxWidth: "600px",
         margin: "auto",
+        position: "relative",
       }}
     >
       <Toaster position="top-right" />
@@ -470,104 +518,171 @@ function Quiz() {
       )}
 
       {notification && !isLoading && (
-        <div style={{ 
-          color: isTop10 ? "green" : "red", 
-          fontSize: "20px", 
-          margin: "20px",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
-          padding: "10px",
-          borderRadius: "5px"
-        }}>
+        <div
+          style={{
+            color: isTop10 ? "green" : "red",
+            fontSize: "20px",
+            margin: "20px",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
+        >
           {notification}
           {isSubmitted.round1 && currentRound === "round1" && !showTableVerification && countdown > 0 && (
-            <p>Results in: {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, "0")}</p>
+            <p>
+              Results in: {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, "0")}
+            </p>
           )}
         </div>
       )}
 
       {currentRound === "round1" && !isSubmitted.round1 && round1Questions.length > 0 && !isLoading && (
         <>
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            <p style={{ color: "white", margin: "5px" }}>0{currentQuestionIndex + 1}</p>
-            <div style={{ display: "flex", gap: "8px" }}>
-              {[...Array(totalQuestions)].map((_, index) => (
-                <div
-                  key={index}
-                  style={{
-                    backgroundColor: index === currentQuestionIndex ? "#4dd766" : "white",
-                    height: "10px",
-                    width: "10px",
-                    borderRadius: "100%",
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          {/* Question Display */}
           <div
             style={{
-              height: "50%",
-              display: "flex",
+              display: showFeedback ? "none" : "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              margin:"20px",
-              borderRadius:"20px",
-              boxShadow:"0 0 0 1px lightgray",
-              backgroundColor:"white",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
             }}
           >
-            <p style={{ fontSize: "18px", fontWeight: "bold" }}>{round1Questions[currentQuestionIndex].question}</p>
-            <ul
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+              <p style={{ color: "white", margin: "5px" }}>0{currentQuestionIndex + 1}</p>
+              <div style={{ display: "flex", gap: "8px" }}>
+                {[...Array(totalQuestions)].map((_, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      backgroundColor: index === currentQuestionIndex ? "#4dd766" : "white",
+                      height: "10px",
+                      width: "10px",
+                      borderRadius: "100%",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+            <div
               style={{
+                height: "50%",
                 display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-evenly",
-                gap: "10px",
-                listStyleType: "none",
-                padding: "0",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "20px",
+                borderRadius: "20px",
+                boxShadow: "0 0 0 1px lightgray",
+                backgroundColor: "white",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
               }}
             >
-              {round1Questions[currentQuestionIndex].options.map((option, idx) => (
-                <li
-                  key={idx}
-                  onClick={() => handleAnswer(option)}
+              <p style={{ fontSize: "18px", fontWeight: "bold" }}>{round1Questions[currentQuestionIndex].question}</p>
+              <ul
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-evenly",
+                  gap: "10px",
+                  listStyleType: "none",
+                  padding: "0",
+                }}
+              >
+                {round1Questions[currentQuestionIndex].options.map((option, idx) => (
+                  <li
+                    key={idx}
+                    onClick={() => handleAnswer(option)}
+                    style={{
+                      padding: "10px",
+                      margin: "5px 0",
+                      width: "34vw",
+                      border: "2px solid white",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      background: "#fff",
+                      backgroundColor: "#000",
+                      color: "white",
+                      boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
+                    }}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ marginTop: "20px" }}>
+              {currentQuestionIndex < totalQuestions - 1 ? (
+                <button
+                  onClick={nextQuestion}
                   style={{
                     padding: "10px",
-                    margin: "5px 0",
-                    width:"34vw",
-                    border: "2px solid white",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    background: "#fff",
-                    backgroundColor: "#000",
+                    backgroundColor: "#11C05E",
+                    borderRadius: "14px",
                     color: "white",
-                    boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
+                    border: "none",
                   }}
                 >
-                  {option}
-                </li>
-              ))}
-            </ul>
+                  Next <span><img src={arrowW} width="35px" /></span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleRound1Submit(false)}
+                  style={{
+                    padding: "10px",
+                    backgroundColor: "#11C05E",
+                    borderRadius: "14px",
+                    color: "white",
+                    border: "none",
+                  }}
+                >
+                  Submit
+                </button>
+              )}
+            </div>
           </div>
-          <div style={{ marginTop: "20px" }}>
-            {currentQuestionIndex === totalQuestions - 1 ? (
-              <button
-                onClick={() => handleRound1Submit(false)}
-                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-              >
-                Submit
-              </button>
-            ) : (
-              <button
-                onClick={nextQuestion}
-                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-              >
-                Next <span><img src={arrowW} width="35px" /></span>
-              </button>
-            )}
-          </div>
+
+          {/* Feedback Overlay */}
+          {showFeedback && (
+            <div
+              style={{
+                position: "absolute",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 10,
+              }}
+            >
+              {isAnswerCorrect ? (
+                <img
+                  src={getThankYouImage()}
+                  alt="Thank you"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    padding: "20px",
+                    borderRadius: "10px",
+                    textAlign: "center",
+                  }}
+                >
+                  <h2 style={{ color: "red" }}>Sorry you are not able to find me</h2>
+                </div>
+              )}
+            </div>
+          )}
         </>
       )}
 
@@ -662,7 +777,6 @@ function Quiz() {
     </div>
   );
 }
-
 // Main App Component
 export default function App() {
   return (

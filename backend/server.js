@@ -152,6 +152,11 @@ for (let i = 1; i <= 24; i++) {
           options: ["Beagle", "Bloodhound", "Cocker Spaniel", "Basset Hound"],
           answer: "Beagle",
         },
+        {
+          question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers",
+          options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
+          answer: "Dalmatian",
+        },
       ],
       round2: allAnswered && isEligibleForRound2
         ? {
