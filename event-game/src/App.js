@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate, useParams } from 'react-router-dom';
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 import arrowW from './arrowW.png';
 import arrowG from './arrowG.png';
+import loadingGif from './loading.gif'; // Import your loading GIF
 
 const baseUrl = "http://localhost:5000/";
 
-// 🎉 Welcome Page Component
+// Welcome Page Component
 function Welcome() {
   const navigate = useNavigate();
   const { tableNumber } = useParams();
@@ -47,27 +54,26 @@ function Welcome() {
   );
 }
 
-// 🏆 Leaderboard Component
+// Leaderboard Component
 function Leaderboard() {
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [leaderboard, setLeaderboard] = useState({ round1: [], round2: [], winners: [] });
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const fetchLeaderboard = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${baseUrl}leaderboard`);
       const data = await response.json();
-      const sortedRound1 = data.round1.sort((a, b) =>
-        b.score === a.score ? a.time.localeCompare(b.time) : b.score - a.score
-      );
-      const sortedRound2 = data.round2.sort((a, b) =>
-        b.score === a.score ? a.time.localeCompare(b.time) : b.score - a.score
-      );
       setLeaderboard({
-        round1: sortedRound1,
-        round2: data.allAnswered ? sortedRound2 : [],
+        round1: data.round1.sort((a, b) => b.score - a.score),
+        round2: data.round2.sort((a, b) => b.score - a.score),
         winners: data.winners,
       });
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
+      toast.error("Failed to fetch leaderboard");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,135 +93,115 @@ function Leaderboard() {
         color: "black",
       }}
     >
-      <h1 style={{ color: "white" }}>Leaderboard</h1>
-      <div>
-        <h2 style={{ color: "white" }}>Round 1</h2>
-        <table
-          style={{
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            borderRadius: "10px",
-            overflow: "hidden",
-            width: "100%",
-            paddingTop: "15%",
-            paddingBottom: "15%",
-            backgroundImage: "url('/Union.png')",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "none" }}>
-              <th style={{ padding: "5px", fontSize: "14px" }}>Table No</th>
-              <th style={{ padding: "5px", fontSize: "14px" }}>Score</th>
-              <th style={{ padding: "5px", fontSize: "14px" }}>Time</th>
-            </tr>
-          </thead>
-          <tbody style={{ background: "none" }}>
-            {leaderboard.round1?.map((player, index) => (
-              <tr key={player.id}>
-                <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                  Table {player.tableNo}
-                </td>
-                <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                  {player.score}
-                </td>
-                <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                  {player.time}
-                </td>
+      {isLoading ? (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+          <img src={loadingGif} alt="Loading..." style={{ width: "100px" }} />
+        </div>
+      ) : (
+        <>
+          <h1 style={{ color: "white" }}>Leaderboard</h1>
+          <h2 style={{ color: "white" }}>Round 1</h2>
+          <table
+            style={{
+              width: "100%",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              borderRadius: "10px",
+              overflow: "hidden",
+              backgroundImage: "url('/Union.png')",
+              backgroundColor: "white",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <thead>
+              <tr style={{ background: "none" }}>
+                <th style={{ padding: "5px" }}>Table No</th>
+                <th style={{ padding: "5px" }}>Score</th>
+                <th style={{ padding: "5px" }}>Time</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {leaderboard.round2?.length > 0 && (
-          <>
-            <h2 style={{ color: "white", marginTop: "20px" }}>Round 2</h2>
-            <table
-              style={{
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "10px",
-                overflow: "hidden",
-                width: "100%",
-                paddingTop: "15%",
-                paddingBottom: "15%",
-                backgroundImage: "url('/Union.png')",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <thead>
-                <tr style={{ background: "none" }}>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Table No</th>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Score</th>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Time</th>
+            </thead>
+            <tbody>
+              {leaderboard.round1.map((player) => (
+                <tr key={player.id}>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
                 </tr>
-              </thead>
-              <tbody style={{ background: "none" }}>
-                {leaderboard.round2.map((player, index) => (
-                  <tr key={player.id}>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      Table {player.tableNo}
-                    </td>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      {player.score}
-                    </td>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      {player.time}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
+              ))}
+            </tbody>
+          </table>
 
-        {leaderboard.winners?.length > 0 && (
-          <>
-            <h2 style={{ color: "white", marginTop: "20px" }}>Winners</h2>
-            <table
-              style={{
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "10px",
-                overflow: "hidden",
-                width: "100%",
-                paddingTop: "15%",
-                paddingBottom: "15%",
-                backgroundImage: "url('/Union.png')",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <thead>
-                <tr style={{ background: "none" }}>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Table No</th>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Score</th>
-                  <th style={{ padding: "5px", fontSize: "14px" }}>Time</th>
+          <h2 style={{ color: "white", marginTop: "20px" }}>Round 2</h2>
+          <table
+            style={{
+              width: "100%",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              borderRadius: "10px",
+              overflow: "hidden",
+              backgroundImage: "url('/Union.png')",
+              backgroundColor: "white",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <thead>
+              <tr style={{ background: "none" }}>
+                <th style={{ padding: "5px" }}>Table No</th>
+                <th style={{ padding: "5px" }}>Score</th>
+                <th style={{ padding: "5px" }}>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaderboard.round2.map((player) => (
+                <tr key={player.id}>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
+                  <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
                 </tr>
-              </thead>
-              <tbody style={{ background: "none" }}>
-                {leaderboard.winners.map((player, index) => (
-                  <tr key={player.id}>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      Table {player.tableNo}
-                    </td>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      {player.score}
-                    </td>
-                    <td style={{ padding: "5px", borderBottom: "1px solid #ddd", fontSize: "12px" }}>
-                      {player.time}
-                    </td>
+              ))}
+            </tbody>
+          </table>
+
+          {leaderboard.winners.length > 0 && (
+            <>
+              <h2 style={{ color: "white", marginTop: "20px" }}>Winners</h2>
+              <table
+                style={{
+                  width: "100%",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  backgroundColor: "white",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <thead>
+                  <tr style={{ background: "none" }}>
+                    <th style={{ padding: "5px" }}>Table No</th>
+                    <th style={{ padding: "5px" }}>Score</th>
+                    <th style={{ padding: "5px" }}>Time</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {leaderboard.winners.map((player) => (
+                    <tr key={player.id}>
+                      <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.tableNo}</td>
+                      <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.score}</td>
+                      <td style={{ padding: "5px", borderBottom: "1px solid #ddd" }}>{player.time}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }
 
-// 📝 Quiz Component
+// Quiz Component
 function Quiz() {
   const { tableNumber } = useParams();
   const [round1Questions, setRound1Questions] = useState([]);
@@ -228,11 +214,18 @@ function Quiz() {
   const [timerActive, setTimerActive] = useState(true);
   const [currentRound, setCurrentRound] = useState("round1");
   const [flippedBoxes, setFlippedBoxes] = useState([]);
+  const [hasAttempted, setHasAttempted] = useState(false);
+  const [notification, setNotification] = useState("");
+  const [isTop10, setIsTop10] = useState(false);
+  const [countdown, setCountdown] = useState(20); // 2 minutes in seconds
+  const [tableInput, setTableInput] = useState("");
+  const [showTableVerification, setShowTableVerification] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state for API calls
   const navigate = useNavigate();
 
-  // Fetch quiz data
   useEffect(() => {
     const fetchQuizData = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`${baseUrl}quiz/table${tableNumber}`);
         const data = await response.json();
@@ -240,21 +233,59 @@ function Quiz() {
         setRound2Data(data.round2 || { locked: true });
       } catch (error) {
         console.error("Error fetching quiz data:", error);
+        toast.error("Failed to load quiz data");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchQuizData();
   }, [tableNumber]);
 
-  // Timer
+  // Timer for Round 1
   useEffect(() => {
     let timer;
-    if (timerActive) {
+    if (timerActive && currentRound === "round1" && !isSubmitted.round1) {
+      timer = setInterval(() => {
+        setTimeTaken((prev) => {
+          if (prev >= 120) {
+            handleRound1Submit(true);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [timerActive, currentRound, isSubmitted.round1]);
+
+  // Countdown timer for checking results after Round 1
+  useEffect(() => {
+    let countdownTimer;
+    if (isSubmitted.round1 && currentRound === "round1" && !showTableVerification) {
+      setNotification("Waiting for results...");
+      countdownTimer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            checkTop10();
+            clearInterval(countdownTimer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(countdownTimer);
+  }, [isSubmitted.round1, currentRound, showTableVerification]);
+
+  // Timer for Round 2
+  useEffect(() => {
+    let timer;
+    if (timerActive && currentRound === "round2" && !isSubmitted.round2) {
       timer = setInterval(() => setTimeTaken((prev) => prev + 1), 1000);
     }
     return () => clearInterval(timer);
-  }, [timerActive]);
+  }, [timerActive, currentRound, isSubmitted.round2]);
 
-  // Round 1 answer handling
   const handleAnswer = (option) => {
     setAnswers((prev) => ({ ...prev, [currentQuestionIndex]: option }));
   };
@@ -273,59 +304,109 @@ function Quiz() {
     return newScore;
   };
 
-  const handleRound1Submit = async () => {
+  const handleRound1Submit = async (isAuto = false) => {
     setTimerActive(false);
     const finalScore = calculateRound1Score();
     setScore((prev) => ({ ...prev, round1: finalScore }));
     setIsSubmitted((prev) => ({ ...prev, round1: true }));
-  
+
     const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+    setIsLoading(true);
     try {
       const response = await fetch(`${baseUrl}leaderboard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeFormatted, round: "round1" }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
-        alert(errorData.message); // Display the error message (e.g., "This table has already submitted answers for Round 1")
+        toast.error(errorData.message);
         return;
       }
-  
-      if (round2Data && !round2Data.locked) {
-        setCurrentRound("round2");
-        setTimerActive(true);
-        setTimeTaken(0);
-      }
+      toast.success("Round 1 submitted successfully!");
     } catch (error) {
       console.error("Error updating leaderboard:", error);
-      alert("An error occurred while submitting your score.");
+      toast.error("Failed to submit Round 1 score");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Round 2 flip game handling
+  const checkTop10 = async () => {
+    setIsLoading(true);
+    try {
+      const leaderboardResponse = await fetch(`${baseUrl}leaderboard`);
+      const leaderboardData = await leaderboardResponse.json();
+      const sortedRound1 = leaderboardData.round1.sort((a, b) => b.score - a.score).slice(0, 10);
+      const top10Tables = sortedRound1.map(player => player.tableNo);
+
+      if (top10Tables.includes(Number(tableNumber))) {
+        setIsTop10(true);
+        setNotification("Congratulations! You have qualified for Round 2!");
+        toast.success("Congratulations! You’ve qualified for Round 2!", { duration: 4000 });
+        setShowTableVerification(true);
+      } else {
+        setNotification("Sorry, you didn't qualify for Round 2.");
+        toast.error("Sorry, you didn’t qualify for Round 2.", { duration: 4000 });
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard for top 10:", error);
+      setNotification("Error fetching results. Please try again.");
+      toast.error("Error fetching results");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleTableVerification = () => {
+    if (Number(tableInput) === Number(tableNumber)) {
+      setCurrentRound("round2");
+      setTimerActive(true);
+      setTimeTaken(0);
+      setRound2Data(prev => ({ ...prev, locked: false }));
+      setShowTableVerification(false);
+      toast.success("Secret Code verified! Proceeding to Round 2...");
+    } else {
+      toast.error("Incorrect table number. Please try again.");
+    }
+  };
+
   const handleBoxFlip = async (box) => {
-    if (flippedBoxes.includes(box.id) || isSubmitted.round2) return;
+    if (hasAttempted || isSubmitted.round2) return;
 
-    setFlippedBoxes((prev) => [...prev, box.id]);
-    const newScore = box.isCorrect ? 5 : 0; // 5 points for correct box
-    setScore((prev) => ({ ...prev, round2: prev.round2 + newScore }));
+    setFlippedBoxes([box.id]);
+    setHasAttempted(true);
+    const newScore = box.isCorrect ? 5 : 0;
+    setScore((prev) => ({ ...prev, round2: newScore }));
+    setTimerActive(false);
+    setIsSubmitted((prev) => ({ ...prev, round2: true }));
 
-    if (box.isCorrect || flippedBoxes.length + 1 === round2Data.boxes.length) {
-      setTimerActive(false);
-      setIsSubmitted((prev) => ({ ...prev, round2: true }));
-      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+    const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
+    setIsLoading(true);
+    try {
       await fetch(`${baseUrl}leaderboard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tableNo: Number(tableNumber), score: newScore, time: timeFormatted, round: "round2" }),
       });
+      toast.success("Round 2 submitted successfully!");
+      if (newScore > 0) {
+        toast.success("Great job! You won Round 2!", { duration: 4000 });
+      } else {
+        toast.error("Oops! You lost Round 2.", { duration: 4000 });
+      }
+    } catch (error) {
+      console.error("Error submitting Round 2:", error);
+      toast.error("Failed to submit Round 2 score");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleLeaderboardClick = () => {
     navigate('/leaderboard');
+    toast("Loading leaderboard...", { duration: 2000 });
   };
 
   const totalQuestions = round1Questions.length;
@@ -344,6 +425,7 @@ function Quiz() {
         margin: "auto",
       }}
     >
+      <Toaster position="top-right" />
       <div style={{ color: "white", paddingTop: "2%", fontSize: "30px" }}>
         Table {tableNumber} - {currentRound === "round1" ? "Round 1" : "Round 2"}
       </div>
@@ -351,7 +433,29 @@ function Quiz() {
         ⏳ Time Taken: {timeTaken} sec
       </h3>
 
-      {currentRound === "round1" && !isSubmitted.round1 && round1Questions.length > 0 && (
+      {isLoading && (
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+          <img src={loadingGif} alt="Loading..." style={{ width: "100px" }} />
+        </div>
+      )}
+
+      {notification && !isLoading && (
+        <div style={{ 
+          color: isTop10 ? "green" : "red", 
+          fontSize: "20px", 
+          margin: "20px",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          padding: "10px",
+          borderRadius: "5px"
+        }}>
+          {notification}
+          {isSubmitted.round1 && currentRound === "round1" && !showTableVerification && countdown > 0 && (
+            <p>Results in: {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, "0")}</p>
+          )}
+        </div>
+      )}
+
+      {currentRound === "round1" && !isSubmitted.round1 && round1Questions.length > 0 && !isLoading && (
         <>
           <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <p style={{ color: "white", margin: "5px" }}>0{currentQuestionIndex + 1}</p>
@@ -376,43 +480,61 @@ function Quiz() {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              backgroundImage: "url('/Union.png')",
+              margin:"20px",
+              borderRadius:"20px",
+              boxShadow:"0 0 0 1px lightgray",
+              // backgroundImage: "url('/Union.png')",
+              backgroundColor:"white",
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
             }}
           >
             <p style={{ fontSize: "18px", fontWeight: "bold" }}>{round1Questions[currentQuestionIndex].question}</p>
-            <ul style={{ display: "flex", justifyContent: "space-evenly", gap: "10px", listStyleType: "none", padding: 0 }}>
-              {round1Questions[currentQuestionIndex].options.map((option, idx) => (
-                <li
-                  key={idx}
-                  onClick={() => handleAnswer(option)}
-                  style={{
-                    padding: "10px",
-                    margin: "5px 0",
-                    border: answers[currentQuestionIndex] === option ? "2px solid green" : "1px solid #ccc",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    background: answers[currentQuestionIndex] === option ? "#d4edda" : "#fff",
-                  }}
-                >
-                  {option}
-                </li>
-              ))}
-            </ul>
+            <ul
+  style={{
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+    gap: "10px",
+    listStyleType: "none",
+    padding: "0",
+  }}
+>
+  {round1Questions[currentQuestionIndex].options.map((option, idx) => (
+    <li
+      key={idx}
+      onClick={() => handleAnswer(option)}
+      style={{
+        padding: "10px",
+        margin: "5px 0",
+        width:"34vw",
+        border: "2px solid white", // Ensuring all options have the same border width
+        borderRadius: "5px",
+        cursor: "pointer",
+        background: "#fff", // Keeping background white for all options
+        backgroundColor: "#000", // Ensuring text is visible
+        color: "white",
+        boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px white" : "none", // White border when selected
+      }}
+    >
+      {option}
+    </li>
+  ))}
+</ul>
+
           </div>
           <div style={{ marginTop: "20px" }}>
             {currentQuestionIndex === totalQuestions - 1 ? (
               <button
-                onClick={handleRound1Submit}
-                style={{ cursor: "pointer", border: "none", padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", fontSize: "20px" }}
+                onClick={() => handleRound1Submit(false)}
+                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
               >
                 Submit
               </button>
             ) : (
               <button
                 onClick={nextQuestion}
-                style={{ cursor: "pointer", border: "none", padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", fontSize: "20px" }}
+                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
               >
                 Next <span><img src={arrowW} width="35px" /></span>
               </button>
@@ -421,20 +543,55 @@ function Quiz() {
         </>
       )}
 
-      {currentRound === "round1" && isSubmitted.round1 && (
+      {currentRound === "round1" && isSubmitted.round1 && !isTop10 && !notification.includes("Sorry") && !notification.includes("Congratulations") && !isLoading && (
         <div>
           <h2 style={{ color: "white" }}>Round 1 Score: {score.round1}</h2>
-          {round2Data?.locked ? (
-            <p style={{ color: "white" }}>Waiting for Round 2 to unlock...</p>
-          ) : (
-            <p style={{ color: "white" }}>Round 2 is ready!</p>
-          )}
+          <p style={{ color: "white" }}>Waiting for results...</p>
         </div>
       )}
 
-      {currentRound === "round2" && round2Data && !round2Data.locked && (
+      {currentRound === "round1" && isSubmitted.round1 && !isTop10 && notification.includes("Sorry") && !isLoading && (
+        <div>
+          <h2 style={{ color: "white" }}>Round 1 Score: {score.round1}</h2>
+          <p style={{ color: "white" }}>Round 1 completed. Check leaderboard for results.</p>
+          <button
+            onClick={handleLeaderboardClick}
+            style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
+          >
+            Check Leaderboard
+          </button>
+        </div>
+      )}
+
+      {currentRound === "round1" && isSubmitted.round1 && isTop10 && showTableVerification && !isLoading && (
         <div style={{ height: "50%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box!</h3>
+          <h3 style={{ color: "white" }}>Verify Your Secret Number</h3>
+          <input
+            type="number"
+            value={tableInput}
+            onChange={(e) => setTableInput(e.target.value)}
+            placeholder="Enter your Secret number"
+            style={{
+              padding: "10px",
+              margin: "10px 0",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+              width: "200px",
+              textAlign: "center",
+            }}
+          />
+          <button
+            onClick={handleTableVerification}
+            style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
+          >
+            Verify
+          </button>
+        </div>
+      )}
+
+      {currentRound === "round2" && round2Data && !round2Data.locked && !isLoading && (
+        <div style={{ height: "50%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (One Chance Only)</h3>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
             {round2Data.boxes.map((box) => (
               <div
@@ -445,7 +602,7 @@ function Quiz() {
                   height: "50px",
                   backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
                   borderRadius: "5px",
-                  cursor: isSubmitted.round2 ? "default" : "pointer",
+                  cursor: hasAttempted ? "default" : "pointer",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
@@ -458,10 +615,14 @@ function Quiz() {
           </div>
           {isSubmitted.round2 && (
             <>
-              <h2 style={{ color: "white", marginTop: "20px" }}>Round 2 Score: {score.round2}</h2>
+              {score.round2 > 0 ? (
+                <h2 style={{ color: "white", marginTop: "20px" }}>Round 2 Score: {score.round2}</h2>
+              ) : (
+                <h2 style={{ color: "red", marginTop: "20px" }}>You Lost!</h2>
+              )}
               <button
                 onClick={handleLeaderboardClick}
-                style={{ cursor: "pointer", border: "none", padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", fontSize: "20px" }}
+                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
               >
                 Check Leaderboard
               </button>
@@ -473,7 +634,7 @@ function Quiz() {
   );
 }
 
-// 🔗 Main App Component
+// Main App Component
 export default function App() {
   return (
     <Router>
