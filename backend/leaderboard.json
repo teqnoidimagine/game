@@ -19,6 +19,15 @@
       "updatedAt": "2025-02-21T10:10:16.095Z"
     },
     {
+      "id": 18,
+      "tableNo": 1,
+      "score": 3,
+      "time": "0:49",
+      "answered": true,
+      "createdAt": "2025-02-21T11:29:53.680Z",
+      "updatedAt": "2025-02-21T11:29:53.680Z"
+    },
+    {
       "id": 3,
       "tableNo": 7,
       "score": 2,

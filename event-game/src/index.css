@@ -10,7 +10,6 @@ body {
 }
 body {
   margin: 0; /* Removes default margin */
-  display: flex; /* Example: Change display type */
 }
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
