@@ -71,7 +71,11 @@ function Instruction() {
   return (
     <div
       style={{
-        backgroundColor: "#0c8240", // Example background color, adjust as needed
+        backgroundImage: "url('/instBg.png')",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#13954D", // Example background color, adjust as needed
         height: "100vh",
         color: "white",
         textAlign: "center",
@@ -87,14 +91,14 @@ function Instruction() {
         Welcome to the Quiz! Please read the following instructions carefully:
       </p>
       <ul style={{ listStyleType: "none", padding: "0", fontSize: "16px", textAlign: "left", maxWidth: "500px" }}>
-        <li style={{ marginBottom: "10px" }}>1. You have 120 seconds to complete Round 1.</li>
-        <li style={{ marginBottom: "10px" }}>2. Select an answer for each question before proceeding.</li>
-        <li style={{ marginBottom: "10px" }}>3. Click "Submit" to move to the next question or finish the quiz.</li>
-        <li style={{ marginBottom: "10px" }}>4. Top 10 scorers proceed to Round 2.</li>
+        <li style={{ marginBottom: "10px" }}>The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them</li>
+
       </ul>
       <button
         onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate to Quiz
         style={{
+          position: "absolute",
+          bottom: "22vh",
           padding: "10px 20px",
           fontSize: "16px",
           backgroundColor: "white",
@@ -102,7 +106,6 @@ function Instruction() {
           border: "none",
           borderRadius: "5px",
           cursor: "pointer",
-          marginTop: "20px",
         }}
       >
         Proceed to Quiz <span><img src={arrowG} width="35px" /></span>
