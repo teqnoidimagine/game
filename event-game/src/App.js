@@ -31,11 +31,11 @@ function Welcome() {
       style={{
         backgroundImage: "url('/welcome.png')",
         backgroundPosition: "center",
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         textAlign: "center",
         padding: "0%",
-        backgroundColor: "#4dd766",
+        backgroundColor: "#13954D",
         height: "100vh",
         color: "white",
         display: "flex",
