@@ -560,28 +560,27 @@ function Quiz() {
   return (
     <div
       style={{
-        backgroundImage: "url('/page2.png')",
+        backgroundImage: "url('/bg2que.png')",
         backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
+        // backgroundRepeat: "no-repeat",
+        // backgroundImage: "linear-gradient(to bottom,0% #13954D, 100% #062F18)",
+        // backgroundImage: "linear-gradient(to bottom, #13954D 0%, #062F18 100%)",
+
         height: "100vh",
         padding: "0px",
         textAlign: "center",
         maxWidth: "600px",
         margin: "auto",
-        position: "relative",
+        // position: "relative",
       }}
     >
       <Toaster position="top-right" />
-      <div style={{ color: "white", paddingTop: "2%", fontSize: "30px" }}>
+      <div style={{ color: "white", paddingTop: "2%", fontSize: "30px",opacity:"0" }}>
         Table {tableNumber} - {currentRound === "round1" ? "Round 1" : "Round 2"}
       </div>
-      <h3 style={{ color: "white", marginTop: "27%", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "center", gap: "5px" }}>
-        <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <img src={timerIcon} alt="Timer" style={{ width: "20px" }} />
-        </span>{" "}
-        <span style={{ fontSize: "30px" }}>{timeTaken}</span> sec
-      </h3>
+    
+     
 
       {isLoading && (
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
@@ -616,24 +615,11 @@ function Quiz() {
               display: showFeedback ? "none" : "flex",
               flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center",
+              // alignItems: "center",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <p style={{ color: "white", margin: "5px" }}>0{currentQuestionIndex + 1}</p>
-              <div style={{ display: "flex", gap: "8px" }}>
-                {[...Array(totalQuestions)].map((_, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      backgroundColor: index === currentQuestionIndex ? "#4dd766" : "white",
-                      height: "10px",
-                      width: "10px",
-                      borderRadius: "100%",
-                    }}
-                  />
-                ))}
-              </div>
+            <div style={{ display: "flex", flexDirection: "colum", justifyContent: "center", alignItems: "center" }}>
+           
             </div>
             <div
               style={{
@@ -644,15 +630,31 @@ function Quiz() {
                 justifyContent: "center",
                 alignItems: "center",
                 margin: "20px",
+                marginBottom:"5px",
                 borderRadius: "20px",
                 fontSize: "16px",
-                boxShadow: "0 0 0 1px lightgray",
-                backgroundColor: "white",
+                // boxShadow: "0 0 0 1px lightgray",
+                // backgroundColor: "white",
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <p style={{ fontSize: "18px", fontWeight: "bold", padding: "20px" }}>
+                     <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px",marginTop:"10%"}}> Crack the clue<br></br>
+                     to find the missing paw</p>
+             
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"end",margin:"5px",borderBottom:"1px",width:"85vw",borderBottom: "1px solid green",marginTop:"7%" }}>
+      <div>
+      <p style={{ color: "white", margin: "5px",backgroundColor:"#089449",padding:"5px 10px",borderRadius:"20px",fontSize:"12px"}}>Clue{" "}{currentQuestionIndex + 1}</p>
+      </div>
+      <p style={{ color: "white", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "end", gap: "2px" }}>
+        <span style={{ display: "fle", justifyContent: "center", alignItems: "center" }}>
+          <img src={timerIcon} alt="Timer" style={{ width: "10px" }} />
+        </span>{" "}
+        <span style={{ fontSize: "20px" }}>{timeTaken}</span> s
+      </p>
+    
+      </div>
+              <p style={{ margin:0,fontSize: "18px", fontWeight: "bold", padding: "10px",paddingBottom:"20px",textAlign:"left",color:"white" }}>
                 {round1Questions[currentQuestionIndex].question}
               </p>
               <ul
@@ -670,16 +672,17 @@ function Quiz() {
                     key={idx}
                     onClick={() => handleAnswer(option)}
                     style={{
-                      padding: "10px",
+                      padding: "12px",
                       margin: "5px 0",
-                      width: "34vw",
-                      border: "2px solid white",
-                      borderRadius: "10px",
+                      width: "30vw",
+                      border: "1px solid #2D9059",
+                      borderRadius: "15px",
                       cursor: "pointer",
-                      background: "#fff",
-                      backgroundColor: "#000",
+                      // background: "#fff",
+                      // backgroundColor: "#000",
                       color: "white",
-                      scale: answers[currentQuestionIndex] === option ? 0.95 : 1,
+                      fontSize:"14px",
+                      backgroundColor: answers[currentQuestionIndex] === option ? "#009043" : "",
                       boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
                     }}
                   >
@@ -687,21 +690,22 @@ function Quiz() {
                   </li>
                 ))}
               </ul>
+              <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px"}}>Select the correct answer</p>
             </div>
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ marginTop: "0px" }}>
               {currentQuestionIndex < totalQuestions - 1 ? (
                 <button
                   onClick={nextQuestion}
                   disabled={!isAnswerSelected()}
                   style={{
                     padding: "10px",
-                    paddingLeft: "20px",
-                    paddingRight: "20px",
-                    backgroundColor: isAnswerSelected() ? "white" : "#cccccc",
-                    borderRadius: "18px",
+                    paddingLeft: "25px",
+                    paddingRight: "25px",
+                    backgroundColor: isAnswerSelected() ? "white" : "#6BA37E",
+                    borderRadius: "38px",
                     color: "black",
                     border: "none",
-                    fontSize: "18px",
+                    fontSize: "14px",
                     cursor: isAnswerSelected() ? "pointer" : "not-allowed",
                   }}
                 >
@@ -713,11 +717,11 @@ function Quiz() {
                   disabled={!isAnswerSelected()}
                   style={{
                     padding: "10px",
-                    paddingLeft: "20px",
-                    paddingRight: "20px",
-                    backgroundColor: isAnswerSelected() ? "white" : "#cccccc",
-                    borderRadius: "18px",
-                    fontSize: "18px",
+                    paddingLeft: "25px",
+                    paddingRight: "25px",
+                    backgroundColor: isAnswerSelected() ? "white" : "#6BA37E",
+                    borderRadius: "38px",
+                    fontSize: "14px",
                     color: "black",
                     border: "none",
                     cursor: isAnswerSelected() ? "pointer" : "not-allowed",
