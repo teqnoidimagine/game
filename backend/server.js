@@ -143,17 +143,17 @@ for (let i = 1; i <= 24; i++) {
       table: i,
       round1: [
         {
-          question: "What’s a small fluffy dog with a big personality?",
-          options: ["Pomeranian", "Golden Retriever", "Bulldog", "Beagle"],
-          answer: "Pomeranian",
-        },
-        {
-          question: "Which dog has long ears and a great nose?",
-          options: ["Beagle", "Bloodhound", "Cocker Spaniel", "Basset Hound"],
+          question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
+          options: ["Lihasa", "Husky",  "Beagle","Bull dog"],
           answer: "Beagle",
         },
         {
-          question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers",
+          question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
+          options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
+          answer: "Pomeranian",
+        },
+        {
+          question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
           options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
           answer: "Dalmatian",
         },

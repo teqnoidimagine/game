@@ -28,6 +28,15 @@
       "updatedAt": "2025-02-21T11:29:53.680Z"
     },
     {
+      "id": 19,
+      "tableNo": 6,
+      "score": 3,
+      "time": "0:23",
+      "answered": true,
+      "createdAt": "2025-02-21T13:10:16.110Z",
+      "updatedAt": "2025-02-21T13:10:16.110Z"
+    },
+    {
       "id": 3,
       "tableNo": 7,
       "score": 2,
@@ -161,6 +170,15 @@
       "answered": true,
       "createdAt": "2025-02-21T08:59:03.904Z",
       "updatedAt": "2025-02-21T08:59:03.904Z"
+    },
+    {
+      "id": 20,
+      "tableNo": 23,
+      "score": 0,
+      "time": "0:15",
+      "answered": true,
+      "createdAt": "2025-02-21T13:13:36.961Z",
+      "updatedAt": "2025-02-21T13:13:36.961Z"
     }
   ],
   "round2": [
@@ -217,6 +235,15 @@
       "answered": true,
       "createdAt": "2025-02-21T08:25:32.923Z",
       "updatedAt": "2025-02-21T08:25:32.923Z"
+    },
+    {
+      "id": 7,
+      "tableNo": 6,
+      "score": 0,
+      "time": "0:02",
+      "answered": true,
+      "createdAt": "2025-02-21T13:11:27.081Z",
+      "updatedAt": "2025-02-21T13:11:27.081Z"
     }
   ]
 }

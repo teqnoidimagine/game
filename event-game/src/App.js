@@ -5,18 +5,19 @@ import {
   Route,
   useNavigate,
   useParams,
+  Navigate,
 } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
-import arrowW from './arrowW.png';
-import arrowG from './arrowG.png';
-import loadingGif from './loading.gif'; // Import your loading GIF
-import thankYouImage1 from './huft1t.png'; // Import your "Thank you" image (adjust the path as needed)
-import thankYouImage2 from './huft2.png'; // Import your "Thank you" image (adjust the path as needed)
-import thankYouImage3 from './huft3.png'; // Import your "Thank you" image (adjust the path as needed)
-
-import wrongImage1 from './wrong1.png'; // Import your "Thank you" image (adjust the path as needed)
-import wrongImage2 from './wrong2.png'; // Import your "Thank you" image (adjust the path as needed)
-import wrongImage3 from './wrong3.png'; // Import your "Thank you" image (adjust the path as needed)
+import toast, { Toaster } from "react-hot-toast";
+import arrowW from "./arrowW.png";
+import arrowG from "./arrowG.png";
+import loadingGif from "./loading.gif";
+import thankYouImage1 from "./huft11.png";
+import thankYouImage2 from "./huft12.png";
+import thankYouImage3 from "./huft13.png";
+import wrongImage1 from "./wrong1.png";
+import wrongImage2 from "./wrong2.png";
+import wrongImage3 from "./wrong3.png";
+import timerIcon from "./timer.png";
 
 const baseUrl = "http://localhost:5000/";
 
@@ -42,7 +43,7 @@ function Welcome() {
       }}
     >
       <button
-        onClick={() => navigate(`/quiz/${tableNumber}`)}
+        onClick={() => navigate(`/instruction/${tableNumber}`)} // Navigate to Instruction
         style={{
           position: "absolute",
           bottom: "2vh",
@@ -56,6 +57,54 @@ function Welcome() {
         }}
       >
         Start <span><img src={arrowG} width="35px" /></span>
+      </button>
+    </div>
+  );
+}
+
+// Instruction Page Component
+function Instruction() {
+  const navigate = useNavigate();
+  const { tableNumber } = useParams();
+
+  return (
+    <div
+      style={{
+        backgroundColor: "#0c8240", // Example background color, adjust as needed
+        height: "100vh",
+        color: "white",
+        textAlign: "center",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>Instructions</h1>
+      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
+        Welcome to the Quiz! Please read the following instructions carefully:
+      </p>
+      <ul style={{ listStyleType: "none", padding: "0", fontSize: "16px", textAlign: "left", maxWidth: "500px" }}>
+        <li style={{ marginBottom: "10px" }}>1. You have 120 seconds to complete Round 1.</li>
+        <li style={{ marginBottom: "10px" }}>2. Select an answer for each question before proceeding.</li>
+        <li style={{ marginBottom: "10px" }}>3. Click "Submit" to move to the next question or finish the quiz.</li>
+        <li style={{ marginBottom: "10px" }}>4. Top 10 scorers proceed to Round 2.</li>
+      </ul>
+      <button
+        onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate to Quiz
+        style={{
+          padding: "10px 20px",
+          fontSize: "16px",
+          backgroundColor: "white",
+          color: "black",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          marginTop: "20px",
+        }}
+      >
+        Proceed to Quiz <span><img src={arrowG} width="35px" /></span>
       </button>
     </div>
   );
@@ -218,28 +267,10 @@ function Leaderboard() {
   );
 }
 
-
 // Quiz Component
-
 function Quiz() {
   const { tableNumber } = useParams();
-  const [round1Questions, setRound1Questions] = useState([
-    {
-      question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers",
-      options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
-      answer: "Dalmatian",
-    },
-    {
-      question: "I’m a small, fluffy breed known for my playful nature and loyalty",
-      options: ["Pomeranian", "Chihuahua", "Pug", "Shih Tzu"],
-      answer: "Pomeranian",
-    },
-    {
-      question: "I’m a large working breed, often used for guarding and pulling sleds",
-      options: ["German Shepherd", "Saint Bernard", "Bernese Mountain Dog", "Alaskan Malamute"],
-      answer: "Alaskan Malamute",
-    },
-  ]);
+  const [round1Questions, setRound1Questions] = useState([]);
   const [round2Data, setRound2Data] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -321,11 +352,10 @@ function Quiz() {
     return () => clearInterval(timer);
   }, [timerActive, currentRound, isSubmitted.round2]);
 
-  // Feedback timer effect
   useEffect(() => {
     let feedbackInterval;
     if (showFeedback) {
-      setFeedbackTimer(3); // Reset timer to 3 seconds
+      setFeedbackTimer(3);
       feedbackInterval = setInterval(() => {
         setFeedbackTimer((prev) => {
           if (prev <= 1) {
@@ -519,6 +549,10 @@ function Quiz() {
     }
   };
 
+  const isAnswerSelected = () => {
+    return answers[currentQuestionIndex] !== undefined;
+  };
+
   return (
     <div
       style={{
@@ -538,8 +572,11 @@ function Quiz() {
       <div style={{ color: "white", paddingTop: "2%", fontSize: "30px" }}>
         Table {tableNumber} - {currentRound === "round1" ? "Round 1" : "Round 2"}
       </div>
-      <h3 style={{ color: "white", marginTop: "27%", marginBottom: "2%" }}>
-        ⏳ Time Taken: {timeTaken} sec
+      <h3 style={{ color: "white", marginTop: "27%", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "center", gap: "5px" }}>
+        <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <img src={timerIcon} alt="Timer" style={{ width: "20px" }} />
+        </span>{" "}
+        <span style={{ fontSize: "30px" }}>{timeTaken}</span> sec
       </h3>
 
       {isLoading && (
@@ -570,7 +607,6 @@ function Quiz() {
 
       {currentRound === "round1" && !isSubmitted.round1 && round1Questions.length > 0 && !isLoading && (
         <>
-          {/* Question Display */}
           <div
             style={{
               display: showFeedback ? "none" : "flex",
@@ -598,25 +634,29 @@ function Quiz() {
             <div
               style={{
                 height: "50%",
+                width: "90%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
                 margin: "20px",
                 borderRadius: "20px",
+                fontSize: "16px",
                 boxShadow: "0 0 0 1px lightgray",
                 backgroundColor: "white",
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <p style={{ fontSize: "18px", fontWeight: "bold" }}>{round1Questions[currentQuestionIndex].question}</p>
+              <p style={{ fontSize: "18px", fontWeight: "bold", padding: "20px" }}>
+                {round1Questions[currentQuestionIndex].question}
+              </p>
               <ul
                 style={{
                   display: "flex",
                   flexWrap: "wrap",
                   justifyContent: "space-evenly",
-                  gap: "10px",
+                  gap: "0px",
                   listStyleType: "none",
                   padding: "0",
                 }}
@@ -630,11 +670,12 @@ function Quiz() {
                       margin: "5px 0",
                       width: "34vw",
                       border: "2px solid white",
-                      borderRadius: "5px",
+                      borderRadius: "10px",
                       cursor: "pointer",
                       background: "#fff",
                       backgroundColor: "#000",
                       color: "white",
+                      scale: answers[currentQuestionIndex] === option ? 0.95 : 1,
                       boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
                     }}
                   >
@@ -647,25 +688,35 @@ function Quiz() {
               {currentQuestionIndex < totalQuestions - 1 ? (
                 <button
                   onClick={nextQuestion}
+                  disabled={!isAnswerSelected()}
                   style={{
                     padding: "10px",
-                    backgroundColor: "#11C05E",
-                    borderRadius: "14px",
-                    color: "white",
+                    paddingLeft: "20px",
+                    paddingRight: "20px",
+                    backgroundColor: isAnswerSelected() ? "white" : "#cccccc",
+                    borderRadius: "18px",
+                    color: "black",
                     border: "none",
+                    fontSize: "18px",
+                    cursor: isAnswerSelected() ? "pointer" : "not-allowed",
                   }}
                 >
-                  Next <span><img src={arrowW} width="35px" /></span>
+                  Submit
                 </button>
               ) : (
                 <button
                   onClick={() => handleRound1Submit(false)}
+                  disabled={!isAnswerSelected()}
                   style={{
                     padding: "10px",
-                    backgroundColor: "#11C05E",
-                    borderRadius: "14px",
-                    color: "white",
+                    paddingLeft: "20px",
+                    paddingRight: "20px",
+                    backgroundColor: isAnswerSelected() ? "white" : "#cccccc",
+                    borderRadius: "18px",
+                    fontSize: "18px",
+                    color: "black",
                     border: "none",
+                    cursor: isAnswerSelected() ? "pointer" : "not-allowed",
                   }}
                 >
                   Submit
@@ -674,7 +725,6 @@ function Quiz() {
             </div>
           </div>
 
-          {/* Feedback Overlay */}
           {showFeedback && (
             <div
               style={{
@@ -724,11 +774,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: "0%", // Start at 0%
+                          width: "0%",
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 3s linear forwards", // 3s animation
+                          animation: "fillBar 3s linear forwards",
                         }}
                       />
                     </div>
@@ -778,11 +828,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: "0%", // Start at 0%
+                          width: "0%",
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 3s linear forwards", // 3s animation
+                          animation: "fillBar 3s linear forwards",
                         }}
                       />
                     </div>
@@ -908,15 +958,16 @@ function Quiz() {
   );
 }
 
-
 // Main App Component
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/welcome/:tableNumber" element={<Welcome />} />
+        <Route path="/instruction/:tableNumber" element={<Instruction />} /> {/* New Instruction Route */}
         <Route path="/quiz/:tableNumber" element={<Quiz />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/" element={<Navigate to="/welcome/1" />} />
       </Routes>
     </Router>
   );
