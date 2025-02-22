@@ -86,12 +86,12 @@ function Instruction() {
         alignItems: "center",
       }}
     >
-      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>Instructions</h1>
+      {/* <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>Instructions</h1>
       <p style={{ fontSize: "18px", marginBottom: "20px" }}>
         Welcome to the Quiz! Please read the following instructions carefully:
-      </p>
-      <ul style={{ listStyleType: "none", padding: "0", fontSize: "16px", textAlign: "left", maxWidth: "500px" }}>
-        <li style={{ marginBottom: "10px" }}>The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them</li>
+      </p> */}
+      <ul style={{ listStyleType: "none", padding: "0", fontSize: "16px", textAlign: "center", maxWidth: "500px",display:"flex",justifyContent:"center",alignItems:"center" }}>
+        <li style={{ marginBottom: "10px",width:"80%" }}>The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them</li>
 
       </ul>
       <button
