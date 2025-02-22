@@ -31,6 +31,9 @@ const formatTime = (seconds) => {
   const secs = seconds % 60;
   return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is running", timestamp: new Date().toISOString() });
+});
 
 app.get("/leaderboard", (req, res) => {
   const leaderboard = readLeaderboard();
