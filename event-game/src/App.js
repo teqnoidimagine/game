@@ -19,7 +19,8 @@ import wrongImage2 from "./wrong2.png";
 import wrongImage3 from "./wrong3.png";
 import timerIcon from "./timer.png";
 
-const baseUrl = "http://localhost:5000/";
+// const baseUrl = "http://localhost:5000/";
+const baseUrl = "http://game-imhw.vercel.app/";
 
 // Welcome Page Component
 function Welcome() {
