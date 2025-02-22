@@ -20,7 +20,7 @@ import wrongImage3 from "./wrong3.png";
 import timerIcon from "./timer.png";
 
 // const baseUrl = "http://localhost:5000/";
-const baseUrl = "http://game-imhw.vercel.app/";
+const baseUrl = "https://dccbackend.vercel.app/";
 
 // Welcome Page Component
 function Welcome() {
