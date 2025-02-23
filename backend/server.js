@@ -8,7 +8,7 @@ const PORT = 5000;
 
 // GitHub configuration (replace with your details)
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Will be set in Vercel env vars
-const OWNER = "YOUR_GITHUB_USERNAME"; // Replace with your GitHub username
+const OWNER = "teqnoidimagine"; // Replace with your GitHub username
 const REPO = "quiz-leaderboard"; // Replace with your repo name
 const PATH = "leaderboard.json";
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
