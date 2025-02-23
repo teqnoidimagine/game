@@ -561,9 +561,9 @@ function Quiz() {
     <div
       style={{
         backgroundImage: "url('/bg2que.png')",
-        backgroundPosition: "center",
-        backgroundSize: "contain",
-        // backgroundRepeat: "no-repeat",
+        // backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
         // backgroundImage: "linear-gradient(to bottom,0% #13954D, 100% #062F18)",
         // backgroundImage: "linear-gradient(to bottom, #13954D 0%, #062F18 100%)",
 
