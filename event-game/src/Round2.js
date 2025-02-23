@@ -11,9 +11,9 @@ function Round2Instruction({ onProceed }) {
   return (
     <div
     style={{
-      backgroundImage: "url('/round2Ins.png')",
+      backgroundImage: "url('/round2Inss.png')",
       backgroundPosition: "center",
-      backgroundSize: "contain",
+      backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       textAlign: "center",
       padding: "0%",
