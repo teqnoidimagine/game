@@ -48,9 +48,13 @@ const writeLeaderboard = async (data) => {
         path: PATH,
       });
       sha = file.sha;
+      console.log("Fetched SHA for update:", sha);
     } catch (error) {
-      if (error.status !== 404) {
-        console.error("Unexpected error fetching file SHA:", error);
+      if (error.status === 404) {
+        console.log("File not found, will create new file");
+        sha = undefined;
+      } else {
+        console.error("Unexpected error fetching SHA:", error);
         throw error;
       }
     }
@@ -62,7 +66,7 @@ const writeLeaderboard = async (data) => {
       path: PATH,
       message: "Update leaderboard",
       content: Buffer.from(content).toString("base64"),
-      sha: sha || undefined,
+      sha,
     });
     console.log("Leaderboard written to GitHub, new SHA:", response.data.commit.sha);
   } catch (error) {
