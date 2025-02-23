@@ -1,28 +1,67 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const fs = require("fs");
-
+const { Octokit } = require("@octokit/rest");
+require("dotenv").config();
 const app = express();
 const PORT = 5000;
-const FILE_PATH = "/tmp/leaderboard.json";
+
+// GitHub configuration (replace with your details)
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Will be set in Vercel env vars
+const OWNER = "YOUR_GITHUB_USERNAME"; // Replace with your GitHub username
+const REPO = "quiz-leaderboard"; // Replace with your repo name
+const PATH = "leaderboard.json";
+const octokit = new Octokit({ auth: GITHUB_TOKEN });
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-const readLeaderboard = () => {
-  if (!fs.existsSync(FILE_PATH)) {
-    console.log("Creating new leaderboard.json");
-    fs.writeFileSync(FILE_PATH, JSON.stringify({ round1: [], round2: [] }, null, 2));
+// Read leaderboard from GitHub
+const readLeaderboard = async () => {
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner: OWNER,
+      repo: REPO,
+      path: PATH,
+    });
+    const content = Buffer.from(data.content, "base64").toString("utf8");
+    console.log("Leaderboard read from GitHub:", content);
+    return JSON.parse(content);
+  } catch (error) {
+    if (error.status === 404) {
+      console.log("No leaderboard found, initializing...");
+      const initialData = { round1: [], round2: [] };
+      await writeLeaderboard(initialData);
+      return initialData;
+    }
+    console.error("Error reading from GitHub:", error);
+    return { round1: [], round2: [] }; // Fallback
   }
-  const data = JSON.parse(fs.readFileSync(FILE_PATH, "utf8"));
-  console.log("Leaderboard read:", data);
-  return data;
 };
 
-const writeLeaderboard = (data) => {
-  console.log("Writing leaderboard:", data);
-  fs.writeFileSync(FILE_PATH, JSON.stringify(data, null, 2));
+// Write leaderboard to GitHub
+const writeLeaderboard = async (data) => {
+  try {
+    const { data: file } = await octokit.repos.getContent({
+      owner: OWNER,
+      repo: REPO,
+      path: PATH,
+    });
+    const content = JSON.stringify(data, null, 2);
+    await octokit.repos.createOrUpdateFileContents({
+      owner: OWNER,
+      repo: REPO,
+      path: PATH,
+      message: "Update leaderboard",
+      content: Buffer.from(content).toString("base64"),
+      sha: file.sha, // Required to update existing file
+    });
+    console.log("Leaderboard written to GitHub");
+  } catch (error) {
+    console.error("Error writing to GitHub:", error);
+    throw error;
+  }
 };
 
 const formatTime = (seconds) => {
@@ -30,14 +69,15 @@ const formatTime = (seconds) => {
   const secs = seconds % 60;
   return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
+
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running", timestamp: new Date().toISOString() });
 });
 
-app.get("/leaderboard", (req, res) => {
-  const leaderboard = readLeaderboard();
+app.get("/leaderboard", async (req, res) => {
+  const leaderboard = await readLeaderboard();
   const top5Round1 = leaderboard.round1.sort((a, b) => b.score - a.score).slice(0, 5);
-  const allAnswered = leaderboard.round1.length > 0; // For testing
+  const allAnswered = leaderboard.round1.length > 0; // For testing, adjust as needed
   const round2Players = leaderboard.round2;
   const top3Winners = round2Players.sort((a, b) => b.score - a.score).slice(0, 3);
 
@@ -53,7 +93,7 @@ app.get("/leaderboard", (req, res) => {
   res.json(response);
 });
 
-app.post("/leaderboard", (req, res) => {
+app.post("/leaderboard", async (req, res) => {
   console.log("Received POST request:", req.body);
   const { tableNo, score, time, round } = req.body;
 
@@ -67,7 +107,7 @@ app.post("/leaderboard", (req, res) => {
     return res.status(400).json({ message: "Invalid round. Use 'round1' or 'round2'." });
   }
 
-  let leaderboard = readLeaderboard();
+  let leaderboard = await readLeaderboard();
   let roundData = leaderboard[round];
 
   const tableIndex = roundData.findIndex((entry) => entry.tableNo === tableNo);
@@ -75,10 +115,8 @@ app.post("/leaderboard", (req, res) => {
   let normalizedTime = typeof time === "number" ? formatTime(time) : time;
 
   if (tableIndex !== -1) {
-    // Update existing entry instead of allowing duplicates
     console.log(`Updating existing entry for table ${tableNo} in ${round}`);
     if (round === "round1") {
-      // For Round 1, only update if not already answered
       if (roundData[tableIndex].answered) {
         console.log("Duplicate Round 1 submission for table:", tableNo);
         return res.status(403).json({ message: "This table has already submitted answers for Round 1" });
@@ -91,8 +129,7 @@ app.post("/leaderboard", (req, res) => {
         updatedAt: timestamp,
       };
     } else if (round === "round2") {
-      // For Round 2, update score and time if better
-      roundData[tableIndex].score = score; // Replace score instead of adding
+      roundData[tableIndex].score = score;
       roundData[tableIndex].updatedAt = timestamp;
       roundData[tableIndex].answered = true;
 
@@ -106,7 +143,6 @@ app.post("/leaderboard", (req, res) => {
       roundData[tableIndex].time = newTotalSeconds < existingTotalSeconds ? normalizedTime : roundData[tableIndex].time;
     }
   } else {
-    // Add new entry if table doesn't exist
     roundData.push({
       id: roundData.length + 1,
       tableNo,
@@ -118,15 +154,13 @@ app.post("/leaderboard", (req, res) => {
     });
   }
 
-  // Ensure no duplicates by filtering unique tableNos
   leaderboard[round] = roundData
     .reduce((unique, item) => {
       return unique.some((entry) => entry.tableNo === item.tableNo) ? unique : [...unique, item];
     }, [])
     .sort((a, b) => b.score - a.score);
 
-  writeLeaderboard(leaderboard);
-
+  await writeLeaderboard(leaderboard);
   res.json({ message: "Score updated", leaderboard });
 });
 
@@ -135,8 +169,8 @@ const shuffleArray = (array) => {
 };
 
 for (let i = 1; i <= 24; i++) {
-  app.get(`/quiz/table${i}`, (req, res) => {
-    const leaderboard = readLeaderboard();
+  app.get(`/quiz/table${i}`, async (req, res) => {
+    const leaderboard = await readLeaderboard();
     const top5Round1 = leaderboard.round1.sort((a, b) => b.score - a.score).slice(0, 5);
     const allAnswered = leaderboard.round1.length > 0; // For testing
     const isEligibleForRound2 = true; // For testing
@@ -146,7 +180,7 @@ for (let i = 1; i <= 24; i++) {
       round1: [
         {
           question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
-          options: ["Lihasa", "Husky",  "Beagle","Bull dog"],
+          options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
           answer: "Beagle",
         },
         {
@@ -178,5 +212,6 @@ for (let i = 1; i <= 24; i++) {
     res.json(response);
   });
 }
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
