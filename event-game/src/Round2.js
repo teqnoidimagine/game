@@ -74,19 +74,19 @@ function Round2Verification({ onVerify, tableNumber }) {
     > 
 
 <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-    <div style={{color:"white",fontSize:"12px"}}>
+    <div style={{color:"white",fontSize:"14px",marginTop:"40%"}}>
       Target
     </div>
-    <div style={{color:"white",fontSize:"12px"}}>
+    <div style={{color:"white",fontSize:"14px"}}>
       Table Number:
     </div>
-    <div style={{fontSize:"24px",color:"white"}}>
+    <div style={{fontSize:"36px",color:"white"}}>
    <b>{tableNumber}</b> 
     </div>
-    <div style={{color:"white",fontSize:"12px"}}>
+    <div style={{color:"white",fontSize:"14px",width:"60%",marginTop:"20%"}}>
       Go to the target table, Guess the correct Key code, Get it to your table
     </div>
-      <h3 style={{ color: "white" }}>Verify Your Secret Number</h3>
+      <h3 style={{ color: "white",fontSize:"12px",marginTop:"15%" }}>Write the code here:</h3>
       <input
         type="number"
         value={tableInput}
@@ -110,13 +110,14 @@ function Round2Verification({ onVerify, tableNumber }) {
       <button
         onClick={handleVerify}
         style={{
-          padding: "10px",
+          padding: "10px 20px",
           backgroundColor: "white",
           borderRadius: "14px",
           color: "black",
           border: "none",
           cursor: "pointer",
-          borderRadius:"20px"
+          borderRadius:"20px",
+          fontSize:"16px"
         }}
       >
         Verify
