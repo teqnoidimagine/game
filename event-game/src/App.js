@@ -594,7 +594,7 @@ function Quiz() {
           style={{
             color: isTop10 ? "green" : "red",
             fontSize: "20px",
-            margin: "20px",
+            // margin: "20px",
             backgroundColor: "rgba(255, 255, 255, 0.8)",
             padding: "10px",
             borderRadius: "5px",
@@ -636,11 +636,13 @@ function Quiz() {
                 fontSize: "16px",
                 // boxShadow: "0 0 0 1px lightgray",
                 // backgroundColor: "white",
+             
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
             >
               <img src={logo1} width={120} style={{marginTop:"5%"}} />
+              
                      <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px",marginTop:"10%"}}> Crack the clue<br></br>
                      to find the missing paw</p>
              
@@ -884,7 +886,10 @@ function Quiz() {
       )}
 
       {currentRound === "round1" && isSubmitted.round1 && !isTop10 && notification.includes("Sorry") && !isLoading && (
-        <div>
+        <div style={{  backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        }}>
+           <img src={logo1} width={120} style={{marginTop:"5%"}} />
+           <p style={{fontSize:"40px",color:"51FF9D",fontWeight:"semibold"}}>Congrats</p>
           <h2 style={{ color: "white" }}>Round 1 Score: {score.round1}</h2>
           <p style={{ color: "white" }}>Round 1 completed. Check leaderboard for results.</p>
           <button
