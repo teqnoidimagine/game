@@ -254,8 +254,8 @@ function Round2Game({ tableNumber }) {
         </div>
       ) : (
         <>
-          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
-          <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p>
+          {/* <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
+          <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p> */}
 
           {/* Boxes positioned along the snake's body */}
           {round2Data?.boxes.map((box, index) => (
@@ -291,12 +291,12 @@ function Round2Game({ tableNumber }) {
               ) : (
                 <h2 style={{ color: "red", marginTop: "20px" }}>You Lost!</h2>
               )}
-              <button
+              {/* <button
                 onClick={handleLeaderboardClick}
                 style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
               >
                 Check Leaderboard
-              </button>
+              </button> */}
             </>
           )}
         </>
