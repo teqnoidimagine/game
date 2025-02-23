@@ -10,7 +10,7 @@ const OWNER = "teqnoidimagine";
 const REPO = "quiz-leaderboard";
 const PATH = "leaderboard.json";
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
-console.log(GITHUB_TOKEN,"sdsfdsda",process.env.GITHUB_TOKEN?"yes":"NO")
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -87,6 +87,19 @@ const formatTime = (seconds) => {
   return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
 
+const formatTimestamp = (date) => {
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+    timeZone: "UTC",
+  }) + " UTC";
+};
+
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running", timestamp: new Date().toISOString() });
 });
@@ -134,7 +147,7 @@ app.post("/leaderboard", async (req, res) => {
     let roundData = leaderboard[round];
 
     const tableIndex = roundData.findIndex((entry) => entry.tableNo === tableNo);
-    let timestamp = new Date().toISOString();
+    let timestamp = formatTimestamp(new Date());
     let normalizedTime = typeof time === "number" ? formatTime(time) : time;
 
     if (tableIndex !== -1) {
@@ -188,6 +201,19 @@ app.post("/leaderboard", async (req, res) => {
   } catch (error) {
     console.error("Error in POST /leaderboard:", error);
     res.status(500).json({ error: "Failed to update leaderboard" });
+  }
+});
+
+// New endpoint to clear the leaderboard
+app.delete("/leaderboard", async (req, res) => {
+  try {
+    const initialData = { round1: [], round2: [] };
+    await writeLeaderboard(initialData);
+    console.log("Leaderboard cleared");
+    res.json({ message: "Leaderboard cleared successfully" });
+  } catch (error) {
+    console.error("Error clearing leaderboard:", error);
+    res.status(500).json({ error: "Failed to clear leaderboard" });
   }
 });
 
@@ -245,5 +271,4 @@ for (let i = 1; i <= 24; i++) {
   });
 }
 
-// Export the app for Vercel
 module.exports = app;
