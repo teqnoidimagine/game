@@ -521,7 +521,7 @@ function Quiz() {
                   </p>
                 </div>
                 <p style={{ color: "white", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "end", gap: "2px" }}>
-                  <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <span style={{ display: "fle", justifyContent: "center", alignItems: "center" }}>
                     <img src={timerIcon} alt="Timer" style={{ width: "10px" }} />
                   </span>{" "}
                   <span style={{ fontSize: "20px" }}>{timeTaken}</span> s
