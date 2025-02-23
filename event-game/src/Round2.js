@@ -271,8 +271,8 @@ function Round2Game({ tableNumber }) {
                 alignItems: "center",
                 color: "white",
                 position: "absolute",
-                top: boxPositions[index].top,
-                left: boxPositions[index].left,
+                top: boxPositions[index]?.top,
+                left: boxPositions[index]?.left,
                 transform: "translate(-50%, -50%)",
               }}
             >
