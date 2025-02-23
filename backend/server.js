@@ -4,14 +4,13 @@ const bodyParser = require("body-parser");
 const { Octokit } = require("@octokit/rest");
 
 const app = express();
-const PORT = 5000;
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const OWNER = "teqnoidimagine";
 const REPO = "quiz-leaderboard";
 const PATH = "leaderboard.json";
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
-
+console.log(GITHUB_TOKEN,"sdsfdsda",process.env.GITHUB_TOKEN?"yes":"NO")
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -46,6 +45,7 @@ const writeLeaderboard = async (data) => {
         owner: OWNER,
         repo: REPO,
         path: PATH,
+        branch: "main",
       });
       sha = file.sha;
       console.log("Fetched SHA for update:", sha);
@@ -245,4 +245,5 @@ for (let i = 1; i <= 24; i++) {
   });
 }
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export the app for Vercel
+module.exports = app;
