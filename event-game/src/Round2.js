@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import arrowG from "./arrowG.png";
 import loadingGif from "./loading.gif";
 import logo1 from './logo1.png'
+import loc from './loc.png'
 const baseUrl = "https://dccbackend.vercel.app/";
 
 // Round 2 Instruction Component
@@ -220,10 +221,10 @@ function Round2Game({ tableNumber }) {
 
   // Define box positions along the snake's body (adjust these percentages based on your image)
   const boxPositions = [
-    { top: "20%", left: "20%" }, // Top-left curve of the snake
-    { top: "40%", left: "30%" }, // Middle of the first curve
-    { top: "60%", left: "50%" }, // Middle of the straight section
-    { top: "80%", left: "70%" }, // Bottom of the second curve
+    { top: "17%", left: "28%" }, // Top-left curve of the snake
+    { top: "33%", left: "73%" }, // Middle of the first curve
+    { top: "62%", left: "50%" }, // Middle of the straight section
+    { top: "79%", left: "70%" }, // Bottom of the second curve
     { top: "90%", left: "80%" }, // End of the snake
   ];
 
@@ -263,20 +264,22 @@ function Round2Game({ tableNumber }) {
               style={{
                 width: "50px",
                 height: "50px",
-                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
+                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#17A046",
                 borderRadius: "5px",
                 cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 color: "white",
+                borderRadius:"50px",
                 position: "absolute",
+                border:"2px solid #3DE577",
                 top: boxPositions[index]?.top,
                 left: boxPositions[index]?.left,
                 transform: "translate(-50%, -50%)",
               }}
             >
-              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : "?"}
+              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : <img src={loc} width="16px" />}
             </div>
           ))}
 

@@ -257,7 +257,7 @@ for (let i = 1; i <= 24; i++) {
                 { id: 3, isCorrect: false },
                 { id: 4, isCorrect: false },
                 { id: 5, isCorrect: true },
-                { id: 6, isCorrect: false },
+             
               ]),
             }
           : { locked: true },
