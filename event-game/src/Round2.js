@@ -3,45 +3,45 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import arrowG from "./arrowG.png";
 import loadingGif from "./loading.gif";
-import logo1 from './logo1.png'
-import loc from './loc.png'
+import logo1 from './logo1.png';
+import loc from './loc.png';
 const baseUrl = "https://dccbackend.vercel.app/";
 
 // Round 2 Instruction Component
 function Round2Instruction({ onProceed }) {
   return (
     <div
-    style={{
-      backgroundImage: "url('/round2Inss.png')",
-      backgroundPosition: "center",
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-      textAlign: "center",
-      padding: "0%",
-      backgroundColor: "#13954D",
-      height: "100vh",
-      color: "white",
-      display: "flex",
-      justifyContent: "center",
-    }}
-  >
-    <button
-      onClick={onProceed}
       style={{
-        position: "absolute",
-        bottom: "2vh",
-        padding: "10px 20px",
-        fontSize: "16px",
-        backgroundColor: "white",
-        color: "black",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
+        backgroundImage: "url('/round2Inss.png')",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        textAlign: "center",
+        padding: "0%",
+        backgroundColor: "#13954D",
+        height: "100vh",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
-      Start <span><img src={arrowG} width="35px" /></span>
-    </button>
-  </div>
+      <button
+        onClick={onProceed}
+        style={{
+          position: "absolute",
+          bottom: "2vh",
+          padding: "10px 20px",
+          fontSize: "16px",
+          backgroundColor: "white",
+          color: "black",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Start <span><img src={arrowG} width="35px" /></span>
+      </button>
+    </div>
   );
 }
 
@@ -51,7 +51,7 @@ function Round2Verification({ onVerify, tableNumber }) {
 
   const handleVerify = () => {
     if (Number(tableInput) === Number(tableNumber)) {
-      toast.success("Secret Code verified! Proceeding to Flip Game...");
+      toast.success("Secret Code verified! Proceeding to next step...");
       onVerify(true);
     } else {
       toast.error("Incorrect table number. Please try again.");
@@ -72,39 +72,34 @@ function Round2Verification({ onVerify, tableNumber }) {
         alignItems: "center",
       }}
     > 
-
-<img src={logo1} width={120} style={{ marginTop: "5%" }} />
-    <div style={{color:"white",fontSize:"14px",marginTop:"40%"}}>
-      Target
-    </div>
-    <div style={{color:"white",fontSize:"14px"}}>
-      Table Number:
-    </div>
-    <div style={{fontSize:"36px",color:"white"}}>
-   <b>{tableNumber}</b> 
-    </div>
-    <div style={{color:"white",fontSize:"14px",width:"60%",marginTop:"20%"}}>
-      Go to the target table, Guess the correct Key code, Get it to your table
-    </div>
+      <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+      <div style={{color:"white",fontSize:"14px",marginTop:"40%"}}>
+        Target
+      </div>
+      <div style={{color:"white",fontSize:"14px"}}>
+        Table Number:
+      </div>
+      <div style={{fontSize:"36px",color:"white"}}>
+        <b>{tableNumber}</b> 
+      </div>
+      <div style={{color:"white",fontSize:"14px",width:"60%",marginTop:"20%"}}>
+        Go to the target table, Guess the correct Key code, Get it to your table
+      </div>
       <h3 style={{ color: "white",fontSize:"12px",marginTop:"15%" }}>Write the code here:</h3>
       <input
         type="number"
         value={tableInput}
         onChange={(e) => setTableInput(e.target.value)}
-        // placeholder="Enter your Secret number"
         style={{
           padding: "10px",
           margin: "10px 0",
-  
           color:"white",
           fontSize:"16px",
           width: "200px",
           textAlign: "center",
           border: "none",
-    borderBottom: "1px solid #46FF97",
-    width: "200px",
-    textAlign: "center",
-    background: "transparent",
+          borderBottom: "1px solid #46FF97",
+          background: "transparent",
         }}
       />
       <button
@@ -121,6 +116,46 @@ function Round2Verification({ onVerify, tableNumber }) {
         }}
       >
         Verify
+      </button>
+    </div>
+  );
+}
+
+// Round 2 Intermission Component (New)
+function Round2Intermission({ onProceed }) {
+  return (
+    <div
+      style={{
+        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        height: "100vh",
+        color: "white",
+        textAlign: "center",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <h3 style={{ color: "white", fontSize: "24px", marginBottom: "20px" }}>
+        Ready for the Flip Game!
+      </h3>
+      <p style={{ color: "white", fontSize: "16px", marginBottom: "30px" }}>
+        You've verified the secret code. Click the button below to start the Flip Game and find the correct box.
+      </p>
+      <button
+        onClick={onProceed}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "white",
+          borderRadius: "14px",
+          color: "black",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      >
+        Start Flip Game
       </button>
     </div>
   );
@@ -305,11 +340,10 @@ function Round2Game({ tableNumber }) {
   );
 }
 
-
 // Main Round 2 Component
 export default function Round2() {
   const { tableNumber } = useParams();
-  const [step, setStep] = useState("instruction"); // "instruction", "verification", "game"
+  const [step, setStep] = useState("instruction"); // "instruction", "verification", "intermission", "game"
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isWinner, setIsWinner] = useState(false);
@@ -341,8 +375,9 @@ export default function Round2() {
 
   const handleProceedToVerification = () => setStep("verification");
   const handleVerificationSuccess = (verified) => {
-    if (verified) setStep("game");
+    if (verified) setStep("intermission"); // Move to intermission after verification
   };
+  const handleProceedToGame = () => setStep("game"); // Proceed to game from intermission
 
   if (isLoading) {
     return (
@@ -368,6 +403,7 @@ export default function Round2() {
       {step === "verification" && (
         <Round2Verification onVerify={handleVerificationSuccess} tableNumber={tableNumber} />
       )}
+      {step === "intermission" && <Round2Intermission onProceed={handleProceedToGame} />}
       {step === "game" && <Round2Game tableNumber={tableNumber} />}
     </>
   );
