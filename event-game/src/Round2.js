@@ -218,6 +218,15 @@ function Round2Game({ tableNumber }) {
     toast("Loading leaderboard...", { duration: 2000 });
   };
 
+  // Define box positions along the snake's body (adjust these percentages based on your image)
+  const boxPositions = [
+    { top: "20%", left: "20%" }, // Top-left curve of the snake
+    { top: "40%", left: "30%" }, // Middle of the first curve
+    { top: "60%", left: "50%" }, // Middle of the straight section
+    { top: "80%", left: "70%" }, // Bottom of the second curve
+    { top: "90%", left: "80%" }, // End of the snake
+  ];
+
   return (
     <div
       style={{
@@ -246,7 +255,7 @@ function Round2Game({ tableNumber }) {
           <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
           <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p>
 
-          {/* Boxes positioned absolutely over the background */}
+          {/* Boxes positioned along the snake's body */}
           {round2Data?.boxes.map((box, index) => (
             <div
               key={box.id}
@@ -262,8 +271,8 @@ function Round2Game({ tableNumber }) {
                 alignItems: "center",
                 color: "white",
                 position: "absolute",
-                top: `${1 * 80 + 10}%`, // Adjust these values as per your design
-                left: `${1 * 80 + 10}%`, // Adjust these values as per your design
+                top: boxPositions[index].top,
+                left: boxPositions[index].left,
                 transform: "translate(-50%, -50%)",
               }}
             >
