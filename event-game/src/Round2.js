@@ -126,36 +126,34 @@ function Round2Intermission({ onProceed }) {
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        backgroundImage: "url('/interm.png')",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        textAlign: "center",
+        padding: "0%",
+        backgroundColor: "#13954D",
         height: "100vh",
         color: "white",
-        textAlign: "center",
-        padding: "20px",
         display: "flex",
-        flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      <h3 style={{ color: "white", fontSize: "24px", marginBottom: "20px" }}>
-        Ready for the Flip Game!
-      </h3>
-      <p style={{ color: "white", fontSize: "16px", marginBottom: "30px" }}>
-        You've verified the secret code. Click the button below to start the Flip Game and find the correct box.
-      </p>
       <button
         onClick={onProceed}
         style={{
+          position: "absolute",
+          bottom: "2vh",
           padding: "10px 20px",
+          fontSize: "16px",
           backgroundColor: "white",
-          borderRadius: "14px",
           color: "black",
           border: "none",
+          borderRadius: "5px",
           cursor: "pointer",
-          fontSize: "16px",
         }}
       >
-        Start Flip Game
+       Let's Go
       </button>
     </div>
   );
