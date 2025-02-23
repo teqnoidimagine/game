@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { Octokit } = require("@octokit/rest"); // v19.0.13 supports this
+const { Octokit } = require("@octokit/rest");
 
 const app = express();
 const PORT = 5000;
@@ -49,19 +49,22 @@ const writeLeaderboard = async (data) => {
       });
       sha = file.sha;
     } catch (error) {
-      if (error.status !== 404) throw error;
+      if (error.status !== 404) {
+        console.error("Unexpected error fetching file SHA:", error);
+        throw error;
+      }
     }
 
     const content = JSON.stringify(data, null, 2);
-    await octokit.repos.createOrUpdateFileContents({
+    const response = await octokit.repos.createOrUpdateFileContents({
       owner: OWNER,
       repo: REPO,
       path: PATH,
       message: "Update leaderboard",
       content: Buffer.from(content).toString("base64"),
-      sha,
+      sha: sha || undefined,
     });
-    console.log("Leaderboard written to GitHub");
+    console.log("Leaderboard written to GitHub, new SHA:", response.data.commit.sha);
   } catch (error) {
     console.error("Error writing to GitHub:", error);
     throw error;
