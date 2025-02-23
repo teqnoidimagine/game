@@ -10,52 +10,37 @@ const baseUrl = "https://dccbackend.vercel.app/";
 function Round2Instruction({ onProceed }) {
   return (
     <div
+    style={{
+      backgroundImage: "url('/round2Ins.png')",
+      backgroundPosition: "center",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      textAlign: "center",
+      padding: "0%",
+      backgroundColor: "#13954D",
+      height: "100vh",
+      color: "white",
+      display: "flex",
+      justifyContent: "center",
+    }}
+  >
+    <button
+      onClick={onProceed}
       style={{
-        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
-        height: "100vh",
-        color: "white",
-        textAlign: "center",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        position: "absolute",
+        bottom: "2vh",
+        padding: "10px 20px",
+        fontSize: "16px",
+        backgroundColor: "white",
+        color: "black",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
       }}
     >
-                 <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-      <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>Round 2 Instructions</h1>
-      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
-        Congratulations on making it to Round 2! Here’s how to play the Flip Game:
-      </p>
-      <ul
-        style={{
-          listStyleType: "none",
-          padding: "0",
-          fontSize: "16px",
-          textAlign: "left",
-          maxWidth: "500px",
-        }}
-      >
-        <li style={{ marginBottom: "10px" }}>1. You have 2 chances to find the correct box.</li>
-        <li style={{ marginBottom: "10px" }}>2. Flip a box to reveal if it’s correct (✓) or incorrect (✗).</li>
-        <li style={{ marginBottom: "10px" }}>3. Find the correct box to win 5 points!</li>
-      </ul>
-      <button
-        onClick={onProceed}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "white",
-          color: "black",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-          marginTop: "20px",
-        }}
-      >
-        Proceed to Verification <span><img src={arrowG} width="35px" /></span>
-      </button>
-    </div>
+      Start <span><img src={arrowG} width="35px" /></span>
+    </button>
+  </div>
   );
 }
 
