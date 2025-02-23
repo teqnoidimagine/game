@@ -18,8 +18,9 @@ import wrongImage1 from "./wrong1.png";
 import wrongImage2 from "./wrong2.png";
 import wrongImage3 from "./wrong3.png";
 import timerIcon from "./timer.png";
-import logo1 from './logo1.png'
-// const baseUrl = "http://localhost:5000/";
+import logo1 from "./logo1.png";
+import Round2 from "./Round2"; // Import Round 2 component
+
 const baseUrl = "https://dccbackend.vercel.app/";
 
 // Welcome Page Component
@@ -44,7 +45,7 @@ function Welcome() {
       }}
     >
       <button
-        onClick={() => navigate(`/instruction/${tableNumber}`)} // Navigate to Instruction
+        onClick={() => navigate(`/instruction/${tableNumber}`)}
         style={{
           position: "absolute",
           bottom: "2vh",
@@ -63,7 +64,7 @@ function Welcome() {
   );
 }
 
-// Instruction Page Component
+// Instruction Page Component (for Round 1)
 function Instruction() {
   const navigate = useNavigate();
   const { tableNumber } = useParams();
@@ -75,7 +76,7 @@ function Instruction() {
         backgroundPosition: "center",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "#13954D", // Example background color, adjust as needed
+        backgroundColor: "#13954D",
         height: "100vh",
         color: "white",
         textAlign: "center",
@@ -86,16 +87,24 @@ function Instruction() {
         alignItems: "center",
       }}
     >
-      {/* <h1 style={{ fontSize: "32px", marginBottom: "20px" }}>Instructions</h1>
-      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
-        Welcome to the Quiz! Please read the following instructions carefully:
-      </p> */}
-      <ul style={{ listStyleType: "none", padding: "0", fontSize: "16px", textAlign: "center", maxWidth: "500px",display:"flex",justifyContent:"center",alignItems:"center" }}>
-        <li style={{ marginBottom: "10px",width:"80%" }}>The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them</li>
-
+      <ul
+        style={{
+          listStyleType: "none",
+          padding: "0",
+          fontSize: "16px",
+          textAlign: "center",
+          maxWidth: "500px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <li style={{ marginBottom: "10px", width: "80%" }}>
+          The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them
+        </li>
       </ul>
       <button
-        onClick={() => navigate(`/quiz/${tableNumber}`)} // Navigate to Quiz
+        onClick={() => navigate(`/quiz/${tableNumber}`)}
         style={{
           position: "absolute",
           bottom: "22vh",
@@ -161,7 +170,6 @@ function Leaderboard() {
         <>
           <h1 style={{ color: "white" }}>Leaderboard</h1>
 
-          {/* Round 1 */}
           <h2 style={{ color: "white" }}>Round 1</h2>
           <table
             style={{
@@ -195,7 +203,6 @@ function Leaderboard() {
             </tbody>
           </table>
 
-          {/* Round 2 */}
           <h2 style={{ color: "white", marginTop: "20px" }}>Round 2</h2>
           <table
             style={{
@@ -229,7 +236,6 @@ function Leaderboard() {
             </tbody>
           </table>
 
-          {/* Winners */}
           {leaderboard.winners.length > 0 && (
             <>
               <h2 style={{ color: "white", marginTop: "20px" }}>Winners</h2>
@@ -271,29 +277,21 @@ function Leaderboard() {
   );
 }
 
-// Quiz Component
+// Quiz Component (Round 1 Only)
 function Quiz() {
   const { tableNumber } = useParams();
   const [round1Questions, setRound1Questions] = useState([]);
-  const [round2Data, setRound2Data] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [score, setScore] = useState({ round1: 0, round2: 0 });
-  const [isSubmitted, setIsSubmitted] = useState({ round1: false, round2: false });
+  const [score, setScore] = useState({ round1: 0 });
+  const [isSubmitted, setIsSubmitted] = useState({ round1: false });
   const [timeTaken, setTimeTaken] = useState(0);
   const [timerActive, setTimerActive] = useState(true);
-  const [currentRound, setCurrentRound] = useState("round1");
-  const [flippedBoxes, setFlippedBoxes] = useState([]);
-  const [attempts, setAttempts] = useState(0);
   const [notification, setNotification] = useState("");
-  const [isTop10, setIsTop10] = useState(false);
-  const [countdown, setCountdown] = useState(20);
-  const [feedbackTimer, setFeedbackTimer] = useState(3); // Feedback countdown
-  const [tableInput, setTableInput] = useState("");
-  const [showTableVerification, setShowTableVerification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+  const [feedbackTimer, setFeedbackTimer] = useState(3); // Added feedbackTimer state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -303,7 +301,6 @@ function Quiz() {
         const response = await fetch(`${baseUrl}quiz/table${tableNumber}`);
         const data = await response.json();
         setRound1Questions(data.round1 || round1Questions);
-        setRound2Data(data.round2 || { locked: true });
       } catch (error) {
         console.error("Error fetching quiz data:", error);
         toast.error("Failed to load quiz data");
@@ -316,7 +313,7 @@ function Quiz() {
 
   useEffect(() => {
     let timer;
-    if (timerActive && currentRound === "round1" && !isSubmitted.round1) {
+    if (timerActive && !isSubmitted.round1) {
       timer = setInterval(() => {
         setTimeTaken((prev) => {
           if (prev >= 120) {
@@ -328,38 +325,12 @@ function Quiz() {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [timerActive, currentRound, isSubmitted.round1]);
-
-  useEffect(() => {
-    let countdownTimer;
-    if (isSubmitted.round1 && currentRound === "round1" && !showTableVerification) {
-      setNotification("Waiting for results...");
-      countdownTimer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            checkTop10();
-            clearInterval(countdownTimer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(countdownTimer);
-  }, [isSubmitted.round1, currentRound, showTableVerification]);
-
-  useEffect(() => {
-    let timer;
-    if (timerActive && currentRound === "round2" && !isSubmitted.round2) {
-      timer = setInterval(() => setTimeTaken((prev) => prev + 1), 1000);
-    }
-    return () => clearInterval(timer);
-  }, [timerActive, currentRound, isSubmitted.round2]);
+  }, [timerActive, isSubmitted.round1]);
 
   useEffect(() => {
     let feedbackInterval;
     if (showFeedback) {
-      setFeedbackTimer(3);
+      setFeedbackTimer(3); // Reset timer to 3 seconds
       feedbackInterval = setInterval(() => {
         setFeedbackTimer((prev) => {
           if (prev <= 1) {
@@ -418,106 +389,17 @@ function Quiz() {
             });
           }
           toast.success("Round 1 submitted successfully!");
+          // setNotification("Round 1 completed. Check leaderboard for results.");
         })
         .catch((error) => {
           console.error("Error updating leaderboard:", error);
           toast.error("Failed to submit Round 1 score");
+          setNotification("Error submitting score. Please try again.");
         })
         .finally(() => {
           setIsLoading(false);
         });
     }, 3000);
-  };
-
-  const checkTop10 = async () => {
-    setIsLoading(true);
-    try {
-      const leaderboardResponse = await fetch(`${baseUrl}leaderboard`);
-      const leaderboardData = await leaderboardResponse.json();
-      const sortedRound1 = leaderboardData.round1.sort((a, b) => b.score - a.score).slice(0, 10);
-      const top10Tables = sortedRound1.map((player) => player.tableNo);
-
-      if (top10Tables.includes(Number(tableNumber))) {
-        setIsTop10(true);
-        setNotification("Congratulations! You have qualified for Round 2!");
-        toast.success("Congratulations! You’ve qualified for Round 2!", { duration: 4000 });
-        setShowTableVerification(true);
-      } else {
-        setNotification("Sorry, you didn't qualify for Round 2.");
-        toast.error("Sorry, you didn’t qualify for Round 2.", { duration: 4000 });
-      }
-    } catch (error) {
-      console.error("Error fetching leaderboard for top 10:", error);
-      setNotification("Error fetching results. Please try again.");
-      toast.error("Error fetching results");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleTableVerification = () => {
-    if (Number(tableInput) === Number(tableNumber)) {
-      setCurrentRound("round2");
-      setTimerActive(true);
-      setTimeTaken(0);
-      setRound2Data((prev) => ({ ...prev, locked: false }));
-      setShowTableVerification(false);
-      toast.success("Secret Code verified! Proceeding to Round 2...");
-    } else {
-      toast.error("Incorrect table number. Please try again.");
-    }
-  };
-
-  const handleBoxFlip = async (box) => {
-    if (attempts >= 2 || isSubmitted.round2) return;
-
-    const newFlippedBoxes = [...flippedBoxes, box.id];
-    setFlippedBoxes(newFlippedBoxes);
-    setAttempts(attempts + 1);
-
-    if (box.isCorrect) {
-      setScore((prev) => ({ ...prev, round2: 5 }));
-      setTimerActive(false);
-      setIsSubmitted((prev) => ({ ...prev, round2: true }));
-
-      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
-      setIsLoading(true);
-      try {
-        await fetch(`${baseUrl}leaderboard`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tableNo: Number(tableNumber), score: 5, time: timeFormatted, round: "round2" }),
-        });
-        toast.success("Round 2 submitted successfully!");
-        toast.success("Great job! You won Round 2!", { duration: 4000 });
-      } catch (error) {
-        console.error("Error submitting Round 2:", error);
-        toast.error("Failed to submit Round 2 score");
-      } finally {
-        setIsLoading(false);
-      }
-    } else if (attempts + 1 === 2) {
-      setScore((prev) => ({ ...prev, round2: 0 }));
-      setTimerActive(false);
-      setIsSubmitted((prev) => ({ ...prev, round2: true }));
-
-      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
-      setIsLoading(true);
-      try {
-        await fetch(`${baseUrl}leaderboard`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tableNo: Number(tableNumber), score: 0, time: timeFormatted, round: "round2" }),
-        });
-        toast.success("Round 2 submitted successfully!");
-        toast.error("Oops! You lost Round 2.", { duration: 4000 });
-      } catch (error) {
-        console.error("Error submitting Round 2:", error);
-        toast.error("Failed to submit Round 2 score");
-      } finally {
-        setIsLoading(false);
-      }
-    }
   };
 
   const handleLeaderboardClick = () => {
@@ -536,7 +418,7 @@ function Quiz() {
       case 2:
         return thankYouImage3;
       default:
-        return thankYouImage1; // Fallback
+        return thankYouImage1;
     }
   };
 
@@ -549,7 +431,7 @@ function Quiz() {
       case 2:
         return wrongImage3;
       default:
-        return wrongImage1; // Fallback
+        return wrongImage1;
     }
   };
 
@@ -560,29 +442,15 @@ function Quiz() {
   return (
     <div
       style={{
-        // backgroundImage: "url('/bg2que.png')",
-        // backgroundPosition: "center",
-        // backgroundSize: "cover",
-        // backgroundRepeat: "no-repeat",
-
-        // backgroundImage: "linear-gradient(to bottom,0% #13954D, 100% #062F18)",
         backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
-
         height: "100vh",
         padding: "0px",
         textAlign: "center",
         maxWidth: "600px",
         margin: "auto",
-        // position: "relative",
       }}
     >
       <Toaster position="top-right" />
-      {/* <div style={{ color: "white", paddingTop: "2%", fontSize: "30px",opacity:"0" }}>
-        Table {tableNumber} - {currentRound === "round1" ? "Round 1" : "Round 2"}
-      </div> */}
-    
-     
-
       {isLoading && (
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
           <img src={loadingGif} alt="Loading..." style={{ width: "100px" }} />
@@ -592,35 +460,27 @@ function Quiz() {
       {notification && !isLoading && (
         <div
           style={{
-            color: isTop10 ? "green" : "red",
+            color: "white",
             fontSize: "20px",
-            // margin: "20px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            // backgroundColor: "rgba(255, 255, 255, 0.8)",
             padding: "10px",
             borderRadius: "5px",
           }}
         >
-          {notification}
-          {isSubmitted.round1 && currentRound === "round1" && !showTableVerification && countdown > 0 && (
-            <p>
-              Results in: {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, "0")}
-            </p>
-          )}
+          {/* {notification} */}
         </div>
       )}
 
-      {currentRound === "round1" && !isSubmitted.round1 && round1Questions.length > 0 && !isLoading && (
+      {!isSubmitted.round1 && round1Questions.length > 0 && !isLoading && (
         <>
           <div
             style={{
               display: showFeedback ? "none" : "flex",
               flexDirection: "column",
               justifyContent: "center",
-              // alignItems: "center",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "colum", justifyContent: "center", alignItems: "center" }}>
-           
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             </div>
             <div
               style={{
@@ -631,34 +491,42 @@ function Quiz() {
                 justifyContent: "center",
                 alignItems: "center",
                 margin: "20px",
-                marginBottom:"5px",
+                marginBottom: "5px",
                 borderRadius: "20px",
                 fontSize: "16px",
-                // boxShadow: "0 0 0 1px lightgray",
-                // backgroundColor: "white",
-             
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <img src={logo1} width={120} style={{marginTop:"5%"}} />
-              
-                     <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px",marginTop:"10%"}}> Crack the clue<br></br>
-                     to find the missing paw</p>
-             
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"end",margin:"5px",borderBottom:"1px",width:"85vw",borderBottom: "1px solid green",marginTop:"7%" }}>
-      <div>
-      <p style={{ color: "white", margin: "5px",backgroundColor:"#089449",padding:"5px 10px",borderRadius:"20px",fontSize:"12px"}}>Clue{" "}{currentQuestionIndex + 1}</p>
-      </div>
-      <p style={{ color: "white", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "end", gap: "2px" }}>
-        <span style={{ display: "fle", justifyContent: "center", alignItems: "center" }}>
-          <img src={timerIcon} alt="Timer" style={{ width: "10px" }} />
-        </span>{" "}
-        <span style={{ fontSize: "20px" }}>{timeTaken}</span> s
-      </p>
-    
-      </div>
-              <p style={{ margin:0,fontSize: "18px", fontWeight: "bold", padding: "10px",paddingBottom:"20px",textAlign:"left",color:"white" }}>
+              <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+              <p style={{ color: "#5CFFA4", textAlign: "center", width: "70%", fontSize: "12px", marginTop: "10%" }}>
+                Crack the clue<br />to find the missing paw
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "end",
+                  margin: "5px",
+                  borderBottom: "1px",
+                  width: "85vw",
+                  borderBottom: "1px solid green",
+                  marginTop: "7%",
+                }}
+              >
+                <div>
+                  <p style={{ color: "white", margin: "5px", backgroundColor: "#089449", padding: "5px 10px", borderRadius: "20px", fontSize: "12px" }}>
+                    Clue {currentQuestionIndex + 1}
+                  </p>
+                </div>
+                <p style={{ color: "white", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "end", gap: "2px" }}>
+                  <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img src={timerIcon} alt="Timer" style={{ width: "10px" }} />
+                  </span>{" "}
+                  <span style={{ fontSize: "20px" }}>{timeTaken}</span> s
+                </p>
+              </div>
+              <p style={{ margin: 0, fontSize: "18px", fontWeight: "bold", padding: "10px", paddingBottom: "20px", textAlign: "left", color: "white" }}>
                 {round1Questions[currentQuestionIndex].question}
               </p>
               <ul
@@ -682,10 +550,8 @@ function Quiz() {
                       border: "1px solid #2D9059",
                       borderRadius: "15px",
                       cursor: "pointer",
-                      // background: "#fff",
-                      // backgroundColor: "#000",
                       color: "white",
-                      fontSize:"14px",
+                      fontSize: "14px",
                       backgroundColor: answers[currentQuestionIndex] === option ? "#009043" : "",
                       boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
                     }}
@@ -694,7 +560,7 @@ function Quiz() {
                   </li>
                 ))}
               </ul>
-              <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px"}}>Select the correct answer</p>
+              <p style={{ color: "#5CFFA4", textAlign: "center", width: "70%", fontSize: "12px" }}>Select the correct answer</p>
             </div>
             <div style={{ marginTop: "0px" }}>
               {currentQuestionIndex < totalQuestions - 1 ? (
@@ -878,95 +744,28 @@ function Quiz() {
         </>
       )}
 
-      {currentRound === "round1" && isSubmitted.round1 && !isTop10 && !notification.includes("Sorry") && !notification.includes("Congratulations") && !isLoading && (
-        <div>
-          <h2 style={{ color: "white" }}>Round 1 Score: {score.round1}</h2>
-          <p style={{ color: "white" }}>Waiting for results...</p>
-        </div>
-      )}
-
-      {currentRound === "round1" && isSubmitted.round1 && !isTop10 && notification.includes("Sorry") && !isLoading && (
-        <div style={{  backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
-        }}>
-           <img src={logo1} width={120} style={{marginTop:"5%"}} />
-           <p style={{fontSize:"40px",color:"51FF9D",fontWeight:"semibold"}}>Congrats</p>
-          <h2 style={{ color: "white" }}>Round 1 Score: {score.round1}</h2>
-          <p style={{ color: "white" }}>Round 1 completed. Check leaderboard for results.</p>
-          <button
+      {isSubmitted.round1 && !isLoading && (
+        <div style={{ backgroundImage: "" }}>
+          <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+          <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold",marginTop:"25%" }}>Congrats</div>
+          <p style={{color:"white",margin:"0px",fontSize:"12px"}}>You finshed the <b>Round 1</b></p>
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <p style={{width:"60%",height:"1px",backgroundColor:"green",alignItems:"center",}}></p></div>
+          <div style={{ color: "white" ,margin:"0px",fontSize:"12px"}}>Found {score.round1} lost Paws in the jungle</div>
+          <div style={{ color: "white" ,margin:"0px",fontSize:"12px"}}>in {score.time} Seconds</div>
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <p style={{width:"100%",height:"40px",margin:"30px 0px",fontSize:"12px",backgroundColor:"#0A7F3F",color:"white",display:"flex",justifyContent:"center",alignItems:"center"}}>
+           <div>Please Wait</div> 
+            </p></div>
+            <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+            <p style={{color:"#4EFF9C",width:"50%",margin:"0px",fontSize:"12px"}}>We’ll announce the top tables list selected for <b>Round 2</b>, at the end of <b>Round 1</b></p></div> 
+          <p style={{ color: "white" }}>{notification}</p>
+          {/* <button
             onClick={handleLeaderboardClick}
             style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
           >
             Check Leaderboard
-          </button>
-        </div>
-      )}
-
-      {currentRound === "round1" && isSubmitted.round1 && isTop10 && showTableVerification && !isLoading && (
-        <div style={{ height: "50%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-          <h3 style={{ color: "white" }}>Verify Your Secret Number</h3>
-          <input
-            type="number"
-            value={tableInput}
-            onChange={(e) => setTableInput(e.target.value)}
-            placeholder="Enter your Secret number"
-            style={{
-              padding: "10px",
-              margin: "10px 0",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              width: "200px",
-              textAlign: "center",
-            }}
-          />
-          <button
-            onClick={handleTableVerification}
-            style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-          >
-            Verify
-          </button>
-        </div>
-      )}
-
-      {currentRound === "round2" && round2Data && !round2Data.locked && !isLoading && (
-        <div style={{ height: "50%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-          <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
-          <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
-            {round2Data.boxes.map((box) => (
-              <div
-                key={box.id}
-                onClick={() => handleBoxFlip(box)}
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
-                  borderRadius: "5px",
-                  cursor: attempts >= 2 || isSubmitted.round2 ? "default" : "pointer",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                }}
-              >
-                {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : "?"}
-              </div>
-            ))}
-          </div>
-          {isSubmitted.round2 && (
-            <>
-              {score.round2 > 0 ? (
-                <h2 style={{ color: "white", marginTop: "20px" }}>Round 2 Score: {score.round2}</h2>
-              ) : (
-                <h2 style={{ color: "red", marginTop: "20px" }}>You Lost!</h2>
-              )}
-              <button
-                onClick={handleLeaderboardClick}
-                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-              >
-                Check Leaderboard
-              </button>
-            </>
-          )}
+          </button> */}
         </div>
       )}
     </div>
@@ -979,8 +778,9 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/welcome/:tableNumber" element={<Welcome />} />
-        <Route path="/instruction/:tableNumber" element={<Instruction />} /> {/* New Instruction Route */}
+        <Route path="/instruction/:tableNumber" element={<Instruction />} />
         <Route path="/quiz/:tableNumber" element={<Quiz />} />
+        <Route path="/round2/:tableNumber" element={<Round2 />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/" element={<Navigate to="/welcome/1" />} />
       </Routes>
