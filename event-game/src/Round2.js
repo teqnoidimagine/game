@@ -95,7 +95,8 @@ function Round2Verification({ onVerify, tableNumber }) {
           padding: "10px",
           margin: "10px 0",
   
-          
+          color:"white",
+          fontSize:"16px",
           width: "200px",
           textAlign: "center",
           border: "none",
