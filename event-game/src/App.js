@@ -18,7 +18,7 @@ import wrongImage1 from "./wrong1.png";
 import wrongImage2 from "./wrong2.png";
 import wrongImage3 from "./wrong3.png";
 import timerIcon from "./timer.png";
-
+import logo1 from './logo1.png'
 // const baseUrl = "http://localhost:5000/";
 const baseUrl = "https://dccbackend.vercel.app/";
 
@@ -560,12 +560,13 @@ function Quiz() {
   return (
     <div
       style={{
-        backgroundImage: "url('/bg2que.png')",
+        // backgroundImage: "url('/bg2que.png')",
         // backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        // backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
+
         // backgroundImage: "linear-gradient(to bottom,0% #13954D, 100% #062F18)",
-        // backgroundImage: "linear-gradient(to bottom, #13954D 0%, #062F18 100%)",
+        backgroundImage: "linear-gradient(rgb(24 121 68) 0%, rgb(1 12 6) 100%, rgb(6, 47, 24) 100%, rgb(25 76 48) 100%)",
 
         height: "100vh",
         padding: "0px",
@@ -576,9 +577,9 @@ function Quiz() {
       }}
     >
       <Toaster position="top-right" />
-      <div style={{ color: "white", paddingTop: "2%", fontSize: "30px",opacity:"0" }}>
+      {/* <div style={{ color: "white", paddingTop: "2%", fontSize: "30px",opacity:"0" }}>
         Table {tableNumber} - {currentRound === "round1" ? "Round 1" : "Round 2"}
-      </div>
+      </div> */}
     
      
 
@@ -639,6 +640,7 @@ function Quiz() {
                 backgroundRepeat: "no-repeat",
               }}
             >
+              <img src={logo1} width={120} style={{marginTop:"5%"}} />
                      <p style={{color:"#5CFFA4",textAlign:"center",width:"70%",fontSize:"12px",marginTop:"10%"}}> Crack the clue<br></br>
                      to find the missing paw</p>
              
