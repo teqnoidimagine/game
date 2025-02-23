@@ -60,15 +60,21 @@ const writeLeaderboard = async (data) => {
     }
 
     const content = JSON.stringify(data, null, 2);
-    const response = await octokit.repos.createOrUpdateFileContents({
+    const base64Content = Buffer.from(content).toString("base64");
+    const requestBody = {
       owner: OWNER,
       repo: REPO,
       path: PATH,
       message: "Update leaderboard",
-      content: Buffer.from(content).toString("base64"),
-      sha,
-    });
+      content: base64Content,
+      sha: sha,
+      branch: "main",
+    };
+    console.log("Sending PUT request with body:", JSON.stringify(requestBody, null, 2));
+
+    const response = await octokit.repos.createOrUpdateFileContents(requestBody);
     console.log("Leaderboard written to GitHub, new SHA:", response.data.commit.sha);
+    return response;
   } catch (error) {
     console.error("Error writing to GitHub:", error);
     throw error;
