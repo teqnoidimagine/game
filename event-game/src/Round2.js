@@ -220,8 +220,11 @@ function Round2Game({ tableNumber }) {
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        backgroundImage: "url('/round2game.png')",
         height: "100vh",
+        width: "100vw",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         color: "white",
         textAlign: "center",
         padding: "20px",
@@ -229,6 +232,7 @@ function Round2Game({ tableNumber }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
       }}
     >
       <Toaster position="top-right" />
@@ -240,27 +244,32 @@ function Round2Game({ tableNumber }) {
         <>
           <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
           <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
-            {round2Data?.boxes.map((box) => (
-              <div
-                key={box.id}
-                onClick={() => handleBoxFlip(box)}
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
-                  borderRadius: "5px",
-                  cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                }}
-              >
-                {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : "?"}
-              </div>
-            ))}
-          </div>
+
+          {/* Boxes positioned absolutely over the background */}
+          {round2Data?.boxes.map((box, index) => (
+            <div
+              key={box.id}
+              onClick={() => handleBoxFlip(box)}
+              style={{
+                width: "50px",
+                height: "50px",
+                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#ccc",
+                borderRadius: "5px",
+                cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                position: "absolute",
+                top: `${Math.random() * 80 + 10}%`, // Adjust these values as per your design
+                left: `${Math.random() * 80 + 10}%`, // Adjust these values as per your design
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : "?"}
+            </div>
+          ))}
+
           {isSubmitted && (
             <>
               {score > 0 ? (
@@ -281,6 +290,7 @@ function Round2Game({ tableNumber }) {
     </div>
   );
 }
+
 
 // Main Round 2 Component
 export default function Round2() {
