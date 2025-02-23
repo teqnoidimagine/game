@@ -225,7 +225,7 @@ function Round2Game({ tableNumber }) {
     { top: "33%", left: "73%" }, // Middle of the first curve
     { top: "62%", left: "50%" }, // Middle of the straight section
     { top: "79%", left: "70%" }, // Bottom of the second curve
-    { top: "90%", left: "80%" }, // End of the snake
+    { top: "48%", left: "25%" }, // End of the snake
   ];
 
   return (
