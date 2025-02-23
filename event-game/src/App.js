@@ -566,7 +566,7 @@ function Quiz() {
         // backgroundRepeat: "no-repeat",
 
         // backgroundImage: "linear-gradient(to bottom,0% #13954D, 100% #062F18)",
-        backgroundImage: "linear-gradient(rgb(24 121 68) 0%, rgb(1 12 6) 100%, rgb(6, 47, 24) 100%, rgb(25 76 48) 100%)",
+        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
 
         height: "100vh",
         padding: "0px",
