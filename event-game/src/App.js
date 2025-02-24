@@ -50,7 +50,7 @@ function Welcome() {
         onClick={() => navigate(`/instruction/${tableNumber}`)}
         style={{
           position: "absolute",
-          bottom: "5vh",
+          bottom: "12vh",
           padding: "10px 20px",
           fontSize: "16px",
           backgroundColor: "white",
