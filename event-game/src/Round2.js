@@ -256,10 +256,10 @@ function Round2Game({ tableNumber }) {
 
   // Define box positions along the snake's body (adjust these percentages based on your image)
   const boxPositions = [
-    { top: "17%", left: "6%" }, // Top-left curve of the snake
-    { top: "32%", left: "78%" }, // Middle of the first curve
+    { top: "17%", left: "15%" }, // Top-left curve of the snake
+    { top: "32%", left: "86%" }, // Middle of the first curve
     { top: "55%", left: "11%" }, // Middle of the straight section
-    { top: "68%", left: "50%" }, // Bottom of the second curve
+    { top: "70%", left: "50%" }, // Bottom of the second curve
     { top: "84%", left: "70%" }, // End of the snake
   ];
 
@@ -278,7 +278,7 @@ function Round2Game({ tableNumber }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        position: "relative",
+        // position: "relative",
       }}
     >
       <Toaster position="top-right" />
