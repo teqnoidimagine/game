@@ -96,8 +96,8 @@ const formatTimestamp = (date) => {
     minute: "numeric",
     second: "numeric",
     hour12: true,
-    timeZone: "UTC",
-  }) + " UTC";
+    timeZone: "Asia/Kolkata", // Ensures IST timezone
+  }) + " IST";
 };
 
 // Universal time parser for formats like "0:55", "00:23", "0:48", "00:48"

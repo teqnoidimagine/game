@@ -188,7 +188,7 @@ function Leaderboard() {
           >
             <thead>
               <tr style={{ background: "none" }}>
-                <th style={{ padding: "5px" }}>Serial No</th>
+                <th style={{ padding: "5px" }}>Rank</th>
                 <th style={{ padding: "5px" }}>Table No</th>
                 <th style={{ padding: "5px" }}>Score</th>
                 <th style={{ padding: "5px" }}>Time</th>
@@ -221,7 +221,7 @@ function Leaderboard() {
           >
             <thead>
               <tr style={{ background: "none" }}>
-                <th style={{ padding: "5px" }}>Serial No</th>
+                <th style={{ padding: "5px" }}>Rank</th>
                 <th style={{ padding: "5px" }}>Table No</th>
                 <th style={{ padding: "5px" }}>Score</th>
                 <th style={{ padding: "5px" }}>Time</th>
@@ -255,7 +255,7 @@ function Leaderboard() {
               >
                 <thead>
                   <tr style={{ background: "none" }}>
-                    <th style={{ padding: "5px" }}>Serial No</th>
+                    <th style={{ padding: "5px" }}>Rank</th>
                     <th style={{ padding: "5px" }}>Table No</th>
                     <th style={{ padding: "5px" }}>Score</th>
                     <th style={{ padding: "5px" }}>Time</th>
