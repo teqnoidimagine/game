@@ -100,6 +100,26 @@ const formatTimestamp = (date) => {
   }) + " UTC";
 };
 
+// Universal time parser for formats like "0:55", "00:23", "0:48", "00:48"
+function parseTime(timeStr) {
+  if (!timeStr || typeof timeStr !== "string") return 0;
+  
+  // Remove any whitespace and split by colon
+  const parts = timeStr.trim().split(":").map((part) => parseInt(part, 10) || 0);
+  
+  // Ensure we have minutes and seconds (default to 0 if not provided)
+  const minutes = parts[0] || 0;
+  const seconds = parts[1] || 0;
+  
+  // Validate and return total seconds
+  if (isNaN(minutes) || isNaN(seconds) || minutes < 0 || seconds < 0 || seconds >= 60) {
+    console.warn(`Invalid time format: ${timeStr}, defaulting to 0 seconds`);
+    return 0;
+  }
+  
+  return (minutes * 60) + seconds;
+}
+
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running", timestamp: new Date().toISOString() });
 });
@@ -157,12 +177,6 @@ app.get("/leaderboard", async (req, res) => {
   }
 });
 
-// Helper function to parse time string (e.g., "0:55" or "00:48") into seconds
-function parseTime(timeStr) {
-  if (!timeStr) return 0;
-  const [minutes, seconds] = timeStr.split(":").map(Number);
-  return (minutes || 0) * 60 + (seconds || 0);
-}
 app.post("/leaderboard", async (req, res) => {
   try {
     console.log("Received POST request:", req.body);
@@ -183,7 +197,7 @@ app.post("/leaderboard", async (req, res) => {
 
     const tableIndex = roundData.findIndex((entry) => entry.tableNo === tableNo);
     let timestamp = formatTimestamp(new Date());
-    let normalizedTime = typeof time === "number" ? formatTime(time) : time;
+    let normalizedTime = typeof time === "number" ? formatTime(time) : formatTime(parseTime(time.toString()));
 
     if (tableIndex !== -1) {
       console.log(`Updating existing entry for table ${tableNo} in ${round}`);
@@ -205,13 +219,10 @@ app.post("/leaderboard", async (req, res) => {
         roundData[tableIndex].answered = true;
 
         let existingTimeStr = String(roundData[tableIndex].time || "00:00");
-        let existingTime = existingTimeStr.split(":").map(Number);
-        let newTime = normalizedTime.split(":").map(Number);
+        let existingTime = parseTime(existingTimeStr);
+        let newTime = parseTime(normalizedTime);
 
-        let existingTotalSeconds = existingTime[0] * 60 + existingTime[1];
-        let newTotalSeconds = newTime[0] * 60 + newTime[1];
-
-        roundData[tableIndex].time = newTotalSeconds < existingTotalSeconds ? normalizedTime : roundData[tableIndex].time;
+        roundData[tableIndex].time = newTime < existingTime ? normalizedTime : roundData[tableIndex].time;
       }
     } else {
       roundData.push({
@@ -229,7 +240,15 @@ app.post("/leaderboard", async (req, res) => {
       .reduce((unique, item) => {
         return unique.some((entry) => entry.tableNo === item.tableNo) ? unique : [...unique, item];
       }, [])
-      .sort((a, b) => b.score - a.score);
+      .sort((a, b) => {
+        // Sort by score (descending) and time (ascending) for ties
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        const timeA = parseTime(a.time);
+        const timeB = parseTime(b.time);
+        return timeA - timeB;
+      });
 
     await writeLeaderboard(leaderboard);
     res.json({ message: "Score updated", leaderboard });
@@ -260,7 +279,15 @@ for (let i = 1; i <= 24; i++) {
   app.get(`/quiz/table${i}`, async (req, res) => {
     try {
       const leaderboard = await readLeaderboard();
-      const top5Round1 = leaderboard.round1.sort((a, b) => b.score - a.score).slice(0, 5);
+      const top5Round1 = leaderboard.round1.sort((a, b) => {
+        // Sort by score (descending) and time (ascending) for ties
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        const timeA = parseTime(a.time);
+        const timeB = parseTime(b.time);
+        return timeA - timeB;
+      }).slice(0, 5);
       const allAnswered = leaderboard.round1.length > 0;
       const isEligibleForRound2 = true;
 
