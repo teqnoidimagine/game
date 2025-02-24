@@ -46,16 +46,21 @@ function Round2Instruction({ onProceed }) {
 }
 
 // Round 2 Verification Component
+
+
 function Round2Verification({ onVerify, tableNumber }) {
   const [tableInput, setTableInput] = useState("");
+  const [message, setMessage] = useState(""); // State for displaying the message
 
   const handleVerify = () => {
     if (Number(tableInput) === Number(tableNumber)) {
-      toast.success("Secret Code verified! Proceeding to next step...");
-      onVerify(true);
+      setMessage("Secret Code verified! Proceeding to next step...");
+      setTimeout(() => {
+        onVerify(true); // Proceed after a short delay to show the message
+      }, 1000); // 1-second delay (adjustable)
     } else {
-      toast.error("Error, please write the correct code");
-      setTableInput(""); // Optionally clear the input for a retry
+      setMessage("Error, please write the correct code");
+      setTableInput(""); // Clear input on error
     }
   };
 
@@ -106,16 +111,30 @@ function Round2Verification({ onVerify, tableNumber }) {
         }}
         placeholder="Enter code"
       />
+      {/* Display the message below the input */}
+      {message && (
+        <div
+          style={{
+            color: message.includes("Error") ? "#FF6347" : "#46FF97", // Red for error, green for success
+            fontSize: "14px",
+            marginTop: "10px",
+            fontWeight: "bold",
+          }}
+        >
+          {message}
+        </div>
+      )}
       <button
         onClick={handleVerify}
         style={{
           padding: "10px 20px",
           backgroundColor: "white",
-          borderRadius: "20px", // Fixed duplicate borderRadius property
+          borderRadius: "20px",
           color: "black",
           border: "none",
           cursor: "pointer",
           fontSize: "16px",
+          marginTop: "20px", // Added some spacing after the message
         }}
       >
         Verify
