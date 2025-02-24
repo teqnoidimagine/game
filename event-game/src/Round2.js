@@ -268,7 +268,7 @@ function Round2Game({ tableNumber }) {
       style={{
         backgroundImage: "url('/round2game.png')",
         height: "100vh",
-        width: "100vw",
+        // width: "100vw",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
