@@ -255,7 +255,7 @@ function Round2Game({ tableNumber }) {
 
   // Define box positions along the snake's body (adjust these percentages based on your image)
   const boxPositions = [
-    { top: "17%", left: "28%" }, // Top-left curve of the snake
+    { top: "17%", left: "25%" }, // Top-left curve of the snake
     { top: "33%", left: "73%" }, // Middle of the first curve
     { top: "62%", left: "50%" }, // Middle of the straight section
     { top: "79%", left: "70%" }, // Bottom of the second curve

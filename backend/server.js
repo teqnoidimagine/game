@@ -110,7 +110,10 @@ app.get("/leaderboard", async (req, res) => {
     const top5Round1 = leaderboard.round1.sort((a, b) => b.score - a.score).slice(0, 5);
     const allAnswered = leaderboard.round1.length > 0;
     const round2Players = leaderboard.round2;
-    const top3Winners = round2Players.sort((a, b) => b.score - a.score).slice(0, 3);
+    const top3Winners = round2Players
+      .sort((a, b) => b.score - a.score)
+      .filter((player) => player.score > 0) // Filter out players with score 0
+      .slice(0, 3);
 
     const response = {
       round1: leaderboard.round1,
@@ -257,7 +260,6 @@ for (let i = 1; i <= 24; i++) {
                 { id: 3, isCorrect: false },
                 { id: 4, isCorrect: false },
                 { id: 5, isCorrect: true },
-             
               ]),
             }
           : { locked: true },
