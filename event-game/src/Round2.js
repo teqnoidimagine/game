@@ -193,7 +193,7 @@ function Round2Intermission({ onProceed }) {
         onClick={onProceed}
         style={{
           position: "absolute",
-          bottom: "2vh",
+          bottom: "12vh",
           padding: "10px 20px",
           fontSize: "16px",
           backgroundColor: "white",
