@@ -50,43 +50,46 @@ function Round2Instruction({ onProceed }) {
 
 function Round2Verification({ onVerify, tableNumber }) {
   const [tableInput, setTableInput] = useState("");
-  const [message, setMessage] = useState(""); // State for displaying the message
+  const [message, setMessage] = useState("");
 
-  // Define the table number to secret code mapping for 20 tables
-  const secretCodeMap = {
-    1: 9,   // Table 1 -> Secret Code 9
-    2: 12,  // Table 2 -> Secret Code 12
-    3: 14,  // Table 3 -> Secret Code 14
-    4: 7,   // Table 4 -> Secret Code 7
-    5: 10,  // Table 5 -> Secret Code 10
-    6: 15,  // Table 6 -> Secret Code 15
-    7: 3,   // Table 7 -> Secret Code 3
-    8: 11,  // Table 8 -> Secret Code 11
-    9: 6,   // Table 9 -> Secret Code 6
-    10: 13, // Table 10 -> Secret Code 13
-    11: 18, // Table 11 -> Secret Code 18
-    12: 5,  // Table 12 -> Secret Code 5
-    13: 16, // Table 13 -> Secret Code 16
-    14: 20, // Table 14 -> Secret Code 20
-    15: 2,  // Table 15 -> Secret Code 2
-    16: 19, // Table 16 -> Secret Code 19
-    17: 8,  // Table 17 -> Secret Code 8
-    18: 17, // Table 18 -> Secret Code 17
-    19: 4,  // Table 19 -> Secret Code 4
-    20: 1,  // Table 20 -> Secret Code 1
+  // Complete verification data list
+  const verificationData = {
+    1: { targetTable: 12, verificationCode: "1923" },
+    2: { targetTable: 19, verificationCode: "4512" },
+    3: { targetTable: 7, verificationCode: "7894" },
+    4: { targetTable: 15, verificationCode: "2367" },
+    5: { targetTable: 18, verificationCode: "9103" },
+    6: { targetTable: 1, verificationCode: "3548" },
+    7: { targetTable: 13, verificationCode: "6721" },
+    8: { targetTable: 20, verificationCode: "1089" },
+    9: { targetTable: 4, verificationCode: "5432" },
+    10: { targetTable: 16, verificationCode: "8765" },
+    11: { targetTable: 3, verificationCode: "3214" },
+    12: { targetTable: 17, verificationCode: "6547" },
+    13: { targetTable: 9, verificationCode: "9871" },
+    14: { targetTable: 6, verificationCode: "2436" },
+    15: { targetTable: 11, verificationCode: "5678" },
+    16: { targetTable: 8, verificationCode: "8901" },
+    17: { targetTable: 14, verificationCode: "1357" },
+    18: { targetTable: 2, verificationCode: "3421" },
+    19: { targetTable: 5, verificationCode: "4323" },
+    20: { targetTable: 10, verificationCode: "7654" },
   };
 
-  // Get the secret code for the current table number
-  const secretCode = secretCodeMap[tableNumber] || 0; // Default to 0 if tableNumber not found
+  // Get data for the current table number
+  const currentData = verificationData[tableNumber] || {
+    targetTable: 1,
+    verificationCode: "0000",
+  }; // Fallback if tableNumber is invalid
 
   const handleVerify = () => {
-    if (Number(tableInput) === secretCode) {
-      setMessage("Secret Code verified! Proceeding to next step...");
+    if (tableInput === currentData.verificationCode) {
+      setMessage("Verification Code correct! Proceeding to next step...");
       setTimeout(() => {
-        onVerify(true); // Proceed after a short delay to show the message
-      }, 1000); // 1-second delay (adjustable)
+        onVerify(true); // Proceed after a short delay
+      }, 1000); // 1-second delay
     } else {
-      setMessage("Error, please write the correct code");
+      setMessage("Error, please enter the correct code");
       setTableInput(""); // Clear input on error
     }
   };
@@ -106,20 +109,20 @@ function Round2Verification({ onVerify, tableNumber }) {
       }}
     >
       <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
-      <div style={{ color: "white", fontSize: "14px", marginTop: "40%" }}>
-        Target
+      <div style={{ color: "white", fontSize: "14px", marginTop: "20%" }}>
+        Your Table Number: {tableNumber}
       </div>
       <div style={{ color: "white", fontSize: "14px" }}>
-        Secret Code is on Table No. :
+        Target Table Number: {currentData.targetTable}
       </div>
-      <div style={{ fontSize: "36px", color: "white" }}>
-        <b>{secretCode}</b>
+      <div style={{ fontSize: "36px", color: "white", marginTop: "10px" }}>
+        <b>{currentData.verificationCode}</b>
       </div>
       <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
-        Go to the target table, guess the correct Key code, and enter it here.
+        Go to Target Table {currentData.targetTable}, find the 4-digit Verification Code, and enter it here.
       </div>
       <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
-        Write the code here:
+        Enter the code:
       </h3>
       <input
         type="number"
@@ -136,13 +139,12 @@ function Round2Verification({ onVerify, tableNumber }) {
           borderBottom: "1px solid #46FF97",
           background: "transparent",
         }}
-        placeholder="Enter code"
+        placeholder="Enter 4-digit code"
       />
-      {/* Display the message below the input */}
       {message && (
         <div
           style={{
-            color: message.includes("Error") ? "#FF6347" : "#46FF97", // Red for error, green for success
+            color: message.includes("Error") ? "#FF6347" : "#46FF97",
             fontSize: "14px",
             marginTop: "10px",
             fontWeight: "bold",
@@ -161,7 +163,7 @@ function Round2Verification({ onVerify, tableNumber }) {
           border: "none",
           cursor: "pointer",
           fontSize: "16px",
-          marginTop: "20px", // Added some spacing after the message
+          marginTop: "20px",
         }}
       >
         Verify
