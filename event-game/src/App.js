@@ -20,7 +20,7 @@ import wrongImage3 from "./wrong3.png";
 import timerIcon from "./timer.png";
 import logo1 from "./logo1.png";
 import Round2 from "./Round2"; // Import Round 2 component
-
+import paws from './paws.png'
 // const baseUrl = "https://localhost:5000/"
 const baseUrl = "https://dccbackend.vercel.app/";
 
@@ -88,6 +88,7 @@ function Instruction() {
         alignItems: "center",
       }}
     >
+         <img src={paws} width={140} style={{ marginBottom: "30%" }} />
       <ul
         style={{
           listStyleType: "none",
@@ -98,6 +99,7 @@ function Instruction() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+           marginBottom: "40%"
         }}
       >
         <li style={{ marginBottom: "10px", width: "80%" }}>
