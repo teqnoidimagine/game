@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import Confetti from "react-confetti"; // Import react-confetti
 import arrowG from "./arrowG.png";
 import loadingGif from "./loading.gif";
-import logo1 from './logo1.png';
-import loc from './loc.png';
+import logo1 from "./logo1.png";
+import loc from "./loc.png";
 const baseUrl = "https://dccbackend.vercel.app/";
 
-// Round 2 Instruction Component
+// Round 2 Instruction Component (unchanged)
 function Round2Instruction({ onProceed }) {
   return (
     <div
@@ -45,14 +46,11 @@ function Round2Instruction({ onProceed }) {
   );
 }
 
-// Round 2 Verification Component
-
-
+// Round 2 Verification Component (unchanged)
 function Round2Verification({ onVerify, tableNumber }) {
   const [tableInput, setTableInput] = useState("");
   const [message, setMessage] = useState("");
 
-  // Complete verification data list
   const verificationData = {
     1: { targetTable: 12, verificationCode: "1923" },
     2: { targetTable: 19, verificationCode: "4512" },
@@ -76,21 +74,20 @@ function Round2Verification({ onVerify, tableNumber }) {
     20: { targetTable: 10, verificationCode: "7654" },
   };
 
-  // Get data for the current table number
   const currentData = verificationData[tableNumber] || {
     targetTable: 1,
     verificationCode: "0000",
-  }; // Fallback if tableNumber is invalidd
+  };
 
   const handleVerify = () => {
     if (tableInput === currentData.verificationCode) {
       setMessage("Verification Code correct! Proceeding to next step...");
       setTimeout(() => {
-        onVerify(true); // Proceed after a short delay
-      }, 1000); // 1-second delay
+        onVerify(true);
+      }, 1000);
     } else {
       setMessage("Error, please enter the correct code");
-      setTableInput(""); // Clear input on errorr
+      setTableInput("");
     }
   };
 
@@ -110,19 +107,13 @@ function Round2Verification({ onVerify, tableNumber }) {
     >
       <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
       <div style={{ color: "white", fontSize: "14px", marginTop: "20%" }}>
-        {/* Your Table Number: {tableNumber} */}
-      </div>
-      <div style={{ color: "white", fontSize: "14px" }}>
         Target Table Number: {currentData.targetTable}
       </div>
-      <div style={{ fontSize: "36px", color: "white", marginTop: "10px" }}>
-        {/* <b>{currentData.verificationCode}</b> */}
-      </div>
       <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
-        Go to Target Table {currentData.targetTable}, find the 4-digit Verification Code, and enter it here.
+        Go to the Target Table {currentData.targetTable}, Guess the correct Key code, Get it to your table 
       </div>
       <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
-        Enter the code:
+        Write the code here:
       </h3>
       <input
         type="number"
@@ -171,7 +162,8 @@ function Round2Verification({ onVerify, tableNumber }) {
     </div>
   );
 }
-// Round 2 Intermission Component (New)
+
+// Round 2 Intermission Component (unchanged)
 function Round2Intermission({ onProceed }) {
   return (
     <div
@@ -203,14 +195,89 @@ function Round2Intermission({ onProceed }) {
           cursor: "pointer",
         }}
       >
-       Let's Go
+        Let's Go
       </button>
     </div>
   );
 }
 
+// New Win Screen Component
+function WinScreen({ score, onLeaderboardClick }) {
+  return (
+    <div
+      style={{
+        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        height: "100vh",
+        color: "white",
+        textAlign: "center",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Confetti width={window.innerWidth} height={window.innerHeight} /> {/* Confetti effect */}
+      <h1 style={{ fontSize: "48px", color: "#46FF97" }}>Congratulations! You Won!</h1>
+      <p style={{ fontSize: "24px", margin: "20px 0" }}>Round 2 Score: {score}</p>
+      <p style={{ fontSize: "18px", color: "#FFD700" }}>*Party time! Celebrate your victory!*</p>
+      <button
+        onClick={onLeaderboardClick}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#11C05E",
+          borderRadius: "14px",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "16px",
+          marginTop: "20px",
+        }}
+      >
+        Check Leaderboard
+      </button>
+    </div>
+  );
+}
 
-// Round 2 Flip Game Component
+// New Lose Screen Component
+function LoseScreen({ onLeaderboardClick }) {
+  return (
+    <div
+      style={{
+        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        height: "100vh",
+        color: "white",
+        textAlign: "center",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <h1 style={{ fontSize: "48px", color: "#FF6347" }}>Oops! You Lost!</h1>
+      <p style={{ fontSize: "24px", margin: "20px 0" }}>Better luck next time!</p>
+      <button
+        onClick={onLeaderboardClick}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#11C05E",
+          borderRadius: "14px",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "16px",
+          marginTop: "20px",
+        }}
+      >
+        Check Leaderboard
+      </button>
+    </div>
+  );
+}
+
+// Updated Round 2 Game Component
 function Round2Game({ tableNumber }) {
   const [round2Data, setRound2Data] = useState(null);
   const [flippedBoxes, setFlippedBoxes] = useState([]);
@@ -268,7 +335,6 @@ function Round2Game({ tableNumber }) {
           body: JSON.stringify({ tableNo: Number(tableNumber), score: 5, time: timeFormatted, round: "round2" }),
         });
         toast.success("Round 2 submitted successfully!");
-        toast.success("Great job! You won Round 2!", { duration: 4000 });
       } catch (error) {
         console.error("Error submitting Round 2:", error);
         toast.error("Failed to submit Round 2 score");
@@ -289,7 +355,6 @@ function Round2Game({ tableNumber }) {
           body: JSON.stringify({ tableNo: Number(tableNumber), score: 0, time: timeFormatted, round: "round2" }),
         });
         toast.success("Round 2 submitted successfully!");
-        toast.error("Oops! You lost Round 2.", { duration: 4000 });
       } catch (error) {
         console.error("Error submitting Round 2:", error);
         toast.error("Failed to submit Round 2 score");
@@ -304,13 +369,12 @@ function Round2Game({ tableNumber }) {
     toast("Loading leaderboard...", { duration: 2000 });
   };
 
-  // Define box positions along the snake's body (adjust these percentages based on your image)
   const boxPositions = [
-    { top: "17%", left: "15%" }, // Top-left curve of the snake
-    { top: "32%", left: "86%" }, // Middle of the first curve
-    { top: "55%", left: "11%" }, // Middle of the straight section
-    { top: "70%", left: "50%" }, // Bottom of the second curve
-    { top: "84%", left: "70%" }, // End of the snake
+    { top: "17%", left: "15%" },
+    { top: "32%", left: "86%" },
+    { top: "55%", left: "11%" },
+    { top: "70%", left: "50%" },
+    { top: "84%", left: "70%" },
   ];
 
   return (
@@ -318,7 +382,6 @@ function Round2Game({ tableNumber }) {
       style={{
         backgroundImage: "url('/round2game.png')",
         height: "100vh",
-        // width: "100vw",
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
@@ -328,7 +391,6 @@ function Round2Game({ tableNumber }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        // position: "relative",
       }}
     >
       <Toaster position="top-right" />
@@ -336,17 +398,21 @@ function Round2Game({ tableNumber }) {
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
           <img src={loadingGif} alt="Loading..." style={{ width: "100px" }} />
         </div>
+      ) : isSubmitted ? (
+        score > 0 ? (
+          <WinScreen score={score} onLeaderboardClick={handleLeaderboardClick} />
+        ) : (
+          <LoseScreen onLeaderboardClick={handleLeaderboardClick} />
+        )
       ) : (
         <>
-          {/* <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3> */}
-          {/* Replace Attempts Left with Hearts in the top-right corner */}
           <div
             style={{
               position: "absolute",
-              top: "6%", // Adjust to position near the top-right corner
-              right: "20px", // Adjust to position near the top-right corner
-              fontSize: "24px", // Larger hearts for visibility
-              color: "red", // Heart color
+              top: "6%",
+              right: "20px",
+              fontSize: "24px",
+              color: "red",
             }}
           >
             {Array.from({ length: 2 - attempts }, (_, index) => (
@@ -354,7 +420,6 @@ function Round2Game({ tableNumber }) {
             ))}
           </div>
 
-          {/* Boxes positioned along the snake's body */}
           {round2Data?.boxes.map((box, index) => (
             <div
               key={box.id}
@@ -363,13 +428,12 @@ function Round2Game({ tableNumber }) {
                 width: "50px",
                 height: "50px",
                 backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#17A046",
-                borderRadius: "5px",
+                borderRadius: "50px",
                 cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 color: "white",
-                borderRadius: "50px",
                 position: "absolute",
                 border: "2px solid #3DE577",
                 top: boxPositions[index]?.top,
@@ -380,33 +444,16 @@ function Round2Game({ tableNumber }) {
               {flippedBoxes.includes(box.id) ? (box.isCorrect ? "DCC" : "✗") : <img src={loc} width="16px" />}
             </div>
           ))}
-
-          {isSubmitted && (
-            <>
-              {score > 0 ? (
-                <h2 style={{ color: "white", marginTop: "20px" }}>You Won & Round 2 Score: {score}</h2>
-              ) : (
-                <h2 style={{ color: "red", marginTop: "20px" }}>You Lost!</h2>
-              )}
-              {/* <button
-                onClick={handleLeaderboardClick}
-                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-              >
-                Check Leaderboard
-              </button> */}
-            </>
-          )}
         </>
       )}
     </div>
   );
 }
 
-
-// Main Round 2 Component
+// Main Round 2 Component (unchanged)
 export default function Round2() {
   const { tableNumber } = useParams();
-  const [step, setStep] = useState("instruction"); // "instruction", "verification", "intermission", "game"
+  const [step, setStep] = useState("instruction");
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isWinner, setIsWinner] = useState(false);
@@ -438,9 +485,9 @@ export default function Round2() {
 
   const handleProceedToVerification = () => setStep("verification");
   const handleVerificationSuccess = (verified) => {
-    if (verified) setStep("intermission"); // Move to intermission after verification
+    if (verified) setStep("intermission");
   };
-  const handleProceedToGame = () => setStep("game"); // Proceed to game from intermission
+  const handleProceedToGame = () => setStep("game");
 
   if (isLoading) {
     return (
@@ -458,7 +505,7 @@ export default function Round2() {
     );
   }
 
-  if (!isWinner) return null; // Redirect handled in useEffect
+  if (!isWinner) return null;
 
   return (
     <>
