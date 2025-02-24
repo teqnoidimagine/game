@@ -21,6 +21,7 @@ import timerIcon from "./timer.png";
 import logo1 from "./logo1.png";
 import Round2 from "./Round2"; // Import Round 2 component
 import paws from './paws.png'
+import smile from './smile.png'
 // const baseUrl = "https://localhost:5000/"
 const baseUrl = "https://dccbackend.vercel.app/";
 
@@ -802,7 +803,7 @@ function Quiz() {
           ) : (
             <div style={{ backgroundImage: "" }}>
               <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-              <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold", marginTop: "25%" }}>Congrats</div>
+              <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold", marginTop: "25%" }}>Congrats<span><img src={smile} /></span></div>
               <p style={{ color: "white", margin: "0px", fontSize: "12px" }}>You finished the <b>Round 1</b></p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <p style={{ width: "60%", height: "1px", backgroundColor: "green", alignItems: "center" }}></p>
