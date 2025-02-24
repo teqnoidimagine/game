@@ -76,7 +76,7 @@ function Instruction() {
       style={{
         backgroundImage: "url('/instBg.png')",
         backgroundPosition: "center",
-        backgroundSize: "contain",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#13954D",
         height: "100vh",
