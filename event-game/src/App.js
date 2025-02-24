@@ -445,6 +445,9 @@ function Quiz() {
     <div
       style={{
         backgroundImage: "url('/disq.png')",
+        backgroundColor: "white",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
        // backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
         height: "100vh",
         color: "white",
