@@ -110,7 +110,7 @@ function Round2Verification({ onVerify, tableNumber }) {
         Target
       </div>
       <div style={{ color: "white", fontSize: "14px" }}>
-        Secret Code:
+        Secret Code is on Table No. :
       </div>
       <div style={{ fontSize: "36px", color: "white" }}>
         <b>{secretCode}</b>
