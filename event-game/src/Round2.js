@@ -293,7 +293,7 @@ function Round2Game({ tableNumber }) {
           <div
             style={{
               position: "absolute",
-              top: "20px", // Adjust to position near the top-right corner
+              top: "6%", // Adjust to position near the top-right corner
               right: "20px", // Adjust to position near the top-right corner
               fontSize: "24px", // Larger hearts for visibility
               color: "red", // Heart color
@@ -334,7 +334,7 @@ function Round2Game({ tableNumber }) {
           {isSubmitted && (
             <>
               {score > 0 ? (
-                <h2 style={{ color: "white", marginTop: "20px" }}>Round 2 Score: {score}</h2>
+                <h2 style={{ color: "white", marginTop: "20px" }}>You Won & Round 2 Score: {score}</h2>
               ) : (
                 <h2 style={{ color: "red", marginTop: "20px" }}>You Lost!</h2>
               )}
