@@ -72,7 +72,7 @@ function Round2Verification({ onVerify, tableNumber }) {
         alignItems: "center",
       }}
     > 
-      <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+      <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
       <div style={{color:"white",fontSize:"14px",marginTop:"40%"}}>
         Target
       </div>
@@ -158,6 +158,7 @@ function Round2Intermission({ onProceed }) {
     </div>
   );
 }
+
 
 // Round 2 Flip Game Component
 function Round2Game({ tableNumber }) {
@@ -255,11 +256,11 @@ function Round2Game({ tableNumber }) {
 
   // Define box positions along the snake's body (adjust these percentages based on your image)
   const boxPositions = [
-    { top: "17%", left: "25%" }, // Top-left curve of the snake
-    { top: "33%", left: "73%" }, // Middle of the first curve
-    { top: "62%", left: "50%" }, // Middle of the straight section
-    { top: "79%", left: "70%" }, // Bottom of the second curve
-    { top: "48%", left: "25%" }, // End of the snake
+    { top: "17%", left: "6%" }, // Top-left curve of the snake
+    { top: "32%", left: "78%" }, // Middle of the first curve
+    { top: "55%", left: "11%" }, // Middle of the straight section
+    { top: "68%", left: "50%" }, // Bottom of the second curve
+    { top: "84%", left: "70%" }, // End of the snake
   ];
 
   return (
@@ -287,8 +288,21 @@ function Round2Game({ tableNumber }) {
         </div>
       ) : (
         <>
-          {/* <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3>
-          <p style={{ color: "white" }}>Attempts Left: {2 - attempts}</p> */}
+          {/* <h3 style={{ color: "white" }}>Flip Game - Find the Correct Box! (Two Chances)</h3> */}
+          {/* Replace Attempts Left with Hearts in the top-right corner */}
+          <div
+            style={{
+              position: "absolute",
+              top: "20px", // Adjust to position near the top-right corner
+              right: "20px", // Adjust to position near the top-right corner
+              fontSize: "24px", // Larger hearts for visibility
+              color: "red", // Heart color
+            }}
+          >
+            {Array.from({ length: 2 - attempts }, (_, index) => (
+              <span key={index}>❤️</span>
+            ))}
+          </div>
 
           {/* Boxes positioned along the snake's body */}
           {round2Data?.boxes.map((box, index) => (
@@ -305,15 +319,15 @@ function Round2Game({ tableNumber }) {
                 justifyContent: "center",
                 alignItems: "center",
                 color: "white",
-                borderRadius:"50px",
+                borderRadius: "50px",
                 position: "absolute",
-                border:"2px solid #3DE577",
+                border: "2px solid #3DE577",
                 top: boxPositions[index]?.top,
                 left: boxPositions[index]?.left,
                 transform: "translate(-50%, -50%)",
               }}
             >
-              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "✓" : "✗") : <img src={loc} width="16px" />}
+              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "DCC" : "✗") : <img src={loc} width="16px" />}
             </div>
           ))}
 
@@ -337,6 +351,7 @@ function Round2Game({ tableNumber }) {
     </div>
   );
 }
+
 
 // Main Round 2 Component
 export default function Round2() {

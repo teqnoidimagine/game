@@ -118,7 +118,7 @@ function Instruction() {
           cursor: "pointer",
         }}
       >
-        Proceed to Quiz <span><img src={arrowG} width="35px" /></span>
+        Play <span><img src={arrowG} width="35px" /></span>
       </button>
     </div>
   );
