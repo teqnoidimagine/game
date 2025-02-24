@@ -445,8 +445,8 @@ function Quiz() {
     <div
       style={{
         backgroundImage: "url('/disq.png')",
-        backgroundColor: "white",
-        backgroundSize: "cover",
+        // backgroundColor: "white",
+        backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
        // backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
         height: "100vh",
@@ -458,7 +458,13 @@ function Quiz() {
         justifyContent: "center",
         alignItems: "center",
       }}
-    >
+    > 
+    <p style={{ position: "absolute",
+          bottom: "22vh",
+          padding: "10px 20px",
+          fontSize: "16px",}}>
+      You found <b>0</b> Paws
+    </p>
       {/* <img src={logo1} width={120} style={{ marginTop: "5%" }} />
       <h2 style={{ fontSize: "36px", color: "#FF4C4C", marginTop: "20%" }}>Disqualified</h2>
       <p style={{ color: "white", fontSize: "18px", marginTop: "20px" }}>
