@@ -557,7 +557,7 @@ function Quiz() {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "end",
+                  alignItems: "inherit",
                   margin: "5px",
                   borderBottom: "1px",
                   width: "85vw",
