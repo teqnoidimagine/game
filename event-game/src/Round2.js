@@ -52,8 +52,35 @@ function Round2Verification({ onVerify, tableNumber }) {
   const [tableInput, setTableInput] = useState("");
   const [message, setMessage] = useState(""); // State for displaying the message
 
+  // Define the table number to secret code mapping for 20 tables
+  const secretCodeMap = {
+    1: 9,   // Table 1 -> Secret Code 9
+    2: 12,  // Table 2 -> Secret Code 12
+    3: 14,  // Table 3 -> Secret Code 14
+    4: 7,   // Table 4 -> Secret Code 7
+    5: 10,  // Table 5 -> Secret Code 10
+    6: 15,  // Table 6 -> Secret Code 15
+    7: 3,   // Table 7 -> Secret Code 3
+    8: 11,  // Table 8 -> Secret Code 11
+    9: 6,   // Table 9 -> Secret Code 6
+    10: 13, // Table 10 -> Secret Code 13
+    11: 18, // Table 11 -> Secret Code 18
+    12: 5,  // Table 12 -> Secret Code 5
+    13: 16, // Table 13 -> Secret Code 16
+    14: 20, // Table 14 -> Secret Code 20
+    15: 2,  // Table 15 -> Secret Code 2
+    16: 19, // Table 16 -> Secret Code 19
+    17: 8,  // Table 17 -> Secret Code 8
+    18: 17, // Table 18 -> Secret Code 17
+    19: 4,  // Table 19 -> Secret Code 4
+    20: 1,  // Table 20 -> Secret Code 1
+  };
+
+  // Get the secret code for the current table number
+  const secretCode = secretCodeMap[tableNumber] || 0; // Default to 0 if tableNumber not found
+
   const handleVerify = () => {
-    if (Number(tableInput) === Number(tableNumber)) {
+    if (Number(tableInput) === secretCode) {
       setMessage("Secret Code verified! Proceeding to next step...");
       setTimeout(() => {
         onVerify(true); // Proceed after a short delay to show the message
@@ -83,13 +110,13 @@ function Round2Verification({ onVerify, tableNumber }) {
         Target
       </div>
       <div style={{ color: "white", fontSize: "14px" }}>
-        Table Number:
+        Secret Code:
       </div>
       <div style={{ fontSize: "36px", color: "white" }}>
-        <b>{tableNumber}</b>
+        <b>{secretCode}</b>
       </div>
       <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
-        Go to the target table, Guess the correct Key code, Get it to your table
+        Go to the target table, guess the correct Key code, and enter it here.
       </div>
       <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
         Write the code here:
