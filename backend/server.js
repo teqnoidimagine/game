@@ -107,20 +107,46 @@ app.get("/health", (req, res) => {
 app.get("/leaderboard", async (req, res) => {
   try {
     const leaderboard = await readLeaderboard();
-    const top5Round1 = leaderboard.round1.sort((a, b) => b.score - a.score).slice(0, 5);
+    
+    // Sort Round 1 by score (descending) and time (ascending) for ties
+    const sortedRound1 = leaderboard.round1.sort((a, b) => {
+      // First, sort by score (descending)
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      // If scores are equal, sort by time (ascending)
+      const timeA = parseTime(a.time);
+      const timeB = parseTime(b.time);
+      return timeA - timeB;
+    });
+
+    const top5Round1 = sortedRound1.slice(0, 5); // Keep top 5 for consistency, but you can change to top 10 if needed
     const allAnswered = leaderboard.round1.length > 0;
     const round2Players = leaderboard.round2;
-    const top3Winners = round2Players
-      .sort((a, b) => b.score - a.score)
-      .filter((player) => player.score > 0) // Filter out players with score 0
+
+    // Sort Round 2 by score (descending) and time (ascending) for ties
+    const sortedRound2 = round2Players.sort((a, b) => {
+      // First, sort by score (descending)
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      // If scores are equal, sort by time (ascending)
+      const timeA = parseTime(a.time);
+      const timeB = parseTime(b.time);
+      return timeA - timeB;
+    });
+
+    // Filter out players with score 0 for winners and get top 3
+    const top3Winners = sortedRound2
+      .filter((player) => player.score > 0)
       .slice(0, 3);
 
     const response = {
-      round1: leaderboard.round1,
-      top5Round1,
+      round1: sortedRound1, // Return the full sorted Round 1 list
+      top5Round1, // Keep top 5 for consistency, but you can adjust to top 10
       allAnswered,
       round2Locked: !allAnswered,
-      round2: allAnswered ? round2Players : [],
+      round2: allAnswered ? sortedRound2 : [], // Return the full sorted Round 2 list
       winners: allAnswered ? top3Winners : [],
     };
     console.log("Sending leaderboard response:", response);
@@ -131,6 +157,12 @@ app.get("/leaderboard", async (req, res) => {
   }
 });
 
+// Helper function to parse time string (e.g., "0:55" or "00:48") into seconds
+function parseTime(timeStr) {
+  if (!timeStr) return 0;
+  const [minutes, seconds] = timeStr.split(":").map(Number);
+  return (minutes || 0) * 60 + (seconds || 0);
+}
 app.post("/leaderboard", async (req, res) => {
   try {
     console.log("Received POST request:", req.body);
