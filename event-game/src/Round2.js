@@ -80,7 +80,7 @@ function Round2Verification({ onVerify, tableNumber }) {
   const currentData = verificationData[tableNumber] || {
     targetTable: 1,
     verificationCode: "0000",
-  }; // Fallback if tableNumber is invalid
+  }; // Fallback if tableNumber is invalidd
 
   const handleVerify = () => {
     if (tableInput === currentData.verificationCode) {
