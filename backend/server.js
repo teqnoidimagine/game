@@ -130,27 +130,23 @@ app.get("/leaderboard", async (req, res) => {
     
     // Sort Round 1 by score (descending) and time (ascending) for ties
     const sortedRound1 = leaderboard.round1.sort((a, b) => {
-      // First, sort by score (descending)
       if (b.score !== a.score) {
         return b.score - a.score;
       }
-      // If scores are equal, sort by time (ascending)
       const timeA = parseTime(a.time);
       const timeB = parseTime(b.time);
       return timeA - timeB;
     });
 
-    const top5Round1 = sortedRound1.slice(0, 5); // Keep top 5 for consistency, but you can change to top 10 if needed
+    const top5Round1 = sortedRound1.slice(0, 5);
     const allAnswered = leaderboard.round1.length > 0;
     const round2Players = leaderboard.round2;
 
     // Sort Round 2 by score (descending) and time (ascending) for ties
     const sortedRound2 = round2Players.sort((a, b) => {
-      // First, sort by score (descending)
       if (b.score !== a.score) {
         return b.score - a.score;
       }
-      // If scores are equal, sort by time (ascending)
       const timeA = parseTime(a.time);
       const timeB = parseTime(b.time);
       return timeA - timeB;
@@ -162,11 +158,11 @@ app.get("/leaderboard", async (req, res) => {
       .slice(0, 3);
 
     const response = {
-      round1: sortedRound1, // Return the full sorted Round 1 list
-      top5Round1, // Keep top 5 for consistency, but you can adjust to top 10
+      round1: sortedRound1,
+      top5Round1,
       allAnswered,
       round2Locked: !allAnswered,
-      round2: allAnswered ? sortedRound2 : [], // Return the full sorted Round 2 list
+      round2: allAnswered ? sortedRound2 : [],
       winners: allAnswered ? top3Winners : [],
     };
     console.log("Sending leaderboard response:", response);
@@ -200,7 +196,7 @@ app.post("/leaderboard", async (req, res) => {
     let normalizedTime = typeof time === "number" ? formatTime(time) : formatTime(parseTime(time.toString()));
 
     if (tableIndex !== -1) {
-      console.log(`Updating existing entry for table ${tableNo} in ${round}`);
+      console.log(`Existing entry found for table ${tableNo} in ${round}`);
       if (round === "round1") {
         if (roundData[tableIndex].answered) {
           console.log("Duplicate Round 1 submission for table:", tableNo);
@@ -214,15 +210,15 @@ app.post("/leaderboard", async (req, res) => {
           updatedAt: timestamp,
         };
       } else if (round === "round2") {
+        if (roundData[tableIndex].answered) {
+          console.log("Duplicate Round 2 submission for table:", tableNo);
+          return res.status(403).json({ message: "This table has already submitted answers for Round 2" });
+        }
+        // Update existing entry if not already answered
         roundData[tableIndex].score = score;
-        roundData[tableIndex].updatedAt = timestamp;
+        roundData[tableIndex].time = normalizedTime; // Always update to the submitted time
         roundData[tableIndex].answered = true;
-
-        let existingTimeStr = String(roundData[tableIndex].time || "00:00");
-        let existingTime = parseTime(existingTimeStr);
-        let newTime = parseTime(normalizedTime);
-
-        roundData[tableIndex].time = newTime < existingTime ? normalizedTime : roundData[tableIndex].time;
+        roundData[tableIndex].updatedAt = timestamp;
       }
     } else {
       roundData.push({
@@ -241,7 +237,6 @@ app.post("/leaderboard", async (req, res) => {
         return unique.some((entry) => entry.tableNo === item.tableNo) ? unique : [...unique, item];
       }, [])
       .sort((a, b) => {
-        // Sort by score (descending) and time (ascending) for ties
         if (b.score !== a.score) {
           return b.score - a.score;
         }
@@ -280,7 +275,6 @@ for (let i = 1; i <= 24; i++) {
     try {
       const leaderboard = await readLeaderboard();
       const top5Round1 = leaderboard.round1.sort((a, b) => {
-        // Sort by score (descending) and time (ascending) for ties
         if (b.score !== a.score) {
           return b.score - a.score;
         }
