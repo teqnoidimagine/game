@@ -110,13 +110,13 @@ function Round2Verification({ onVerify, tableNumber }) {
     >
       <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
       <div style={{ color: "white", fontSize: "14px", marginTop: "20%" }}>
-        Your Table Number: {tableNumber}
+        {/* Your Table Number: {tableNumber} */}
       </div>
       <div style={{ color: "white", fontSize: "14px" }}>
         Target Table Number: {currentData.targetTable}
       </div>
       <div style={{ fontSize: "36px", color: "white", marginTop: "10px" }}>
-        <b>{currentData.verificationCode}</b>
+        {/* <b>{currentData.verificationCode}</b> */}
       </div>
       <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
         Go to Target Table {currentData.targetTable}, find the 4-digit Verification Code, and enter it here.
