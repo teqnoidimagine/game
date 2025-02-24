@@ -89,7 +89,7 @@ function Instruction() {
         alignItems: "center",
       }}
     >
-         <img src={paws} width={140} style={{ marginBottom: "15%" }} />
+         <img src={paws} width={140} style={{ marginBottom: "10%" }} />
       <ul
         style={{
           listStyleType: "none",
@@ -598,7 +598,7 @@ function Quiz() {
                     style={{
                       padding: "12px",
                       margin: "5px 0",
-                      width: "30vw",
+                      width: "35vw",
                       border: "1px solid #2D9059",
                       borderRadius: "15px",
                       cursor: "pointer",
