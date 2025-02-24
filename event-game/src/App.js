@@ -292,7 +292,7 @@ function Quiz() {
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-  const [feedbackTimer, setFeedbackTimer] = useState(3); // Added feedbackTimer state
+  const [feedbackTimer, setFeedbackTimer] = useState(4); // Added feedbackTimer state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -381,7 +381,7 @@ function Quiz() {
       fetch(`${baseUrl}leaderboard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeFormatted, round: "round1" }),
+        body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken, round: "round1" }),
       })
         .then((response) => {
           if (!response.ok) {
@@ -439,6 +439,44 @@ function Quiz() {
   const isAnswerSelected = () => {
     return answers[currentQuestionIndex] !== undefined;
   };
+
+  // New Disqualified Screen Component
+  const DisqualifiedScreen = () => (
+    <div
+      style={{
+        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        height: "100vh",
+        color: "white",
+        textAlign: "center",
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+      <h2 style={{ fontSize: "36px", color: "#FF4C4C", marginTop: "20%" }}>Disqualified</h2>
+      <p style={{ color: "white", fontSize: "18px", marginTop: "20px" }}>
+        Unfortunately, you scored 0 in Round 1 and are disqualified from proceeding further.
+      </p>
+      <button
+        onClick={handleLeaderboardClick}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#FF4C4C",
+          borderRadius: "14px",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+          marginTop: "30px",
+          fontSize: "16px",
+        }}
+      >
+        Check Leaderboard
+      </button>
+    </div>
+  );
 
   return (
     <div
@@ -657,7 +695,7 @@ function Quiz() {
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 3s linear forwards",
+                          animation: "fillBar 4s linear forwards",
                         }}
                       />
                     </div>
@@ -711,7 +749,7 @@ function Quiz() {
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 3s linear forwards",
+                          animation: "fillBar 4s linear forwards",
                         }}
                       />
                     </div>
@@ -746,28 +784,37 @@ function Quiz() {
       )}
 
       {isSubmitted.round1 && !isLoading && (
-        <div style={{ backgroundImage: "" }}>
-          <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-          <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold",marginTop:"25%" }}>Congrats</div>
-          <p style={{color:"white",margin:"0px",fontSize:"12px"}}>You finshed the <b>Round 1</b></p>
-          <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <p style={{width:"60%",height:"1px",backgroundColor:"green",alignItems:"center",}}></p></div>
-          <div style={{ color: "white" ,margin:"0px",fontSize:"12px"}}>Found {score.round1} lost Paws in the jungle</div>
-          <div style={{ color: "white" ,margin:"0px",fontSize:"12px"}}>in {score.time} Seconds</div>
-          <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <p style={{width:"100%",height:"40px",margin:"30px 0px",fontSize:"12px",backgroundColor:"#0A7F3F",color:"white",display:"flex",justifyContent:"center",alignItems:"center"}}>
-           <div>Please Wait</div> 
-            </p></div>
-            <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-            <p style={{color:"#4EFF9C",width:"50%",margin:"0px",fontSize:"12px"}}>We’ll announce the top tables list selected for <b>Round 2</b>, at the end of <b>Round 1</b></p></div> 
-          <p style={{ color: "white" }}>{notification}</p>
-          {/* <button
-            onClick={handleLeaderboardClick}
-            style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-          >
-            Check Leaderboard
-          </button> */}
-        </div>
+        <>
+          {score.round1 === 0 ? (
+            <DisqualifiedScreen />
+          ) : (
+            <div style={{ backgroundImage: "" }}>
+              <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+              <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold", marginTop: "25%" }}>Congrats</div>
+              <p style={{ color: "white", margin: "0px", fontSize: "12px" }}>You finished the <b>Round 1</b></p>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <p style={{ width: "60%", height: "1px", backgroundColor: "green", alignItems: "center" }}></p>
+              </div>
+              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>Found {score.round1} lost Paws in the jungle</div>
+              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>in {timeTaken} Seconds</div>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <p style={{ width: "100%", height: "40px", margin: "30px 0px", fontSize: "12px", backgroundColor: "#0A7F3F", color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <div>Please Wait</div>
+                </p>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <p style={{ color: "#4EFF9C", width: "50%", margin: "0px", fontSize: "12px" }}>We’ll announce the top tables list selected for <b>Round 2</b>, at the end of <b>Round 1</b></p>
+              </div>
+              <p style={{ color: "white" }}>{notification}</p>
+              {/* <button
+                onClick={handleLeaderboardClick}
+                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
+              >
+                Check Leaderboard
+              </button> */}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
