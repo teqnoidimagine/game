@@ -54,7 +54,8 @@ function Round2Verification({ onVerify, tableNumber }) {
       toast.success("Secret Code verified! Proceeding to next step...");
       onVerify(true);
     } else {
-      toast.error("Incorrect table number. Please try again.");
+      toast.error("Error, please write the correct code");
+      setTableInput(""); // Optionally clear the input for a retry
     }
   };
 
@@ -71,21 +72,23 @@ function Round2Verification({ onVerify, tableNumber }) {
         justifyContent: "center",
         alignItems: "center",
       }}
-    > 
+    >
       <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
-      <div style={{color:"white",fontSize:"14px",marginTop:"40%"}}>
+      <div style={{ color: "white", fontSize: "14px", marginTop: "40%" }}>
         Target
       </div>
-      <div style={{color:"white",fontSize:"14px"}}>
+      <div style={{ color: "white", fontSize: "14px" }}>
         Table Number:
       </div>
-      <div style={{fontSize:"36px",color:"white"}}>
-        <b>{tableNumber}</b> 
+      <div style={{ fontSize: "36px", color: "white" }}>
+        <b>{tableNumber}</b>
       </div>
-      <div style={{color:"white",fontSize:"14px",width:"60%",marginTop:"20%"}}>
+      <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
         Go to the target table, Guess the correct Key code, Get it to your table
       </div>
-      <h3 style={{ color: "white",fontSize:"12px",marginTop:"15%" }}>Write the code here:</h3>
+      <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
+        Write the code here:
+      </h3>
       <input
         type="number"
         value={tableInput}
@@ -93,26 +96,26 @@ function Round2Verification({ onVerify, tableNumber }) {
         style={{
           padding: "10px",
           margin: "10px 0",
-          color:"white",
-          fontSize:"16px",
+          color: "white",
+          fontSize: "16px",
           width: "200px",
           textAlign: "center",
           border: "none",
           borderBottom: "1px solid #46FF97",
           background: "transparent",
         }}
+        placeholder="Enter code"
       />
       <button
         onClick={handleVerify}
         style={{
           padding: "10px 20px",
           backgroundColor: "white",
-          borderRadius: "14px",
+          borderRadius: "20px", // Fixed duplicate borderRadius property
           color: "black",
           border: "none",
           cursor: "pointer",
-          borderRadius:"20px",
-          fontSize:"16px"
+          fontSize: "16px",
         }}
       >
         Verify
@@ -120,7 +123,6 @@ function Round2Verification({ onVerify, tableNumber }) {
     </div>
   );
 }
-
 // Round 2 Intermission Component (New)
 function Round2Intermission({ onProceed }) {
   return (
