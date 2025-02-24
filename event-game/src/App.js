@@ -444,7 +444,8 @@ function Quiz() {
   const DisqualifiedScreen = () => (
     <div
       style={{
-        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        backgroundImage: "url('/disq.png')",
+       // backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
         height: "100vh",
         color: "white",
         textAlign: "center",
@@ -455,7 +456,7 @@ function Quiz() {
         alignItems: "center",
       }}
     >
-      <img src={logo1} width={120} style={{ marginTop: "5%" }} />
+      {/* <img src={logo1} width={120} style={{ marginTop: "5%" }} />
       <h2 style={{ fontSize: "36px", color: "#FF4C4C", marginTop: "20%" }}>Disqualified</h2>
       <p style={{ color: "white", fontSize: "18px", marginTop: "20px" }}>
         Unfortunately, you scored 0 in Round 1 and are disqualified from proceeding further.
@@ -474,7 +475,7 @@ function Quiz() {
         }}
       >
         Check Leaderboard
-      </button>
+      </button> */}
     </div>
   );
 
