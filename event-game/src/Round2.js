@@ -90,7 +90,7 @@ function Round2Verification({ onVerify, tableNumber }) {
       }, 1000); // 1-second delay
     } else {
       setMessage("Error, please enter the correct code");
-      setTableInput(""); // Clear input on error
+      setTableInput(""); // Clear input on errorr
     }
   };
 
