@@ -50,7 +50,7 @@ function Welcome() {
         onClick={() => navigate(`/instruction/${tableNumber}`)}
         style={{
           position: "absolute",
-          bottom: "2vh",
+          bottom: "5vh",
           padding: "10px 20px",
           fontSize: "16px",
           backgroundColor: "white",
@@ -89,7 +89,7 @@ function Instruction() {
         alignItems: "center",
       }}
     >
-         <img src={paws} width={140} style={{ marginBottom: "10%" }} />
+         {/* <img src={paws} width={140} style={{ marginBottom: "10%" }} /> */}
       <ul
         style={{
           listStyleType: "none",
@@ -112,16 +112,16 @@ function Instruction() {
         style={{
           position: "absolute",
           bottom: "22vh",
-          padding: "10px 20px",
+          padding: "10px 30px",
           fontSize: "16px",
           backgroundColor: "white",
           color: "black",
           border: "none",
-          borderRadius: "5px",
+          borderRadius: "25px",
           cursor: "pointer",
         }}
       >
-        Play <span><img src={arrowG} width="35px" /></span>
+        Play 
       </button>
     </div>
   );
