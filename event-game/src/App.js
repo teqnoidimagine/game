@@ -295,6 +295,7 @@ function Leaderboard() {
   );
 }
 
+
 function Quiz() {
   const { tableNumber } = useParams();
   const [round1Questions, setRound1Questions] = useState([]);
@@ -310,15 +311,6 @@ function Quiz() {
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [feedbackTimer, setFeedbackTimer] = useState(3); // Feedback timer set to 3 seconds
   const navigate = useNavigate();
-
-  // const baseUrl = "your-api-base-url-here"; // Replace with your actual base URL
-  // Placeholder image imports (replace with actual imports)
-  // const logo1 = "path/to/logo1.png";
-  // const timerIcon = "path/to/timerIcon.png";
-  // const smile = "path/to/smile.png";
-  // const loadingGif = "path/to/loading.gif";
-  // const thankYouImage1 = "path/to/thankYouImage1.png"; // Add others as needed
-  // const wrongImage1 = "path/to/wrongImage1.png"; // Add others as needed
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -439,13 +431,11 @@ function Quiz() {
   const totalQuestions = round1Questions.length;
 
   const getThankYouImage = () => {
-    // Placeholder logic; replace with actual image imports
-    return thankYouImage1;
+    return thankYouImage1; // Replace with your logic
   };
 
   const getWrongImage = () => {
-    // Placeholder logic; replace with actual image imports
-    return wrongImage1;
+    return wrongImage1; // Replace with your logic
   };
 
   const isAnswerSelected = () => {
@@ -759,11 +749,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: `${((3 - feedbackTimer) / 3) * 100}%`,
+                          width: "100%", // Start at 100%
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          transition: "width 1s linear",
+                          animation: "unfillBar 3s linear forwards", // Unfill over 3 seconds
                         }}
                       />
                     </div>
@@ -817,11 +807,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: `${((3 - feedbackTimer) / 3) * 100}%`,
+                          width: "100%", // Start at 100%
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          transition: "width 1s linear",
+                          animation: "unfillBar 3s linear forwards", // Unfill over 3 seconds
                         }}
                       />
                     </div>
@@ -844,12 +834,12 @@ function Quiz() {
           )}
           <style>
             {`
-              @keyframes fillBar {
+              @keyframes unfillBar {
                 from {
-                  width: 0%;
+                  width: 100%;
                 }
                 to {
-                  width: 100%;
+                  width: 0%;
                 }
               }
             `}
@@ -952,6 +942,8 @@ function Quiz() {
     </div>
   );
 }
+
+
 
 // Main App Component
 export default function App() {
