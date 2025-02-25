@@ -380,7 +380,7 @@ function Round2Game({ tableNumber }) {
   return (
     <div
       style={{
-        backgroundImage: "url('/round2game.png')",
+        backgroundImage: "url('/gamebg1.png')",
         height: "100vh",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -409,13 +409,14 @@ function Round2Game({ tableNumber }) {
           <div
             style={{
               position: "absolute",
-              top: "6%",
-              right: "20px",
+              top: "10%",
+              left: "20px",
               fontSize: "24px",
               color: "red",
             }}
           >
-            {Array.from({ length: 2 - attempts }, (_, index) => (
+            <div style={{color:"white"}}>Chances Left:</div>
+            {Array.from({ length: 3 - attempts }, (_, index) => (
               <span key={index}>❤️</span>
             ))}
           </div>
@@ -427,7 +428,7 @@ function Round2Game({ tableNumber }) {
               style={{
                 width: "50px",
                 height: "50px",
-                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#17A046",
+                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "white",
                 borderRadius: "50px",
                 cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
                 display: "flex",
