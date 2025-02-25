@@ -256,6 +256,7 @@ function LoseScreen({ onLeaderboardClick }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+          position:"absolute"
       }}
     >
       <h1 style={{ fontSize: "48px", color: "#FF6347" }}>Oops! You Lost!</h1>
