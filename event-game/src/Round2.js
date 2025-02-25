@@ -396,7 +396,7 @@ function Round2Game({ tableNumber }) {
         style={{
           position: "relative",
           maxWidth: "100%",
-          maxHeight: "100%",
+          height: "100%",
           // objectFit: "contain",
         }}
       />
