@@ -414,15 +414,15 @@ function Round2Game({ tableNumber }) {
         )
       ) : (
         <>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}} >
-        <img src={logo1} width={80}/>
-          <img src={paws} width={120}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",postion:"absolute",top:"2%",left:"3%",right:"3%",padding:"10px",width:"90%"}} >
+        <img src={logo1} width={150}/>
+          <img src={paws} width={70}/>
          
         </div>
           <div
             style={{
               position: "absolute",
-              top: "10%",
+              top: "8%",
               left: "20px",
               fontSize: "24px",
               color: "red",
