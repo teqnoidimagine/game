@@ -380,20 +380,26 @@ function Round2Game({ tableNumber }) {
   return (
     <div
       style={{
-        backgroundImage: "url('/gamebg1.png')",
         height: "100vh",
-        backgroundSize: "contain",
-        // backgroundPosition: "center",
         color: "white",
         textAlign: "center",
-        // padding: "20px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundRepeat:"no-repeat"
+        position: "relative", // Added position relative to container
       }}
     >
+      <img 
+        src="/gamebg1.png"
+        alt="Game background"
+        style={{
+          position: "relative",
+          maxWidth: "100%",
+          maxHeight: "100%",
+          objectFit: "contain",
+        }}
+      />
       <Toaster position="top-right" />
       {isLoading ? (
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
@@ -414,10 +420,10 @@ function Round2Game({ tableNumber }) {
               left: "20px",
               fontSize: "24px",
               color: "red",
-              textAlign:"left"
+              textAlign: "left"
             }}
           >
-            <div style={{color:"white",fontSize:"16px"}}>Chances Left:</div>
+            <div style={{color: "white", fontSize: "16px"}}>Chances Left:</div>
             {Array.from({ length: 3 - attempts }, (_, index) => (
               <span key={index}>❤️</span>
             ))}
