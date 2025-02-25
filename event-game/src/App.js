@@ -311,7 +311,7 @@ function Quiz() {
   const [feedbackTimer, setFeedbackTimer] = useState(3); // Feedback timer set to 3 seconds
   const navigate = useNavigate();
 
-  const baseUrl = "your-api-base-url-here"; // Replace with your actual base URL
+  // const baseUrl = "your-api-base-url-here"; // Replace with your actual base URL
   // Placeholder image imports (replace with actual imports)
   const logo1 = "path/to/logo1.png";
   const timerIcon = "path/to/timerIcon.png";
