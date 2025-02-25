@@ -290,56 +290,56 @@ for (let i = 1; i <= 24; i++) {
         round1: [
           {
             question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
-            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
+            options: ["Lhasa", "Husky", "Beagle", "Bulldog"],
             answer: "Beagle",
           },
           {
             question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
-            options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
+            options: ["Beagle", "Pomeranian", "Corgi", "Bulldog"],
             answer: "Pomeranian",
           },
           {
-            question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
+            question: "Known for my sleek build and eye-catching coat that always catches the spotlight, energetic and have a history of running alongside travelers?",
             options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
             answer: "Dalmatian",
           },
           {
-            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
-            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
-            answer: "Beagle",
+            question: "I’m a loyal protector with a black-and-tan coat and powerful jaws. People often choose me to guard their homes, but I’m gentle with my family.",
+            options: ["Chow Chow", "Doberman", "Great Dane", "Rottweiler"],
+            answer: "Rottweiler",
           },
           {
-            question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
-            options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
-            answer: "Pomeranian",
+            question: "I’m a small, fluffy dog with a thick white coat and a fox-like face. Energetic, alert, and loyal, I’m often mistaken for my Arctic cousins but thrive perfectly in warmer climates.",
+            options: ["Samoyed", "Husky", "Labrador", "Indian Spitz"],
+            answer: "Indian Spitz",
           },
           {
-            question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
-            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
-            answer: "Dalmatian",
+            question: "I’m sleek, muscular, and always on alert with cropped ears. My loyalty and sharp senses make me a trusted guardian, while my intelligence makes me easy to train.",
+            options: ["Rottweiler", "Husky", "Cane Corso", "Doberman"],
+            answer: "Doberman",
           },
           {
-            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
-            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
-            answer: "Beagle",
+            question: "With my wrinkled face, round eyes, and curly tail, I’m small but full of personality. I love being around people and can turn any moment into playtime.",
+            options: ["Chihuahua", "Shih Tzu", "Bulldog", "Pug"],
+            answer: "Pug",
           },
           {
-            question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
-            options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
-            answer: "Pomeranian",
+            question: "With my stocky small build, wrinkled face, and short snout, I might look tough, but I’m actually calm, friendly, and love lounging around the house.",
+            options: ["Pug", "Pitbull", "Husky", "Bulldog"],
+            answer: "Bulldog",
           },
           {
-            question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
-            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
-            answer: "Dalmatian",
+            question: "I’m one of the tallest dogs around, with a lean and graceful build. Despite my size, I’m gentle, friendly, and love being part of the family.",
+            options: ["Cane Corso", "Labrador", "Doberman", "Great Dane"],
+            answer: "Great Dane",
           },
           {
-            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
-            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
-            answer: "Beagle",
+            question: "With pointed ears, a thick double coat, and piercing eyes, I’m built for endurance, love the cold, and stay active. Friendly and playful, I always try to talk due to my chatty personality.",
+            options: ["Labrador", "Lhasa", "Spitz", "Siberian Husky"],
+            answer: "Siberian Husky",
           },
-         
         ],
+        
         round2: allAnswered && isEligibleForRound2
           ? {
               gameType: "flip",

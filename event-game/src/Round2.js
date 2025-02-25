@@ -216,6 +216,7 @@ function WinScreen({ score, onLeaderboardClick }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        position:"absolute"
       }}
     >
       <Confetti width={window.innerWidth} height={window.innerHeight} /> {/* Confetti effect */}
