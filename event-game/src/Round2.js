@@ -49,46 +49,48 @@ function Round2Instruction({ onProceed }) {
 
 // Round 2 Verification Component (unchanged)
 function Round2Verification({ onVerify, tableNumber }) {
-  const [tableInput, setTableInput] = useState("");
   const [message, setMessage] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
 
   const verificationData = {
-    1: { targetTable: 12, verificationCode: "1923" },
-    2: { targetTable: 19, verificationCode: "4512" },
-    3: { targetTable: 7, verificationCode: "7894" },
-    4: { targetTable: 15, verificationCode: "2367" },
-    5: { targetTable: 18, verificationCode: "9103" },
-    6: { targetTable: 1, verificationCode: "3548" },
-    7: { targetTable: 13, verificationCode: "6721" },
-    8: { targetTable: 20, verificationCode: "1089" },
-    9: { targetTable: 4, verificationCode: "5432" },
-    10: { targetTable: 16, verificationCode: "8765" },
-    11: { targetTable: 3, verificationCode: "3214" },
-    12: { targetTable: 17, verificationCode: "6547" },
-    13: { targetTable: 9, verificationCode: "9871" },
-    14: { targetTable: 6, verificationCode: "2436" },
-    15: { targetTable: 11, verificationCode: "5678" },
-    16: { targetTable: 8, verificationCode: "8901" },
-    17: { targetTable: 14, verificationCode: "1357" },
-    18: { targetTable: 2, verificationCode: "3421" },
-    19: { targetTable: 5, verificationCode: "4323" },
-    20: { targetTable: 10, verificationCode: "7654" },
+    1: { targetTable: 12, verificationCode: "B" },
+    2: { targetTable: 19, verificationCode: "A" }, // Changed to "A" or "B" if needed
+    3: { targetTable: 7, verificationCode: "B" },  // Changed to "A" or "B" if needed
+    4: { targetTable: 15, verificationCode: "A" }, // Changed to "A" or "B" if needed
+    5: { targetTable: 18, verificationCode: "B" }, // Changed to "A" or "B" if needed
+    6: { targetTable: 1, verificationCode: "A" },
+    7: { targetTable: 13, verificationCode: "B" },
+    8: { targetTable: 20, verificationCode: "A" },
+    9: { targetTable: 4, verificationCode: "B" },
+    10: { targetTable: 16, verificationCode: "A" },
+    11: { targetTable: 3, verificationCode: "B" },
+    12: { targetTable: 17, verificationCode: "A" },
+    13: { targetTable: 9, verificationCode: "B" },
+    14: { targetTable: 6, verificationCode: "A" },
+    15: { targetTable: 11, verificationCode: "B" },
+    16: { targetTable: 8, verificationCode: "A" },
+    17: { targetTable: 14, verificationCode: "B" },
+    18: { targetTable: 2, verificationCode: "A" },
+    19: { targetTable: 5, verificationCode: "B" },
+    20: { targetTable: 10, verificationCode: "A" },
   };
 
   const currentData = verificationData[tableNumber] || {
-    targetTable: 1,
-    verificationCode: "0000",
+    targetTable: 0,
+    verificationCode: "A",
   };
 
   const handleVerify = () => {
-    if (tableInput === currentData.verificationCode) {
+    if (selectedOption === currentData.verificationCode) {
       setMessage("Verification Code correct! Proceeding to next step...");
       setTimeout(() => {
         onVerify(true);
       }, 1000);
     } else {
-      setMessage("Error, please enter the correct code");
-      setTableInput("");
+      setMessage("Incorrect option selected. You are disqualified!");
+      setTimeout(() => {
+        onVerify(false); // Assuming false indicates disqualification
+      }, 1000);
     }
   };
 
@@ -114,31 +116,46 @@ function Round2Verification({ onVerify, tableNumber }) {
         Go to the Target Table {currentData.targetTable}, Guess the correct Key code, Get it to your table 
       </div>
       <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
-        Write the code here:
+        Select the code:
       </h3>
-      <input
-        type="number"
-        value={tableInput}
-        onChange={(e) => setTableInput(e.target.value)}
-        style={{
-          padding: "10px",
-          margin: "10px 0",
-          color: "white",
-          fontSize: "16px",
-          width: "200px",
-          textAlign: "center",
-          border: "none",
-          borderBottom: "1px solid #46FF97",
-          background: "transparent",
-        }}
-        placeholder="Enter 4-digit code"
-      />
+      <div style={{ marginTop: "20px" }}>
+        <button
+          onClick={() => setSelectedOption("A")}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: selectedOption === "A" ? "#46FF97" : "white",
+            borderRadius: "20px",
+            color: "black",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            margin: "0 10px",
+          }}
+        >
+          A
+        </button>
+        <button
+          onClick={() => setSelectedOption("B")}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: selectedOption === "B" ? "#46FF97" : "white",
+            borderRadius: "20px",
+            color: "black",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            margin: "0 10px",
+          }}
+        >
+          B
+        </button>
+      </div>
       {message && (
         <div
           style={{
-            color: message.includes("Error") ? "#FF6347" : "#46FF97",
+            color: message.includes("disqualified") ? "#FF6347" : "#46FF97",
             fontSize: "14px",
-            marginTop: "10px",
+            marginTop: "20px",
             fontWeight: "bold",
           }}
         >
@@ -157,6 +174,7 @@ function Round2Verification({ onVerify, tableNumber }) {
           fontSize: "16px",
           marginTop: "20px",
         }}
+        disabled={!selectedOption} // Disable button if no option is selected
       >
         Verify
       </button>
