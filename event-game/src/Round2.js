@@ -440,8 +440,8 @@ function Round2Game({ tableNumber }) {
               key={box.id}
               onClick={() => handleBoxFlip(box)}
               style={{
-                width: "50px",
-                height: "50px",
+                width: "60px",
+                height: "60px",
                 backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "white",
                 borderRadius: "50px",
                 cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
