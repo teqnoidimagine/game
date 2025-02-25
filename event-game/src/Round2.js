@@ -382,7 +382,7 @@ function Round2Game({ tableNumber }) {
       style={{
         backgroundImage: "url('/gamebg1.png')",
         height: "100vh",
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center",
         color: "white",
         textAlign: "center",
@@ -413,9 +413,10 @@ function Round2Game({ tableNumber }) {
               left: "20px",
               fontSize: "24px",
               color: "red",
+              textAlign:"left"
             }}
           >
-            <div style={{color:"white"}}>Chances Left:</div>
+            <div style={{color:"white",fontSize:"16px"}}>Chances Left:</div>
             {Array.from({ length: 3 - attempts }, (_, index) => (
               <span key={index}>❤️</span>
             ))}
