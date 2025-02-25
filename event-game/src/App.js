@@ -313,12 +313,12 @@ function Quiz() {
 
   // const baseUrl = "your-api-base-url-here"; // Replace with your actual base URL
   // Placeholder image imports (replace with actual imports)
-  const logo1 = "path/to/logo1.png";
-  const timerIcon = "path/to/timerIcon.png";
-  const smile = "path/to/smile.png";
-  const loadingGif = "path/to/loading.gif";
-  const thankYouImage1 = "path/to/thankYouImage1.png"; // Add others as needed
-  const wrongImage1 = "path/to/wrongImage1.png"; // Add others as needed
+  // const logo1 = "path/to/logo1.png";
+  // const timerIcon = "path/to/timerIcon.png";
+  // const smile = "path/to/smile.png";
+  // const loadingGif = "path/to/loading.gif";
+  // const thankYouImage1 = "path/to/thankYouImage1.png"; // Add others as needed
+  // const wrongImage1 = "path/to/wrongImage1.png"; // Add others as needed
 
   useEffect(() => {
     const fetchQuizData = async () => {
