@@ -383,7 +383,7 @@ function Round2Game({ tableNumber }) {
         backgroundImage: "url('/gamebg1.png')",
         height: "100vh",
         backgroundSize: "contain",
-        backgroundPosition: "center",
+        // backgroundPosition: "center",
         color: "white",
         textAlign: "center",
         // padding: "20px",
@@ -391,6 +391,7 @@ function Round2Game({ tableNumber }) {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        backgroundRepeat:"no-repeat"
       }}
     >
       <Toaster position="top-right" />
