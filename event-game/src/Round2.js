@@ -414,7 +414,7 @@ function Round2Game({ tableNumber }) {
         )
       ) : (
         <>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",postion:"absolute",top:"2%",left:"3%",right:"3%",padding:"10px",width:"90%"}} >
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",position:"absolute",top:"2%",left:"3%",right:"3%",padding:"10px",width:"90%"}} >
         <img src={logo1} width={150}/>
           <img src={paws} width={70}/>
          
