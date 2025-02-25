@@ -386,7 +386,7 @@ function Round2Game({ tableNumber }) {
         backgroundPosition: "center",
         color: "white",
         textAlign: "center",
-        padding: "20px",
+        // padding: "20px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

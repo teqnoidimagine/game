@@ -295,7 +295,7 @@ function Quiz() {
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-  const [feedbackTimer, setFeedbackTimer] = useState(4); // Added feedbackTimer state
+  const [feedbackTimer, setFeedbackTimer] = useState(6); // Added feedbackTimer state
   const navigate = useNavigate();
 
   useEffect(() => {
