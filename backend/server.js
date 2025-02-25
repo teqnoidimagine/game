@@ -299,10 +299,11 @@ for (let i = 1; i <= 24; i++) {
             answer: "Pomeranian",
           },
           {
-            question: "Known for my sleek build and eye-catching coat that always catches the spotlight, energetic and have a history of running alongside travelers?",
-            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
-            answer: "Dalmatian",
+            question: "With pointed ears, a thick double coat, and piercing eyes, I’m built for endurance, love the cold, and stay active. Friendly and playful, I always try to talk due to my chatty personality.",
+            options: ["Labrador", "Lhasa", "Spitz", "Siberian Husky"],
+            answer: "Siberian Husky",
           },
+      
           {
             question: "I’m a loyal protector with a black-and-tan coat and powerful jaws. People often choose me to guard their homes, but I’m gentle with my family.",
             options: ["Chow Chow", "Doberman", "Great Dane", "Rottweiler"],
@@ -334,9 +335,9 @@ for (let i = 1; i <= 24; i++) {
             answer: "Great Dane",
           },
           {
-            question: "With pointed ears, a thick double coat, and piercing eyes, I’m built for endurance, love the cold, and stay active. Friendly and playful, I always try to talk due to my chatty personality.",
-            options: ["Labrador", "Lhasa", "Spitz", "Siberian Husky"],
-            answer: "Siberian Husky",
+            question: "Known for my sleek build and eye-catching coat that always catches the spotlight, energetic and have a history of running alongside travelers?",
+            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
+            answer: "Dalmatian",
           },
         ],
         
