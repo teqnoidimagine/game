@@ -850,7 +850,7 @@ function Quiz() {
                 <p style={{ width: "60%", height: "1px", backgroundColor: "green", alignItems: "center" }}></p>
               </div>
               <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>Found {score.round1} lost Paws in the jungle</div>
-              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>in {timeTaken} Seconds</div>
+              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>in {timeTaken-3} Seconds</div>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <p style={{ width: "100%", height: "40px", margin: "30px 0px", fontSize: "12px", backgroundColor: "#0A7F3F", color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <div>Please Wait</div>
