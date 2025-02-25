@@ -295,7 +295,6 @@ function Leaderboard() {
   );
 }
 
-// Quiz Component (Round 1 Only)
 function Quiz() {
   const { tableNumber } = useParams();
   const [round1Questions, setRound1Questions] = useState([]);
@@ -309,8 +308,17 @@ function Quiz() {
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-  const [feedbackTimer, setFeedbackTimer] = useState(6); // Added feedbackTimer state
+  const [feedbackTimer, setFeedbackTimer] = useState(3); // Feedback timer set to 3 seconds
   const navigate = useNavigate();
+
+  const baseUrl = "your-api-base-url-here"; // Replace with your actual base URL
+  // Placeholder image imports (replace with actual imports)
+  const logo1 = "path/to/logo1.png";
+  const timerIcon = "path/to/timerIcon.png";
+  const smile = "path/to/smile.png";
+  const loadingGif = "path/to/loading.gif";
+  const thankYouImage1 = "path/to/thankYouImage1.png"; // Add others as needed
+  const wrongImage1 = "path/to/wrongImage1.png"; // Add others as needed
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -334,7 +342,7 @@ function Quiz() {
     if (timerActive && !isSubmitted.round1) {
       timer = setInterval(() => {
         setTimeTaken((prev) => {
-          if (prev >= 120) {
+          if (prev >= 180) {
             handleRound1Submit(true);
             return prev;
           }
@@ -348,11 +356,15 @@ function Quiz() {
   useEffect(() => {
     let feedbackInterval;
     if (showFeedback) {
-      setFeedbackTimer(3); // Reset timer to 3 seconds
+      setFeedbackTimer(3); // Reset to 3 seconds
       feedbackInterval = setInterval(() => {
         setFeedbackTimer((prev) => {
           if (prev <= 1) {
             clearInterval(feedbackInterval);
+            setShowFeedback(false);
+            if (currentQuestionIndex < totalQuestions - 1) {
+              setCurrentQuestionIndex(currentQuestionIndex + 1);
+            }
             return 0;
           }
           return prev - 1;
@@ -360,7 +372,7 @@ function Quiz() {
       }, 1000);
     }
     return () => clearInterval(feedbackInterval);
-  }, [showFeedback]);
+  }, [showFeedback, currentQuestionIndex]);
 
   const handleAnswer = (option) => {
     setAnswers((prev) => ({ ...prev, [currentQuestionIndex]: option }));
@@ -370,10 +382,6 @@ function Quiz() {
 
   const nextQuestion = () => {
     setShowFeedback(true);
-    setTimeout(() => {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setShowFeedback(false);
-    }, 3000);
   };
 
   const calculateRound1Score = () => {
@@ -386,38 +394,41 @@ function Quiz() {
 
   const handleRound1Submit = async (isAuto = false) => {
     setShowFeedback(true);
-    setTimeout(() => {
-      setTimerActive(false);
-      const finalScore = calculateRound1Score();
-      setScore((prev) => ({ ...prev, round1: finalScore }));
-      setIsSubmitted((prev) => ({ ...prev, round1: true }));
-      setShowFeedback(false);
+    setTimerActive(false);
+    const finalScore = calculateRound1Score();
+    setScore((prev) => ({ ...prev, round1: finalScore }));
+    setIsSubmitted((prev) => ({ ...prev, round1: true }));
 
-      const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60).toString().padStart(2, "0")}`;
-      setIsLoading(true);
-      fetch(`${baseUrl}leaderboard`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tableNo: Number(tableNumber), score: finalScore, time: timeTaken, round: "round1" }),
+    const timeFormatted = `${Math.floor(timeTaken / 60)}:${(timeTaken % 60)
+      .toString()
+      .padStart(2, "0")}`;
+    setIsLoading(true);
+    fetch(`${baseUrl}leaderboard`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tableNo: Number(tableNumber),
+        score: finalScore,
+        time: timeTaken,
+        round: "round1",
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(errorData.message);
+          });
+        }
+        toast.success("Round 1 submitted successfully!");
       })
-        .then((response) => {
-          if (!response.ok) {
-            return response.json().then((errorData) => {
-              throw new Error(errorData.message);
-            });
-          }
-          toast.success("Round 1 submitted successfully!");
-          // setNotification("Round 1 completed. Check leaderboard for results.");
-        })
-        .catch((error) => {
-          console.error("Error updating leaderboard:", error);
-          toast.error("Failed to submit Round 1 score");
-          setNotification("Error submitting score. Please try again.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }, 3000);
+      .catch((error) => {
+        console.error("Error updating leaderboard:", error);
+        toast.error("Failed to submit Round 1 score");
+        setNotification("Error submitting score. Please try again.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleLeaderboardClick = () => {
@@ -428,71 +439,25 @@ function Quiz() {
   const totalQuestions = round1Questions.length;
 
   const getThankYouImage = () => {
-    switch (currentQuestionIndex) {
-      case 0:
-        return thankYouImage1;
-      case 1:
-        return thankYouImage2;
-      case 2:
-        return thankYouImage3;
-      case 3:
-        return thankYouImage4;
-      case 4:
-        return thankYouImage5;
-      case 5:
-        return thankYouImage6;
-      case 6:
-        return thankYouImage7;
-      case 7:
-        return thankYouImage8;
-      case 8:
-        return thankYouImage9;
-      case 9:
-        return thankYouImage10;
-      default:
-        return thankYouImage1; // Fallback
-    }
+    // Placeholder logic; replace with actual image imports
+    return thankYouImage1;
   };
 
   const getWrongImage = () => {
-    switch (currentQuestionIndex) {
-      case 0:
-        return wrongImage1;
-      case 1:
-        return wrongImage2;
-      case 2:
-        return wrongImage3;
-      case 3:
-        return wrongImage4;
-      case 4:
-        return wrongImage5;
-      case 5:
-        return wrongImage6;
-      case 6:
-        return wrongImage7;
-      case 7:
-        return wrongImage8;
-      case 8:
-        return wrongImage9;
-      case 9:
-        return wrongImage10;
-      default:
-        return wrongImage1; // Fallback
-    }
-  }
+    // Placeholder logic; replace with actual image imports
+    return wrongImage1;
+  };
+
   const isAnswerSelected = () => {
     return answers[currentQuestionIndex] !== undefined;
   };
 
-  // New Disqualified Screen Component
   const DisqualifiedScreen = () => (
     <div
       style={{
         backgroundImage: "url('/disq.png')",
-        // backgroundColor: "white",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
-       // backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
         height: "100vh",
         color: "white",
         textAlign: "center",
@@ -502,40 +467,25 @@ function Quiz() {
         justifyContent: "center",
         alignItems: "center",
       }}
-    > 
-    <p style={{ position: "absolute",
+    >
+      <p
+        style={{
+          position: "absolute",
           bottom: "22vh",
           padding: "10px 20px",
-          fontSize: "16px",}}>
-      You found <b>0</b> Paws
-    </p>
-      {/* <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-      <h2 style={{ fontSize: "36px", color: "#FF4C4C", marginTop: "20%" }}>Disqualified</h2>
-      <p style={{ color: "white", fontSize: "18px", marginTop: "20px" }}>
-        Unfortunately, you scored 0 in Round 1 and are disqualified from proceeding further.
-      </p>
-      <button
-        onClick={handleLeaderboardClick}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "#FF4C4C",
-          borderRadius: "14px",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-          marginTop: "30px",
           fontSize: "16px",
         }}
       >
-        Check Leaderboard
-      </button> */}
+        You found <b>0</b> Paws
+      </p>
     </div>
   );
 
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
+        backgroundImage:
+          "linear-gradient(rgb(33 141 82) 0%, rgb(7 92 46) 25%, rgb(5 82 39) 50%, rgb(12 35 22) 100%)",
         height: "100vh",
         padding: "0px",
         textAlign: "center",
@@ -545,7 +495,14 @@ function Quiz() {
     >
       <Toaster position="top-right" />
       {isLoading && (
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
           <img src={loadingGif} alt="Loading..." style={{ width: "100px" }} />
         </div>
       )}
@@ -555,12 +512,11 @@ function Quiz() {
           style={{
             color: "white",
             fontSize: "20px",
-            // backgroundColor: "rgba(255, 255, 255, 0.8)",
             padding: "10px",
             borderRadius: "5px",
           }}
         >
-          {/* {notification} */}
+          {notification}
         </div>
       )}
 
@@ -573,8 +529,6 @@ function Quiz() {
               justifyContent: "center",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-            </div>
             <div
               style={{
                 height: "50%",
@@ -592,7 +546,15 @@ function Quiz() {
               }}
             >
               <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-              <p style={{ color: "#5CFFA4", textAlign: "center", width: "70%", fontSize: "12px", marginTop: "10%" }}>
+              <p
+                style={{
+                  color: "#5CFFA4",
+                  textAlign: "center",
+                  width: "70%",
+                  fontSize: "12px",
+                  marginTop: "10%",
+                }}
+              >
                 Crack the clue<br />to find the missing paw
               </p>
               <div
@@ -601,25 +563,58 @@ function Quiz() {
                   justifyContent: "space-between",
                   alignItems: "inherit",
                   margin: "5px",
-                  borderBottom: "1px",
-                  width: "85vw",
                   borderBottom: "1px solid green",
+                  width: "85vw",
                   marginTop: "7%",
                 }}
               >
                 <div>
-                  <p style={{ color: "white", margin: "5px", backgroundColor: "#089449", padding: "5px 10px", borderRadius: "20px", fontSize: "12px" }}>
+                  <p
+                    style={{
+                      color: "white",
+                      margin: "5px",
+                      backgroundColor: "#089449",
+                      padding: "5px 10px",
+                      borderRadius: "20px",
+                      fontSize: "12px",
+                    }}
+                  >
                     Clue {currentQuestionIndex + 1}
                   </p>
                 </div>
-                <p style={{ color: "white", marginBottom: "2%", display: "flex", justifyContent: "center", alignItems: "end", gap: "2px" }}>
-                  <span style={{ display: "fle", justifyContent: "center", alignItems: "center" }}>
+                <p
+                  style={{
+                    color: "white",
+                    marginBottom: "2%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "end",
+                    gap: "2px",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img src={timerIcon} alt="Timer" style={{ width: "10px" }} />
                   </span>{" "}
                   <span style={{ fontSize: "20px" }}>{timeTaken}</span> s
                 </p>
               </div>
-              <p style={{ margin: 0, fontSize: "18px", fontWeight: "bold", padding: "10px", paddingBottom: "20px", textAlign: "left", color: "white" }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  padding: "10px",
+                  paddingBottom: "20px",
+                  textAlign: "left",
+                  color: "white",
+                }}
+              >
                 {round1Questions[currentQuestionIndex].question}
               </p>
               <ul
@@ -632,28 +627,45 @@ function Quiz() {
                   padding: "0",
                 }}
               >
-                {round1Questions[currentQuestionIndex].options.map((option, idx) => (
-                  <li
-                    key={idx}
-                    onClick={() => handleAnswer(option)}
-                    style={{
-                      padding: "12px",
-                      margin: "5px 0",
-                      width: "35vw",
-                      border: "1px solid #2D9059",
-                      borderRadius: "15px",
-                      cursor: "pointer",
-                      color: "white",
-                      fontSize: "14px",
-                      backgroundColor: answers[currentQuestionIndex] === option ? "#009043" : "",
-                      boxShadow: answers[currentQuestionIndex] === option ? "0 0 0 2px green" : "none",
-                    }}
-                  >
-                    {option}
-                  </li>
-                ))}
+                {round1Questions[currentQuestionIndex].options.map(
+                  (option, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => handleAnswer(option)}
+                      style={{
+                        padding: "12px",
+                        margin: "5px 0",
+                        width: "35vw",
+                        border: "1px solid #2D9059",
+                        borderRadius: "15px",
+                        cursor: "pointer",
+                        color: "white",
+                        fontSize: "14px",
+                        backgroundColor:
+                          answers[currentQuestionIndex] === option
+                            ? "#009043"
+                            : "",
+                        boxShadow:
+                          answers[currentQuestionIndex] === option
+                            ? "0 0 0 2px green"
+                            : "none",
+                      }}
+                    >
+                      {option}
+                    </li>
+                  )
+                )}
               </ul>
-              <p style={{ color: "#5CFFA4", textAlign: "center", width: "70%", fontSize: "12px" }}>Select the correct answer</p>
+              <p
+                style={{
+                  color: "#5CFFA4",
+                  textAlign: "center",
+                  width: "70%",
+                  fontSize: "12px",
+                }}
+              >
+                Select the correct answer
+              </p>
             </div>
             <div style={{ marginTop: "0px" }}>
               {currentQuestionIndex < totalQuestions - 1 ? (
@@ -712,7 +724,9 @@ function Quiz() {
               }}
             >
               {isAnswerCorrect ? (
-                <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                <div
+                  style={{ position: "relative", width: "100%", height: "100%" }}
+                >
                   <img
                     src={getThankYouImage()}
                     alt="Thank you"
@@ -745,11 +759,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: "0%",
+                          width: `${((3 - feedbackTimer) / 3) * 100}%`,
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 4s linear forwards",
+                          transition: "width 1s linear",
                         }}
                       />
                     </div>
@@ -761,12 +775,16 @@ function Quiz() {
                         marginBottom: "50px",
                       }}
                     >
-                      Wait for <span style={{ fontSize: "26px" }}>{feedbackTimer > 1 ? "3" : "2"}</span> sec
+                      Wait for{" "}
+                      <span style={{ fontSize: "26px" }}>{feedbackTimer}</span>{" "}
+                      sec
                     </span>
                   </div>
                 </div>
               ) : (
-                <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                <div
+                  style={{ position: "relative", width: "100%", height: "100%" }}
+                >
                   <img
                     src={getWrongImage()}
                     alt="Wrong"
@@ -799,11 +817,11 @@ function Quiz() {
                     >
                       <div
                         style={{
-                          width: "0%",
+                          width: `${((3 - feedbackTimer) / 3) * 100}%`,
                           height: "100%",
                           backgroundColor: "white",
                           borderRadius: "5px",
-                          animation: "fillBar 4s linear forwards",
+                          transition: "width 1s linear",
                         }}
                       />
                     </div>
@@ -815,7 +833,9 @@ function Quiz() {
                         marginBottom: "50px",
                       }}
                     >
-                      Wait for <span style={{ fontSize: "26px" }}>{feedbackTimer > 1 ? "3" : "2"}</span> sec
+                      Wait for{" "}
+                      <span style={{ fontSize: "26px" }}>{feedbackTimer}</span>{" "}
+                      sec
                     </span>
                   </div>
                 </div>
@@ -842,30 +862,89 @@ function Quiz() {
           {score.round1 === 0 ? (
             <DisqualifiedScreen />
           ) : (
-            <div style={{ backgroundImage: "" }}>
+            <div>
               <img src={logo1} width={120} style={{ marginTop: "5%" }} />
-              <div style={{ fontSize: "46px", color: "#51FF9D", fontWeight: "semibold", marginTop: "25%" }}>Congrats<span><img width={30} style={{marginLeft:"10px"}} src={smile} /></span></div>
-              <p style={{ color: "white", margin: "0px", fontSize: "12px" }}>You finished the <b>Round 1</b></p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p style={{ width: "60%", height: "1px", backgroundColor: "green", alignItems: "center" }}></p>
+              <div
+                style={{
+                  fontSize: "46px",
+                  color: "#51FF9D",
+                  fontWeight: "semibold",
+                  marginTop: "25%",
+                }}
+              >
+                Congrats
+                <span>
+                  <img width={30} style={{ marginLeft: "10px" }} src={smile} />
+                </span>
               </div>
-              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>Found {score.round1} lost Paws in the jungle</div>
-              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>in {timeTaken-3} Seconds</div>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p style={{ width: "100%", height: "40px", margin: "30px 0px", fontSize: "12px", backgroundColor: "#0A7F3F", color: "white", display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <p style={{ color: "white", margin: "0px", fontSize: "12px" }}>
+                You finished the <b>Round 1</b>
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p
+                  style={{
+                    width: "60%",
+                    height: "1px",
+                    backgroundColor: "green",
+                    alignItems: "center",
+                  }}
+                ></p>
+              </div>
+              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>
+                Found {score.round1} lost Paws in the jungle
+              </div>
+              <div style={{ color: "white", margin: "0px", fontSize: "12px" }}>
+                in {timeTaken - 3} Seconds
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p
+                  style={{
+                    width: "100%",
+                    height: "40px",
+                    margin: "30px 0px",
+                    fontSize: "12px",
+                    backgroundColor: "#0A7F3F",
+                    color: "white",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <div>Please Wait</div>
                 </p>
               </div>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p style={{ color: "#4EFF9C", width: "50%", margin: "0px", fontSize: "12px" }}>We’ll announce the top tables list selected for <b>Round 2</b>, at the end of <b>Round 1</b></p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p
+                  style={{
+                    color: "#4EFF9C",
+                    width: "50%",
+                    margin: "0px",
+                    fontSize: "12px",
+                  }}
+                >
+                  We’ll announce the top tables list selected for{" "}
+                  <b>Round 2</b>, at the end of <b>Round 1</b>
+                </p>
               </div>
               <p style={{ color: "white" }}>{notification}</p>
-              {/* <button
-                onClick={handleLeaderboardClick}
-                style={{ padding: "10px", backgroundColor: "#11C05E", borderRadius: "14px", color: "white", border: "none" }}
-              >
-                Check Leaderboard
-              </button> */}
             </div>
           )}
         </>
