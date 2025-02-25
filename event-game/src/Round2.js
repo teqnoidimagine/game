@@ -7,7 +7,7 @@ import loadingGif from "./loading.gif";
 import logo1 from "./logo1.png";
 import loc from "./loc.png";
 const baseUrl = "https://dccbackend.vercel.app/";
-
+import paws from './paws.png'
 // Round 2 Instruction Component (unchanged)
 function Round2Instruction({ onProceed }) {
   return (
@@ -391,7 +391,7 @@ function Round2Game({ tableNumber }) {
       }}
     >
       <img 
-        src="/gamebg1.png"
+        src="/gamebg2.png"
         alt="Game background"
         style={{
           position: "relative",
@@ -413,6 +413,11 @@ function Round2Game({ tableNumber }) {
         )
       ) : (
         <>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}} >
+        <img src={logo1} width={80}/>
+          <img src={paws} width={120}/>
+         
+        </div>
           <div
             style={{
               position: "absolute",
