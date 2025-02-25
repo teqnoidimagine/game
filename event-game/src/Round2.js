@@ -6,7 +6,6 @@ import arrowG from "./arrowG.png";
 import loadingGif from "./loading.gif";
 import logo1 from "./logo1.png";
 import loc from "./loc.png";
-import './round2.css'
 const baseUrl = "https://dccbackend.vercel.app/";
 
 // Round 2 Instruction Component (unchanged)
@@ -407,61 +406,43 @@ function Round2Game({ tableNumber }) {
         )
       ) : (
         <>
-         <div
-  style={{
-    position: "absolute",
-    top: "6%",
-    right: "20px",
-    fontSize: "24px",
-    color: "red",
-  }}
->
-  {Array.from({ length: 2 - attempts }, (_, index) => (
-    <span
-      key={index}
-      className={attempts > index ? "heart-pulse" : ""}
-      style={{ display: "inline-block" }}
-    >
-      ❤️
-    </span>
-  ))}
-</div>
+          <div
+            style={{
+              position: "absolute",
+              top: "6%",
+              right: "20px",
+              fontSize: "24px",
+              color: "red",
+            }}
+          >
+            {Array.from({ length: 2 - attempts }, (_, index) => (
+              <span key={index}>❤️</span>
+            ))}
+          </div>
 
           {round2Data?.boxes.map((box, index) => (
-          <div
-          key={box.id}
-          onClick={() => handleBoxFlip(box)}
-          style={{
-            width: "50px",
-            height: "50px",
-            backgroundColor: flippedBoxes.includes(box.id)
-              ? box.isCorrect
-                ? "green"
-                : "red"
-              : "#17A046",
-            borderRadius: "50px",
-            cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "white",
-            position: "absolute",
-            border: "2px solid #3DE577",
-            top: boxPositions[index]?.top,
-            left: boxPositions[index]?.left,
-            transform: "translate(-50%, -50%)",
-            transition: "transform 0.5s ease, background-color 0.3s ease", // Smooth transitions
-          }}
-          className={`flip-box ${flippedBoxes.includes(box.id) ? "flipped" : ""} ${
-            attempts < 2 && !isSubmitted ? "scale-box" : ""
-          }`}
-        >
-          {flippedBoxes.includes(box.id)
-            ? box.isCorrect
-              ? "DCC"
-              : "✗"
-            : <img src={loc} width="16px" />}
-        </div>
+            <div
+              key={box.id}
+              onClick={() => handleBoxFlip(box)}
+              style={{
+                width: "50px",
+                height: "50px",
+                backgroundColor: flippedBoxes.includes(box.id) ? (box.isCorrect ? "green" : "red") : "#17A046",
+                borderRadius: "50px",
+                cursor: attempts >= 2 || isSubmitted ? "default" : "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                position: "absolute",
+                border: "2px solid #3DE577",
+                top: boxPositions[index]?.top,
+                left: boxPositions[index]?.left,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {flippedBoxes.includes(box.id) ? (box.isCorrect ? "DCC" : "✗") : <img src={loc} width="16px" />}
+            </div>
           ))}
         </>
       )}
