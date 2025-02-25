@@ -303,6 +303,42 @@ for (let i = 1; i <= 24; i++) {
             options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
             answer: "Dalmatian",
           },
+          {
+            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
+            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
+            answer: "Beagle",
+          },
+          {
+            question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
+            options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
+            answer: "Pomeranian",
+          },
+          {
+            question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
+            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
+            answer: "Dalmatian",
+          },
+          {
+            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
+            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
+            answer: "Beagle",
+          },
+          {
+            question: "I’m a little ball of fluff with a big personality. My confident strut and fox-like face often turn heads?",
+            options: ["Beagle", "Pomeranian", "Corgi", "Bull dog"],
+            answer: "Pomeranian",
+          },
+          {
+            question: "Known for my sleek build and eye-catching coat that always catch the spotlight, energetic and have a history of running alongside travelers?",
+            options: ["Husky", "Dalmatian", "Great Dane", "Shiba Inu"],
+            answer: "Dalmatian",
+          },
+          {
+            question: "My long ears and powerful nose make me a master tracker. I’m known for my droopy face and howling voice?",
+            options: ["Lihasa", "Husky", "Beagle", "Bull dog"],
+            answer: "Beagle",
+          },
+         
         ],
         round2: allAnswered && isEligibleForRound2
           ? {

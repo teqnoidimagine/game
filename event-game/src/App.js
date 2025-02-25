@@ -14,9 +14,23 @@ import loadingGif from "./loading.gif";
 import thankYouImage1 from "./huft11.png";
 import thankYouImage2 from "./huft12.png";
 import thankYouImage3 from "./huft13.png";
+import thankYouImage4 from "./huft14.png";
+import thankYouImage5 from "./huft15.png";
+import thankYouImage6 from "./huft16.png";
+import thankYouImage7 from "./huft17.png";
+import thankYouImage8 from "./huft18.png";
+import thankYouImage9 from "./huft19.png";
+import thankYouImage10 from "./huft20.png";
 import wrongImage1 from "./wrong1.png";
 import wrongImage2 from "./wrong2.png";
 import wrongImage3 from "./wrong3.png";
+import wrongImage4 from "./wrong4.png";
+import wrongImage5 from "./wrong5.png";
+import wrongImage6 from "./wrong6.png";
+import wrongImage7 from "./wrong7.png";
+import wrongImage8 from "./wrong8.png";
+import wrongImage9 from "./wrong9.png";
+import wrongImage10 from "./wrong10.png";
 import timerIcon from "./timer.png";
 import logo1 from "./logo1.png";
 import Round2 from "./Round2"; // Import Round 2 component
@@ -421,8 +435,22 @@ function Quiz() {
         return thankYouImage2;
       case 2:
         return thankYouImage3;
+      case 3:
+        return thankYouImage4;
+      case 4:
+        return thankYouImage5;
+      case 5:
+        return thankYouImage6;
+      case 6:
+        return thankYouImage7;
+      case 7:
+        return thankYouImage8;
+      case 8:
+        return thankYouImage9;
+      case 9:
+        return thankYouImage10;
       default:
-        return thankYouImage1;
+        return thankYouImage1; // Fallback
     }
   };
 
@@ -434,11 +462,24 @@ function Quiz() {
         return wrongImage2;
       case 2:
         return wrongImage3;
+      case 3:
+        return wrongImage4;
+      case 4:
+        return wrongImage5;
+      case 5:
+        return wrongImage6;
+      case 6:
+        return wrongImage7;
+      case 7:
+        return wrongImage8;
+      case 8:
+        return wrongImage9;
+      case 9:
+        return wrongImage10;
       default:
-        return wrongImage1;
+        return wrongImage1; // Fallback
     }
-  };
-
+  }
   const isAnswerSelected = () => {
     return answers[currentQuestionIndex] !== undefined;
   };
