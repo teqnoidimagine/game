@@ -6,8 +6,9 @@ import arrowG from "./arrowG.png";
 import loadingGif from "./loading.gif";
 import logo1 from "./logo1.png";
 import loc from "./loc.png";
-const baseUrl = "https://dccbackend.vercel.app/";
 import paws from './paws.png'
+const baseUrl = "https://dccbackend.vercel.app/";
+
 // Round 2 Instruction Component (unchanged)
 function Round2Instruction({ onProceed }) {
   return (
