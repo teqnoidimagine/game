@@ -370,11 +370,11 @@ function Round2Game({ tableNumber }) {
   };
 
   const boxPositions = [
-    { top: "17%", left: "15%" },
-    { top: "32%", left: "86%" },
-    { top: "55%", left: "11%" },
-    { top: "70%", left: "50%" },
-    { top: "84%", left: "70%" },
+    { top: "22%", left: "20%" },
+    { top: "36%", left: "66%" },
+    { top: "61%", left: "22%" },
+    { top: "72%", left: "60%" },
+    { top: "86%", left: "49%" },
   ];
 
   return (
@@ -397,7 +397,7 @@ function Round2Game({ tableNumber }) {
           position: "relative",
           maxWidth: "100%",
           maxHeight: "100%",
-          objectFit: "contain",
+          // objectFit: "contain",
         }}
       />
       <Toaster position="top-right" />
