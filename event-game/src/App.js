@@ -118,7 +118,7 @@ function Instruction() {
         }}
       >
         <li style={{ marginBottom: "10px", width: "80%" }}>
-          The mission is to find 3 pet friends who lost in the jungle and they left some clues that you have to crack and find them
+        Your mission is to find lost pet friends in the jungle by solving the clues they left behind.
         </li>
       </ul>
       <button
