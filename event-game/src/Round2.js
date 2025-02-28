@@ -54,24 +54,24 @@ function Round2Verification({ onVerify, tableNumber }) {
 
   const verificationData = {
     1: { targetTable: 12, verificationCode: "B" },
-    2: { targetTable: 19, verificationCode: "A" }, // Changed to "A" or "B" if needed
+    2: { targetTable: 19, verificationCode: "B" }, // Changed to "A" or "B" if needed
     3: { targetTable: 7, verificationCode: "B" },  // Changed to "A" or "B" if needed
     4: { targetTable: 15, verificationCode: "A" }, // Changed to "A" or "B" if needed
-    5: { targetTable: 18, verificationCode: "B" }, // Changed to "A" or "B" if needed
-    6: { targetTable: 1, verificationCode: "A" },
+    5: { targetTable: 18, verificationCode: "A" }, // Changed to "A" or "B" if needed
+    6: { targetTable: 1, verificationCode: "B" },
     7: { targetTable: 13, verificationCode: "B" },
-    8: { targetTable: 20, verificationCode: "A" },
-    9: { targetTable: 4, verificationCode: "B" },
+    8: { targetTable: 20, verificationCode: "B" },
+    9: { targetTable: 4, verificationCode: "A" },
     10: { targetTable: 16, verificationCode: "A" },
     11: { targetTable: 3, verificationCode: "B" },
-    12: { targetTable: 17, verificationCode: "A" },
+    12: { targetTable: 17, verificationCode: "B" },
     13: { targetTable: 9, verificationCode: "B" },
     14: { targetTable: 6, verificationCode: "A" },
-    15: { targetTable: 11, verificationCode: "B" },
-    16: { targetTable: 8, verificationCode: "A" },
+    15: { targetTable: 11, verificationCode: "A" },
+    16: { targetTable: 8, verificationCode: "B" },
     17: { targetTable: 14, verificationCode: "B" },
-    18: { targetTable: 2, verificationCode: "A" },
-    19: { targetTable: 5, verificationCode: "B" },
+    18: { targetTable: 2, verificationCode: "B" },
+    19: { targetTable: 5, verificationCode: "A" },
     20: { targetTable: 10, verificationCode: "A" },
   };
 
@@ -87,7 +87,7 @@ function Round2Verification({ onVerify, tableNumber }) {
         onVerify(true);
       }, 1000);
     } else {
-      setMessage("Incorrect option selected. You are disqualified!");
+      setMessage("Incorrect option selected. Please try again!");
       setTimeout(() => {
         onVerify(false); // Assuming false indicates disqualification
       }, 1000);
