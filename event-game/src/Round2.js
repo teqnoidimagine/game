@@ -109,24 +109,29 @@ function Round2Verification({ onVerify, tableNumber }) {
       }}
     >
       <img src={logo1} width={120} style={{ marginTop: "-30%" }} />
-      <div style={{ color: "white", fontSize: "14px", marginTop: "20%" }}>
-        Target Table Number: {currentData.targetTable}
+      <div style={{ color: "white", fontSize: "14px", marginTop: "20%" ,textAlign:"center"}}>
+        Target Table Number: <br></br> <span style={{fontSize: "28px",fontWeight:"bold"}}>{currentData.targetTable}</span>
       </div>
-      <div style={{ color: "white", fontSize: "14px", width: "60%", marginTop: "20%" }}>
-        Go to the Target Table {currentData.targetTable}, Guess the correct Key code, Get it to your table 
+      <div style={{ color: "#5cffa4", fontSize: "14px", width: "60%", marginTop: "20%" }}>
+      Find the Question from Target table  
       </div>
       <h3 style={{ color: "white", fontSize: "12px", marginTop: "15%" }}>
-        Select the code:
+      Choose the Right Option
       </h3>
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "20px",    display: "flex",
+
+    flexDirection: "column",
+    gap: "20px",
+    width: "80%" }}>
         <button
           onClick={() => setSelectedOption("A")}
           style={{
-            padding: "10px 20px",
-            backgroundColor: selectedOption === "A" ? "#46FF97" : "white",
+            padding: "15px 20px",
+            backgroundColor: selectedOption === "A" ? "#46FF97" : "transparent",
             borderRadius: "20px",
-            color: "black",
-            border: "none",
+            color: "white",
+            border: "1px solid green",
+        
             cursor: "pointer",
             fontSize: "16px",
             margin: "0 10px",
@@ -137,11 +142,11 @@ function Round2Verification({ onVerify, tableNumber }) {
         <button
           onClick={() => setSelectedOption("B")}
           style={{
-            padding: "10px 20px",
-            backgroundColor: selectedOption === "B" ? "#46FF97" : "white",
+            padding: "15px 20px",
+            backgroundColor: selectedOption === "B" ? "#46FF97" : "transparent",
             borderRadius: "20px",
-            color: "black",
-            border: "none",
+            color: "white",
+            border: "1px solid green",
             cursor: "pointer",
             fontSize: "16px",
             margin: "0 10px",
@@ -176,7 +181,7 @@ function Round2Verification({ onVerify, tableNumber }) {
         }}
         disabled={!selectedOption} // Disable button if no option is selected
       >
-        Verify
+        Submit
       </button>
     </div>
   );
